@@ -1,0 +1,119 @@
+\subsubsection{Alternating}
+\label{sec:alternating}
+
+Alternating optimization algorithms solve the same iterative minimization problem as the previous simultaneous algorithms Eq. \ref{eq:sim_cost}. However, instead of solving the problem simultaneously with respect to increments $\delta\mathbf{p}$ and $\delta\mathbf{c}$, they update $\delta\mathbf{c}$ from $\delta\mathbf{p}$ and $\delta\mathbf{p}$ from $\delta\mathbf{c}$ in an alternate manner starting from some initial values $\delta\mathbf{p}_0$ and $\delta\mathbf{c}_0$.
+
+The general solutions for $\delta\mathbf{c}$ and $\delta\mathbf{p}$ at each iteration can be derived by taking advantage of the inherent structure in the general solution for simultaneous algorithms Eq. \ref{eq:sim_solution}:
+\begin{equation}
+    \begin{aligned}
+        \delta\mathbf{q} & =  \left( \mathbf{J}_\text{sim}^T\mathbf{J}_\text{sim} \right)^{-1} \mathbf{J}_\text{sim}^T \mathbf{e}
+        \\
+        \mathbf{J}_\text{sim}^T\mathbf{J}_\text{sim} \delta\mathbf{q} & = \mathbf{J}_\text{sim}^T \mathbf{e} 
+        \\
+        \begin{pmatrix}
+            \mathbf{A}^T\mathbf{A} & \mathbf{A}^T\mathbf{J} 
+            \\ 
+            \mathbf{J}^T\mathbf{A} & \mathbf{J}^T\mathbf{J} 
+        \end{pmatrix}
+        \begin{pmatrix}
+            \delta\mathbf{c} 
+            \\ 
+            \delta\mathbf{p}
+        \end{pmatrix}
+        & = 
+        \begin{pmatrix}
+            \mathbf{A}^T\mathbf{e} 
+            \\ 
+            \mathbf{J}^T\mathbf{e} 
+        \end{pmatrix}
+    \label{eq:alt_structure}
+    \end{aligned}
+\end{equation}
+from which we can define the following system of equations:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{A}^T\mathbf{A} \delta\mathbf{c} + \mathbf{A}^T\mathbf{J} \delta\mathbf{p} & = \mathbf{A}^T \mathbf{e} 
+        \\
+        \mathbf{J}^T\mathbf{A} \delta\mathbf{c} + \mathbf{J}^T\mathbf{J} \delta\mathbf{p} & = \mathbf{J}^T \mathbf{e}
+    \label{eq:alt_system}
+    \end{aligned}
+\end{equation}
+which can be rewritten as:
+\begin{equation}
+    \begin{aligned}
+        \delta\mathbf{c} & = (\mathbf{A}^T\mathbf{A})^{-1} \mathbf{A}^T \left( \mathbf{e} - \mathbf{J} \delta\mathbf{p} \right) 
+        \label{eq:alt_solution_appearance}
+        \\
+        \delta\mathbf{p} & = (\mathbf{J}^T\mathbf{J})^{-1} \mathbf{J}^T \left( \mathbf{e} - \mathbf{A} \delta\mathbf{c} \right)
+    \end{aligned}
+\end{equation}
+Therefore, the optimal value for $\delta\mathbf{c}_o^k$ at the current iteration can be obtained by evaluating Eq. \ref{eq:alt_solution_appearance} using the optimal value for $\delta\mathbf{p}_o^{k-1}$ at the previous iteration while the optimal value for $\delta\mathbf{p}_o^k$ can be computed by evaluating Eq. \ref{eq:alt_solution_shape} using the current optimal value for $\delta\mathbf{c}_o^k$.
+
+Note that, just like in the simultaneous algorithms, if the algorithm is forward $\mathbf{J} = \nabla\mathbf{i}[\mathbf{p}] \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ and if it is inverse  $\mathbf{J} = -\nabla\left(\bar{\mathbf{a}} + \mathbf{A}\mathbf{c} \right) \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$. Similarly, the update rule for the shape parameters $\mathbf{p}$ is defined by Eq. \ref{eq:fc_update} or Eq. \ref{eq:ic_update} respectively, depending on whether the algorithm is forward or inverse. The appearance parameters $\mathbf{c}$ are updated additively using Eq. \ref{eq:appearance_update}.
+
+The solution obtained by alternating algorithms is identical to the one obtained with simultaneous algorithms. However, the previous alternate update strategy reduces the complexity of the algorithms to $O(n^2F + n^3)$ per iteration. In this paper we will refer to the alternating version...
+
+On the other hand, we can combine the expressions in Eq. \ref{eq:alt_solution_appearance} and Eq. \ref{eq:alt_solution_shape} with the true Taylor expansion of the residual Eq. \ref{eq:true_lin} to derive a slightly different AIC algorithm: 
+\begin{equation}
+    \begin{aligned}
+        \delta\mathbf{c}_o^k & = (\mathbf{A}^T\mathbf{A})^{-1} \mathbf{A}^T \left( \mathbf{e} - \mathbf{J} \delta\mathbf{p} \right) 
+        \\
+        \delta\mathbf{p}_o^k & = (\mathbf{J}(\delta\mathbf{c}_o^k)^T\mathbf{J}(\delta\mathbf{c}_o^k))^{-1} \mathbf{J}(\delta\mathbf{c}_o^k)^T \left( \mathbf{e} - \mathbf{A} \delta\mathbf{c}_o^k \right) 
+        \label{eq:alt_solution_appearance}
+    \end{aligned}
+\end{equation}
+where 
+\begin{equation}
+    \begin{aligned}
+        \mathbf{J}(\delta\mathbf{c}_o^k) & = -\nabla\left(\bar{\mathbf{a}} + \mathbf{A}\mathbf{c} \right) \frac{\partial\mathcal{W}}{\partial\mathbf{p}}  -\sum_{i=1}^m \delta c_i^k \nabla \mathbf{a}_i \frac{\partial\mathcal{W}}{\partial\mathbf{p}}
+        \\
+        & = -\nabla\left(\bar{\mathbf{a}} + \mathbf{A}(\mathbf{c}_{k-1} + \delta\mathbf{c}_k) \right) \frac{\partial\mathcal{W}}{\partial\mathbf{p}}
+        \label{eq:alt_solution_appearance}
+    \end{aligned}
+\end{equation}
+The main difference between Eq. \ref{eq:} and Eq. \ref{eq:} is that in the second one uses the discarded second order terms in on the to update $\delta\mathbf{p}$.
+\begin{equation}
+    \begin{aligned}
+        \delta\mathbf{c}_o^k & = (\mathbf{A}^T\mathbf{A})^{-1} \mathbf{A}^T \mathbf{e}(\mathbf{p}_o^{k-1}, \mathbf{c}_o^{k-1})
+        \\
+        \mathbf{c}_o^k & \leftarrow \mathbf{c}_o^{k-1} + \delta\mathbf{c}_o^k
+        \\
+        \delta\mathbf{p}_o^k & = (\mathbf{J}(\mathbf{c}_o^k)^T\mathbf{J}(\mathbf{c}_o^k))^{-1} \mathbf{J}(\mathbf{c}_o^k)^T \mathbf{e}(\mathbf{p}_o^{k-1}, \mathbf{c}_o^k)
+        \\
+        \mathcal{W}(\mathbf{x}; \mathbf{p}_o^k) & \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_o^{k-1}) + \mathcal{W}(\mathbf{x}; \delta\mathbf{p}_o^k)
+        \label{eq:alt_solution_appearance}
+    \end{aligned}
+\end{equation}
+
+The previous modification on the original AIC algorithm was first used by Tzimiropoulos et al. in \cite{Tzimiropoulos2012}. In this paper, we will refer to this algorithm as the \emph{Modified Alternating Inverse Compositional} (MAIC) algorithm. Note that, as a function of the shape parameters the Jacobian $\mathbf{J}(\mathbf{c}_o^k)$ needs to be recomputed at every iteration and, consequently, the computational cost of every iteration of the algorithm is also $O(n^2F + n^3)$. 
+
+Note that, using the idea of alternating optimization, we can also define a third alternating optimization strategy that uses true Taylor expansion of the residual Eq. \ref{eq:true_lin} for both $\delta{\mathbf{c}}$ and $\delta{\mathbf{p}}$. Let us re-write the Taylor expansion of the residual in Eq. \ref{eq:true_taylor} as:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{r}_\text{lin} & = \mathbf{i}[\mathbf{p}] - \mathbf{a} - \mathbf{A}\mathbf{c} - \mathbf{A}\delta\mathbf{c} + \mathbf{J}\delta\mathbf{p} + \mathbf{G}(\delta\mathbf{p}) \delta\mathbf{c}
+        \\
+        & = \mathbf{i}[\mathbf{p}] - \mathbf{a} - \mathbf{A}\mathbf{c} - \left( \mathbf{A} - \mathbf{G}(\delta\mathbf{p}) \right) \delta\mathbf{c} + \mathbf{J}\delta\mathbf{p}
+        \\
+        & = \mathbf{i}[\mathbf{p}] - \mathbf{a} - \mathbf{A}\mathbf{c} - \hat{\mathbf{A}} \delta\mathbf{c} + \mathbf{J}\delta\mathbf{p}
+        \label{eq:alt_solution_appearance}
+    \end{aligned}
+\end{equation}
+where
+\begin{equation}
+    \begin{aligned}
+        \mathbf{G}(\delta\mathbf{p}) & = \left( \nabla \mathbf{a}_1 \frac{\partial\mathcal{W}}{\partial\mathbf{p}}\delta\mathbf{p}, \cdots, \nabla \mathbf{a}_m \frac{\partial\mathcal{W}}{\partial\mathbf{p}}\delta\mathbf{p} \right)
+        \\
+        \hat{\mathbf{A}}(\delta\mathbf{p}) & = \mathbf{A} - \mathbf{G}(\delta \mathbf{p})
+        \label{eq:alt_solution_appearance}
+    \end{aligned}
+\end{equation}
+Note that $\mathbf{G}(\delta\mathbf{p}) \in R^{F \times m}$. Then, assuming $\delta{\mathbf{p}}$ fixed, the solution for $\delta\mathbf{c}$ is given by:
+\begin{equation}
+    \begin{aligned}
+        \delta\mathbf{c} & = \left( \hat{\mathbf{A}}^T\hat{\mathbf{A}} \right)^{-1} \hat{\mathbf{A}} ^T (\mathbf{e} - \mathbf{J}\delta\mathbf{p})
+        \label{eq:alt_solution_appearance}
+\end{aligned}
+\end{equation}
+and the solution for $\delta \mathbf{p}$ given $\delta\mathbf{c}$ is given by previous Eq. \ref{eq:}.
+
+To the best of are knowledge, the previous algorithm has never being proposed in the existent literature. We will refer to it as the \emph{True Alternating Inverse Compositional} (TAIC) algorithm. Its complexity per iteration is again $O(n^2F + n^3)$.

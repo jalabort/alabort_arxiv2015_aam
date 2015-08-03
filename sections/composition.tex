@@ -1,0 +1,120 @@
+\section{Asymmetric and Bidirectional Compositions}
+
+The previous ESM algorithm can be alternatively derived by introducing an alternative compositional framework to the common forward and inverse compositional. Instead of introducing the incremental warp either on the image side or on the model side, this alternative framework, known as Bidirectional composition introduces incremental warps both on the image and model sides simultaneously. Consequently, both the image and the model jacobians are used to recover  
+
+\paragraph{Dependent Composition}
+
+Within the proposed framework, dependent composition is defined by following optimization problem
+
+\begin{equation}
+	\begin{aligned}
+		\delta \mathbf{p}_o = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}}
+		\left\| \mathbf{i}[\mathbf{p} \circ \alpha \delta \mathbf{p}] - \mathbf{t}_{\mathbf{c}_o}[(1-\alpha) \delta \mathbf{p}^{-1}] \right\|^2
+	\end{aligned}
+\end{equation}
+
+The key assumption here is that the incremental warp introduced on the model side is the inverse of the one introduced on the image side, consequently both warps are controlled by the same set of shape parameters increments.
+
+Using the first order approximation to the warp inversion described in \cite{}
+
+\begin{equation}
+	\begin{aligned}
+		\mathcal{W}(\mathbf{x}; \mathbf{p})^{-1} \approx \mathcal{W}(\mathbf{x}; -\mathbf{p})
+	\end{aligned}
+\end{equation}
+
+and the previous optimization problem simplifies to
+
+\begin{equation}
+	\begin{aligned}
+		\delta \mathbf{p}_o = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}}
+		\left\| \mathbf{i}[\mathbf{p} \circ \alpha \delta \mathbf{p}] - \mathbf{t}_{\mathbf{c}_o}[(\alpha - 1) \delta \mathbf{p}] \right\|^2
+	\end{aligned}
+\end{equation}
+
+Similar to the forward and inverse compositional frameworks the solution for $\delta \mathbf{p}$ can be obtained by performing a first order Taylor expansion of the residual around $\delta \mathbf{p} = \mathbf{0}$
+
+\begin{equation}
+	\begin{aligned}
+		\delta \mathbf{p}_o & = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}}
+		\left\| \mathbf{i}[\mathbf{p}] - \mathbf{t}_{\mathbf{c}_o} + \alpha \mathbf{J}_{forward} \delta \mathbf{p} + (\alpha - 1) \mathbf{J}_{inverse} \delta \mathbf{p} \right\|^2
+		\\
+		& = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}}
+		\left\| \mathbf{i}[\mathbf{p}] - \mathbf{t}_{\mathbf{c}_o} + \mathbf{J} \delta \mathbf{p} \right\|^2
+	\end{aligned}
+\end{equation}
+
+where the \emph{dependent} jacobian $\mathbf{J}$ is defined as
+
+\begin{equation}
+	\begin{aligned}
+		\mathbf{J} & = \alpha \mathbf{J}_{\mathbf{i}} + (\alpha - 1) \mathbf{J}_{\mathbf{t}_{\mathbf{c}_o}}
+		\\
+		& = \alpha \nabla \mathbf{i}[\mathbf{p}] \frac{\partial \mathcal{W}}{\partial \mathbf{p}} + 
+		(\alpha - 1) \nabla \mathbf{t}_{\mathbf{c}_o} \frac{\partial \mathcal{W}}{\partial \mathbf{p}}
+		\\
+		& = \left( \alpha \nabla \mathbf{i}[\mathbf{p}] + (\alpha - 1) \nabla \mathbf{t}_{\mathbf{c}_o} \right) \frac{\partial \mathcal{W}}{\partial \mathbf{p}}
+	\end{aligned}
+\end{equation}
+
+The solution for $\delta \mathbf{p}$ is given by:
+
+\begin{equation}
+	\begin{aligned}
+		\delta \mathbf{p} = \left( \mathbf{J}^T \mathbf{J} \right)^{-1} \mathbf{J}^T \left( \mathbf{i}[\mathbf{p}] - \mathbf{t}_{\mathbf{c}_o} \right)
+	\end{aligned}
+\end{equation}
+
+Finally the update on the current image warp is obtained using the following update rule
+
+\begin{equation}
+	\begin{aligned}
+		\mathbf{p} \leftarrow \mathbf{p} \circ \alpha \delta \mathbf{p} \circ (\alpha -1) \delta \mathbf{p}^{-1} 
+	\end{aligned}
+\end{equation}
+
+The special case in which $\alpha = 0.5$ is also referred in the literature as Symmetric composition.
+
+\paragraph{Bidirectional Composition}
+
+The bidirectional compositional the  incremental  warps  introduced  on  the  image and model sides are assumed to be completely independent from each other and controlled by two different sets of shape parameters increments $\delta \mathbf{p}_{\mathbf{i}}$ and $\delta \mathbf{p}_{\mathbf{t}}$. It defines the following optimization problem
+
+\begin{equation}
+	\begin{aligned}
+		\delta \mathbf{p}_o = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}}
+		\left\| \mathbf{i}[\mathbf{p} \circ \delta \mathbf{p}_{\mathbf{i}}] - \mathbf{t}[\delta \mathbf{p}_{\mathbf{t}}^{-1}] \right\|^2
+	\end{aligned}
+\end{equation}
+
+The first order Taylor expansion of the previous function is
+
+\begin{equation}
+	\begin{aligned}
+		\delta \mathbf{p}_o & = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}}
+		\left\| \mathbf{i}[\mathbf{p}] - \mathbf{t}_{\mathbf{c}_o} + 
+		\mathbf{J}_{\mathbf{i}} \delta \mathbf{p}_{\mathbf{i}} + \mathbf{J}_{\mathbf{t}} \delta \mathbf{p}_{\mathbf{t}} \right\|^2
+		\\
+		& = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}}
+		\left\| \mathbf{i}[\mathbf{p}] - \mathbf{t}_{\mathbf{c}_o} + \mathbf{J} 
+		\begin{pmatrix}
+		\delta \mathbf{p}_{\mathbf{i}}
+		\\ 
+		\delta \mathbf{p}_{\mathbf{t}}
+		\end{pmatrix} \right\|^2
+	\end{aligned}
+\end{equation}
+
+where the \emph{bidirectional} jacobian is defined as the concatenation of the forward and inverse jacobians
+
+\begin{equation}
+	\begin{aligned}
+		\mathbf{J} = \left( \mathbf{J}_{\mathbf{i}}, \mathbf{J}_{\mathbf{t}} \right)
+	\end{aligned}
+\end{equation}
+
+The solution for $\delta \mathbf{p}$ is again given by equation \ref{eq:}, and the update is computed using the following rule
+\begin{equation}
+	\begin{aligned}
+		\mathbf{p} \leftarrow \mathbf{p} \circ \delta \mathbf{p}_{\mathbf{i}} \circ \delta \mathbf{p}_{\mathbf{t}}^{-1} 
+	\end{aligned}
+\end{equation}

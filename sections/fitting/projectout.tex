@@ -1,0 +1,77 @@
+\subsubsection{Project-out}
+\label{sec:projectout}
+
+Project-out algorithms avoid explicitly solving for the appearance parameters $\mathbf{c}$ by splitting Eq. \ref{eq:ssd} into two different terms:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}_o, \mathbf{c}_o & =  \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} \mathbf{r}^T \mathbf{r} 
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} \mathbf{r}^T (\mathbf{A}\mathbf{A}^T + \mathbf{I} - \mathbf{A}\mathbf{A}^T) \mathbf{r}
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} \mathbf{r}^T (\mathbf{A}\mathbf{A}^T) \mathbf{r} + \mathbf{r}^T (\mathbf{I} - \mathbf{A}\mathbf{A}^T) \mathbf{r}
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|_{\mathbf{A}\mathbf{A}^T}^2 \, + 
+        \\
+        & \qquad \qquad \,\,\,\,\, \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|_{\mathbf{I} - \mathbf{A}\mathbf{A}^T}^2
+    \label{eq:po_cost}
+    \end{aligned}
+\end{equation}
+The first term defines the distance \emph{within} the learned appearance subspace and it is always $0$ regardless of the value of the shape parameters $\mathbf{p}$:
+\begin{equation}
+    \begin{aligned}
+        f_1(\mathbf{p}, \mathbf{c}) & = \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|_{\mathbf{A}\mathbf{A}^T}^2
+        \\
+        & = \underbrace{\mathbf{i}[\mathbf{p}]^T \mathbf{A}}_{\mathbf{c}^T} \underbrace{\mathbf{A}^T \mathbf{i}[\mathbf{p}]}_{\mathbf{c}} - \underbrace{2\overbrace{\mathbf{i}[\mathbf{p}]^T \mathbf{A}}^{\mathbf{c}^T} \overbrace{\mathbf{A}^T \bar{\mathbf{a}}}^{\mathbf{0}}}_{0} \, - 
+        \\
+        & \quad \,\, 2\underbrace{\mathbf{i}[\mathbf{p}]^T \mathbf{A}}_{\mathbf{c}^T} \underbrace{\overbrace{\mathbf{A}^T \mathbf{A}}^{\mathbf{I}} \mathbf{c}}_{\mathbf{c}} + \underbrace{\overbrace{\mathbf{a}^T \mathbf{A}}^{\mathbf{0}^T} \overbrace{\mathbf{A}^T \mathbf{a}}^{\mathbf{0}}}_{0} \, +
+        \\
+        & \quad \,\, \underbrace{\mathbf{c}^T \overbrace{\mathbf{A}^T \mathbf{A}}^{\mathbf{I}}}_{\mathbf{c}^T} \underbrace{\overbrace{\mathbf{A}^T \mathbf{A}}^{\mathbf{I}} \mathbf{c}}_{\mathbf{c}}
+        \\
+        & = \mathbf{c}^T\mathbf{c} - 2\mathbf{c}^T\mathbf{c} + \mathbf{c}^T\mathbf{c}
+        \\
+        & = 0
+    \end{aligned}
+\end{equation}
+The second term measures the distance \emph{to} the learned appearance subspace i.e. the distance within its orthogonal complement. After some algebraic manipulation, one can show that this term reduces to a function that only depends on the shape parameters $\mathbf{p}$:
+\begin{equation}
+    \begin{aligned}
+        f_2(\mathbf{p}, \mathbf{c}) & = \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|_{\mathbf{Q}}^2
+        \\
+        & = \mathbf{i}[\mathbf{p}]^T \mathbf{Q} \mathbf{i}[\mathbf{p}] - 2\mathbf{i}[\mathbf{p}]^T \mathbf{Q} \bar{\mathbf{a}} \, - 
+        \\
+        & \quad \,\, \underbrace{2\mathbf{i}[\mathbf{p}]^T \mathbf{Q} \mathbf{A}\mathbf{c}}_{0} + \mathbf{a}^T \mathbf{Q} \mathbf{a} + \underbrace{\mathbf{c}^T \mathbf{A}^T \mathbf{Q} \mathbf{A}\mathbf{c}}_{0}
+        \\
+        & = \mathbf{i}[\mathbf{p}]^T \mathbf{Q} \mathbf{i}[\mathbf{p}] - 2\mathbf{i}[\mathbf{p}]^T \mathbf{Q} \bar{\mathbf{a}} + \mathbf{a}^T \mathbf{Q} \mathbf{a}
+        \\
+        & = \left\| \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} \right\|_{\mathbf{Q}}^2
+    \end{aligned}
+\end{equation}
+where we have defined $\mathbf{Q}= \mathbf{I} -\mathbf{A}\mathbf{A}^T$. 
+
+Note that, as mentioned above, the previous term does not depend on the appearance parameters $\mathbf{c}$:
+\begin{equation}
+    \begin{aligned}
+        f_2(\mathbf{p}, \mathbf{c}) & = \hat{f}_2(\mathbf{p}) = \left\| \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} \right\|_{\mathbf{I} -\mathbf{A}\mathbf{A}^T }^2
+    \label{eq:po_cost}
+    \end{aligned}
+\end{equation}
+Therefore, the minimization problem defined by Eq. \ref{eq:po_cost} reduces to:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}_o & =  \underset{\mathbf{p}}{\mathrm{arg\,min\;}}  \left\| \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} \right\|_{\mathbf{I} -\mathbf{A}\mathbf{A}^T }^2
+    \label{eq:po_cost2}
+    \end{aligned}
+\end{equation}
+which can be solved using the compositional Gauss-Newton algorithm outlined in section \ref{sec:cgd}. The general solution for the increments on the shape parameters $\delta\mathbf{p}$ is given by:
+\begin{equation}
+    \begin{aligned}
+        \delta\mathbf{p} & =  \left( \mathbf{J}^T\mathbf{Q}\mathbf{J} \right)^{-1} \mathbf{J}^T\mathbf{Q} \left( \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} \right)
+    \label{eq:po_solution}
+    \end{aligned}
+\end{equation}
+where $\mathbf{J} = \nabla \mathbf{i}[\mathbf{p}] \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ or $\mathbf{J} = \nabla \bar{\mathbf{a}} \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ 
+depending on whether forward or inverse composition is used and likewise for the update rules in Eq. \ref{eq:fc_update} and Eq. \ref{eq:ic_update}.
+
+The forward version of the algorithm i.e. the \emph{Project-out Forward Compositional} (PFC) algorithm, was first introduced by Amberg et al. in \cite{Amberg2009}. Note that the forward Jacobian $\nabla\mathbf{i}[\mathbf{p}] \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ depends on the shape parameters $\mathbf{p}$ through the warped image $\mathbf{i}[\mathbf{p}]$ and, hence, needs to be re-computed at every iteration. The complexity of each iteration is $O(mnF + n^2F + n^3)$.
+
+The inverse version of the algorithm, known as the \emph{Project-out Inverse Compositional} (PIC) algorithm, was originally proposed by Matthews and Baker in their seminal work \cite{Matthews2004}. Note that, in this case, the inverse Jacobian $\nabla\bar{\mathbf{a}} \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ does not depend on the shape parameters $\mathbf{p}$ and the term $\left( \mathbf{J}^T\mathbf{Q}\mathbf{J} \right)^{-1} \mathbf{Q}\mathbf{J}^T$ can be computed off-line. Consequently, the computational cost per iteration is reduced to $O(nF)$.

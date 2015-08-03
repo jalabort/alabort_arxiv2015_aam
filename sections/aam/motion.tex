@@ -1,0 +1,94 @@
+\subsection{Motion Model}
+\label{sec:motion}
+
+The motion model relates the shape and appearance models of an AAM by means of a particular warping functions. Recall here that the appearance model is solely defined in the
+domain $\Omega$ of pixel positions in the reference frame. The role of the motion model is to extrapolate the position these pixel locations, $\mathbf{x} \in \Omega$, from the reference frame to a particular shape instance $\mathbf{s}$, and vice-versa, based on their relative position with respect to the sparse set of landmarks defining the shape model (for which direct correspondences are always known).
+
+\subsubsection{Non-linear}
+
+The most commonly used motion models for AAMs are Piece Wise Affine (PWA) \cite{Cootes2004,Matthews2004} and Thin Plate Splines (TPS) \cite{Cootes2004,Papandreou2008} warps.
+
+Given two shapes in correspondance and a shared triangulation of their vertices, PWA describes the differences between the positions of their vertices as independent local affine transformations between corresponding triangles pairs. Consequently, any arbitrary point $\mathbf{x}$ on a particular triangle of one of the shapes can be directly mapped to its paired triangle on the other shape by using the affine transform relating both triangles. Excellent descriptions of PWA and their application to AAMs can be found in \cite{Cootes2004} and \cite{Matthews2004}.
+
+On the other hand, TPS defines the mapping of arbitrary points $\mathbf{x}$ from on shape to the other as a globally smooth warp that can be expressed as a generalized linear model \cite{Bookstein1989}. For further details regarding TPS and their application to AAMs the reader is referred to \cite{Cootes2004} and \cite{Papandreou2008}.
+
+Note that, PWA and TPS are both non-linear motion models 
+
+bla, bla, bla... for which operations such composition and inversion are not well defined.
+
+
+Figure \ref{fig:} compares the results obtained by warping using PWA and TPS on two different examples.
+
+\subsubsection{Linear}
+
+Amberg et al. \cite{Amberg2009} introduced a procedure for approximating the previous non-linear motion models using a simple linear model of the form:
+
+\begin{equation}
+	\begin{aligned}
+		\mathbf{x} = \bar{\mathbf{x}} + \mathbf{U} \mathbf{p}
+	\end{aligned}
+    \label{eq:subspace_warp}
+\end{equation}
+
+where ... The idea is to learn the mean $\mathbf{x} \in \mathcal{R}^{F \times 1}$ and the subspace $\mathbf{U}\in \mathcal{R}^{F \times n}$ using training data. 
+
+The procedure is simple and consists of two basic steps: (i) mapping the position of all pixels on the reference frame to the annotated training images using either PWA or TPS, and (ii) applying PCA to the result of the previous mapping. 
+
+Note that, once $\mathbf{x} \in \Omega$ have been mapped onto the training images, the positions $\mathbf{x}'$ to which their are mapped onto each training image can be viewed as a dense set of manual annotations. By applying PCA on these dense annotationa we are, in fact, defining a new dense shape model for which a one to one correspondence between all of its landmarks and all the pixel positions on the reference frame exist. Consequently the position of an arbitrary pixel position $\mathbf{x}$ on the reference frame can be directly mapped onto a particular shape instance (and  vice-versa) through the explicit correspondandes given by the shape model.
+
+Note that, the expression in equation \ref{} constitutes a true linear warp for which...
+
+\subsubsection{Parts Translation}
+
+As noted in Section \ref{sec:intro}, several authors \ref{} have argued that a parts-based representation of the object appearance, obtained by directly sampling the local image region around each of the landmark points defining the object's shape, is more appropriate to solve the object alignment problem. This idea was first introduce by bla, bla... in \cite{} and later developed into the field of Parts-Based Deformable Models.
+
+Building upon the original work of \cite{}, Tzimiropoulos and Pantic \cite{} recently proposed a novel deformable model, for the specific task of face alignemnt, coined Gauss-Newton Deformable Part Model, that bares loads of similarities with the AAMs descrived in this paper. In fact, we argue that their model can be viewed as an AAM using a parts-based translational motion model.
+
+This motion model defines the position of each pixel on the reference frame, $\mathbf{x} \in \mathbf{\Omega}$, relative to the landmark points $\mathbf{x}_i$ defining the shape of the object. Given a particular landmark point $\mathbf{x}_i$ in the reference frame its associated $\mathbf{x} \in \mathbf{\Omega}_{\mathbf{x}_i}$ are uniquily definined by the vector $\delta \boldsymbol{\ell} = \mathbf{x} - \mathbf{x}_i = (\delta x, \delta y)^T$. Consequently, the position of each pixel in the reference frame can be mapped to any arbitrary shape instance $\mathbf{s}$ by simply adding the appropriate vectors $\delta \mathbf{\ell}$ to its landmarks points appropriately
+
+Note that the previous motion model can be defined in terms of the shape model using the following expresison
+
+\begin{equation}
+	\begin{aligned}
+		\mathbf{x} & = 
+        	\begin{pmatrix}
+				\delta x_{1,1}
+                \\
+                \delta y_{1,1}
+                \\ 
+                \vdots
+				\\ 
+                \delta x_{1,k}
+                \\
+                \delta x_{1,k}
+                \\
+                \vdots
+				\\ 
+                \delta x_{v,1}
+                \\
+                \delta y_{v,1}
+                \\ 
+                \vdots
+				\\ 
+                \delta x_{v,k}
+                \\
+                \delta x_{v,k}
+			\end{pmatrix} 
+            + 
+            \begin{pmatrix}
+				\mathbf{M}_1 & \cdots & \mathbf{0}
+                \\
+                \vdots & \ddots & \vdots
+                \\
+                \mathbf{0} & \cdots & \mathbf{M}_v
+			\end{pmatrix} \left(\bar{\mathbf{s}} + \mathbf{S} \mathbf{p} \right)
+	\end{aligned}
+    \label{eq:subspace_warp}
+\end{equation}
+
+
+where in this case x takes
+
+
+Note that, AAMs using parts translational motion models are built using the exact same procedure used  as those using other type of warps. Moreover, they can also be fitted to novel images using all the all the existent AAMs fitting algorithms with no modification.
+

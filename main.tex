@@ -1,0 +1,112 @@
+\RequirePackage{fix-cm}
+
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+%\documentclass[smallextended]{svjour3}      % onecolumn (second format)
+\documentclass[twocolumn]{svjour3}          % twocolumn
+
+\smartqed  % flush right qed marks, e.g. at end of proof
+
+\usepackage{graphicx}
+
+% insert here the call for the packages your document requires
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage[pagebackref,colorlinks]{hyperref}
+\usepackage[numbers]{natbib}
+\usepackage{paralist}
+
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+
+% Insert the name of "your journal" with
+%\journalname{International Journal of Computer Vision}
+
+\begin{document}
+
+\title{Unifying Active Appearance Models Fitting}
+
+\subtitle{A Complete Framework for Fitting Active Appearance Models to Images}
+
+%\titlerunning{Short form of title}        % if too long for running head
+
+\author{Joan Alabort-i-Medina  
+        \and
+        Stefanos Zafeiriou}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{J. Alabort-i-Medina \at
+           Department of Computing, Imperial College London, \\
+           180 Queen's Gate, London SW7 2AZ, UK \\
+           \email{ja310@imperial.ac.uk}
+           \and
+           Stefanos Zafeiriou \at
+           \email{s.zafeiriou@imperial.ac.uk}}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+\maketitle
+
+\begin{abstract}+
+Active Appearance Models (AAMs) are one of the most common and well-established Deformable Models (DMs) techniques in computer vision. In this paper, we present a unified and complete optimization framework for fitting AAMs to images. We classify existent optimization algorithms with respect to three main characteristics:
+\begin{inparaenum}[\itshape a\upshape)]
+\item the method used to handle appearance variations; 
+\item the algorithm used to solve the non-linear optimization problem; and 
+\item the type of composition employed. 
+\end{inparaenum}. We provide new valuable insights into existent appearance variations strategies by reinterpreting them as a direct application of the Wiberg algorithm. 
+
+Furthermore, we extend the previous framework by proposing two new types of compositional algorithms for fitting AAMs, i.e. Asymmetric and Bidirectional. We show these compositional algorithms can be interpreted as \emph{Efficient Second order optimization Methods} that effectively combine the advantages of existent first (robustness and accuracy) and second order (fast convergence) methods.
+
+
+
+comparable or superior accuracy  complexity than Gauss-Newton and, consequently , enjoy faster convergence properties while being as robust and stable as which we prove ha
+
+
+extend the previous framework by re-interpreting recently proposed appearance variation strategies as direct applications of the Wiberg algorithm and by proposing two new types of compositional algorithms for fitting AAMs, i.e. Asymmetric and Bidirectional, which we prove. 
+
+We review the probabilistic formulation of AAMs fitting and derive a complete probabilistic formulations for all existent and novel algorithms naturally obtained by changing our prior belief within this framework.
+
+
+An open-source implementation of all the algorithms described in this paper is available as part of the Menpo Project \footnote{\url{http://www.menpo.org}}.
+
+
+%which differences between certain algorithms can be explained
+
+%On the other hand, we show how
+%Moreover, we re-interpret recent
+
+%Furthermore, we show that existent algorithms optimize the same cost function and that this has an intuitive probabilistic formulation
+
+%To this end, we review all existent AAMs fitting algorithms and group them with respect to their 
+
+%We show how all these different fitting techniques optimiza the same cost functions which can be 
+
+%In a typical application AAMs are fitted to images in order to infer the shape of a particular object (e.g. the human face).
+
+
+\keywords{Active Appearance Models \and Non-linear Optimization \and Bayesian Inference}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
+\input{sections/introduction}
+\input{sections/aam/main}
+\input{sections/fitting/main}
+\input{sections/optimization/main}
+\input{sections/composition}
+\input{sections/implementation}
+\input{sections/experiments}
+\input{sections/conclusion}
+
+%\begin{acknowledgements}
+%If you'd like to thank anyone, place your comments here
+%and remove the percent signs.
+%\end{acknowledgements}
+
+% BibTeX users please use one of
+\bibliographystyle{spbasic}      % basic style, author-year citations
+\bibliography{main.bib}   % name your BibTeX data base
+
+\end{document}

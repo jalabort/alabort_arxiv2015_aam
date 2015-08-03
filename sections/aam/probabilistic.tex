@@ -1,0 +1,24 @@
+\subsection{Probabilistic Formulation}
+\label{sec:paam}
+
+A probabilistic formulation of AAMs can be obtained by rewriting the previous equations \ref{eq:aam_1} and \ref{eq:aam_2} assuming probabilistic generative models for shape and appearance generation. In this paper, motivated by seminal works on Probabilistic Component Analysis (PPCA) and object tracking \cite{Tipping1999, Roweis1998, Moghaddam1997}, we will assume simple probabilistic models for shape and appearance generation with both Gaussian noise and a Gaussian prior over the latent shape and appearance subspaces\footnote{Notice that the previous formulation is general and one can assume other probabilistic generative models \cite{vanderMaaten2010, Bach2005, Prince2012, Nicolau2014} to define novel probabilistic versions of AAMs.}:
+\begin{equation}
+	\begin{aligned}
+		\mathbf{s} & = \bar{\mathbf{s}} + \mathbf{S} \mathbf{p} + \boldsymbol{\varepsilon}
+		\\
+		\mathbf{p} & \sim \mathcal{N} \left( \mathbf{0}, \mathbf{\Lambda} \right) 
+		\\
+		\boldsymbol{\varepsilon} & \sim \mathcal{N} \left( \mathbf{0}, \rho^2 \mathbf{I} \right) 
+	\end{aligned}
+\end{equation}
+\begin{equation}
+	\begin{aligned}
+		\mathbf{i}[\mathbf{p}] & = \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} + \boldsymbol{\epsilon}
+		\\
+		\mathbf{c} & \sim \mathcal{N} \left( \mathbf{0}, \mathbf{\Sigma} \right) 
+		\\
+		\boldsymbol{\epsilon} & \sim \mathcal{N} \left( \mathbf{0}, \sigma^2 \mathbf{I} \right) 
+	\end{aligned}
+\end{equation}
+
+This probabilistic formulation can be used to derive Maximum A Posteriori (MAP) version of all the existent AAMs fitting algorithms reviewed in this paper and it is an essential part of the derivation of the Bayesian inference algorithms for fitting AAMs \cite{Alabort2014} described in in Section \cite{sec:bayes}.

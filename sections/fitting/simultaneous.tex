@@ -1,0 +1,58 @@
+\subsubsection{Simultaneous}
+\label{sec:simultaneous}
+
+Simultaneous algorithms solve Eq. \ref{eq:ssd} by iteratively solving for increments on the shape and appearance parameters, $\delta\mathbf{p}$ and $\delta\mathbf{c}$, at the same time. They do so, by defining the following minimization problem at each iteration of the previous general compositonal Gauss-Newton algorithm (step 3):
+\begin{equation}
+    \begin{aligned}
+        \delta\mathbf{p}_o, \delta\mathbf{c}_o & = \underset{\delta\mathbf{p}, \delta\mathbf{c}}{\mathrm{arg\,min\;}} \left\| \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} - \mathbf{A} \mathbf{c} -  \mathbf{A} \delta\mathbf{c}  + \mathbf{J} \delta\mathbf{p} \right\|^2 
+    \label{eq:sim_cost}
+    \end{aligned}
+\end{equation}
+the solution of which is again given in the familiar form of Eq. \ref{eq:solve_dp}:
+\begin{equation}
+    \begin{aligned}
+        \delta\mathbf{q} & =  \left( \mathbf{J}_\text{sim}^T\mathbf{J}_\text{sim} \right)^{-1} \mathbf{J}_\text{sim}^T \left( \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} - \mathbf{A}\mathbf{c} \right)
+    \label{eq:sim_solution}
+    \end{aligned}
+\end{equation}
+where $\delta\mathbf{q} = \left( \delta\mathbf{c}^T, \delta\mathbf{p}^T \right)^T$ and $\mathbf{J}_\text{sim} = \left( \mathbf{A}, \mathbf{J} \right)$. Also, note that $\mathbf{J} = \nabla\mathbf{i}[\mathbf{p}] \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ if the algorithms is forward and $-\nabla\left(\bar{\mathbf{a}} + \mathbf{A}\mathbf{c} \right) \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ if it is inverse and that the compositional update rules for $\mathcal{W}(\mathbf{x}; \mathbf{p}_o)$ remain the same. On the other hand, simultaneous algorithms update the value of the current appearance parameters $\mathbf{c}$ by using the following additive update rule:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{c}_o & =  \mathbf{c} + \delta\mathbf{c} 
+    \label{eq:appearance_update}
+    \end{aligned}
+\end{equation}
+
+The forward version of the algorithm i.e. the \emph{Simultaneous Forward Compositonal} (SFC) algorithm was first derived by Martins et al. in \cite{Martins2010}\footnote{Note that Martins et al.  used an additive update rule for the shape parameters, $\mathbf{p}_o =  \mathbf{p} + \delta\mathbf{p}$, so strictly speaking they derived an additive version of the algorithm i.e the \emph{Simultaneous Forward Additive} (SFA) algorithm.}. Note that the image Jacobian $\nabla\mathbf{i}[\mathbf{p}]\frac{\partial\mathcal{W}}{\mathbf{p}}$ needs to be recomputed at each iteration due to its dependency on the current shape parameters $\mathbf{p}$ through the warped image $\mathbf{i}[\mathbf{p}]$. Moreover, the inclusionn of the Jacobian $\mathbf{A}$ with respect to the appearance increments $\delta\mathbf{c}$, increases the size of the simultaneous Jacobian to $\mathbf{J}_\text{sim} \in R^{F\times(m+n)}$ and, consequently, the cost per iteration of the algorithm is $O((m+n)^2F + (m + n)^3)$.
+
+On the other hand, Gross et al. presented the \emph{Simultaneous Inverse Compositional} (SIC) algorithm in \cite{Gross2005}. Not that for this algorithm the minimization problem defined by Eq. \ref{eq:sim_cost} is only attained after neglecting the second order terms of the linearized residual:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{r}(\delta\mathbf{p}, \delta\mathbf{c}) & = \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}}[\delta\mathbf{p}] - \sum_{i=1}^m (c_i + \delta c_i) \mathbf{a}_i[\delta\mathbf{p}] 
+    \label{eq:sic_res}
+    \end{aligned}
+\end{equation}
+
+\begin{equation}
+    \begin{aligned}
+        \mathbf{r}_\text{lin}(\delta\mathbf{p}, \delta\mathbf{c}) & = \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} - \mathbf{A}\mathbf{c} \, - 
+        \\
+        & \quad \,\, \underbrace{\nabla\bar{\mathbf{a}}\frac{\partial\mathcal{W}}{\partial\mathbf{p}}\delta\mathbf{p}}_{\text{1st order terms}}  - \underbrace{\sum_{i=1}^m c_i \nabla\mathbf{a}_i \frac{\partial\mathcal{W}}{\partial\mathbf{p}} \delta\mathbf{p}}_{\text{1st order terms}} \, - 
+        \\
+        & \quad \,\, \underbrace{\mathbf{A}\delta\mathbf{c}}_{\text{1st order terms}} - \underbrace{\sum_{i=1}^m \delta c_i\nabla\mathbf{a}_i\frac{\partial\mathcal{W}}{\partial\mathbf{p}}\delta\mathbf{p}}_{\text{2nd order terms}} 
+        \\
+        & \approx \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} - \mathbf{A}\mathbf{c} - \mathbf{A}\delta\mathbf{c} \, -
+        \\
+        & \quad \,\, \nabla\bar{\mathbf{a}}\frac{\partial\mathcal{W}}{\partial\mathbf{p}}\delta\mathbf{p} - \sum_{i=1}^m c_i \nabla\mathbf{a}_i \frac{\partial\mathcal{W}}{\partial\mathbf{p}} \delta\mathbf{p}
+        \\
+        & \approx \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} - \mathbf{A}\mathbf{c} - \mathbf{A}\delta\mathbf{c} \, -
+        \\
+        & \quad \,\, \nabla\left(\bar{\mathbf{a}} + \mathbf{A}\mathbf{c} \right) \frac{\partial\mathcal{W}}{\partial\mathbf{p}} \delta\mathbf{p}
+        \\
+        & \approx \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} - \mathbf{A}\mathbf{c} - \mathbf{A}\delta\mathbf{c} + \mathbf{J}\delta\mathbf{p}
+        \\
+    \label{eq:sim_lin_res}
+    \end{aligned}
+\end{equation}
+
+Note that, the inverse Jacobian $-\nabla\left(\bar{\mathbf{a}} + \mathbf{A}\mathbf{c} \right) \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ does not depend on the current estimate of the shape parameters $\mathbf{p}$ but depends on the current estimate of the appearance parameters $\mathbf{c}$. Hence, it needs to be re-computed at every iteration. The algorithm's complexity per iteration is the same as in the forward case $O((m+n)^2F + (m + n)^3)$. 
