@@ -1,0 +1,167 @@
+\subsection{Cost Functions}
+\label{sec:cost}
+
+AAM fitting is defined as the regularized search over the shape and appearance parameters that minimize a global measure of similarity between the vectorized warped image and the appearance model:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} \mathcal{R} (\mathbf{p}, \mathbf{c}) + \mathcal{D} (\mathbf{i}[\mathbf{p}], \mathbf{c}) 
+        \end{aligned}
+    \label{eq:aam_fitting}
+\end{equation}
+where $\mathcal{R}$ is the regularization term that penalizes complex shape and appearance deformations and $\mathcal{D}$ is the data term that
+quantifies the global measure of similarity between the vectorized warped image and the appearance model.
+
+\subsubsection{Regularized Sum of Squared Differences}
+\label{sec:rssd}
+
+Arguably, the most natural choices for the previous data and regularization terms, $\mathcal{D}$ and $\mathcal{R}$, are the \emph{Sum of Squared} pixel \emph{Differences} (SSD) between the vectorized warped image and the appearance model\footnote{Notice that this choice of $\mathcal{D}$ is very related to the second main assumption behind AAMs, Equation \ref{eq:aam_2}.} and the sum of the $\l_2^2$-norm over the shape and appearance parameters respectively:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} \underbrace{||\mathbf{p}||^2 + ||\mathbf{c}||^2}_{\mathcal{R} (\mathbf{p}, \mathbf{c})} +
+        \\
+        & \qquad \qquad \quad \underbrace{|| \mathbf{i}[\mathbf{p}] - (\mathbf{\bar{a}} + \mathbf{A} \mathbf{c}) ||^2}_{\mathcal{D} (\mathbf{i}[\mathbf{p}], \mathbf{c})}
+    \end{aligned}
+    \label{eq:rssd}
+\end{equation}
+\subsubsection*{Probabilistic Interpretation}
+\label{sec:rssd_pi}
+
+A probabilistic interpretation of the previous cost function can be naturally derived using the probabilistic generative models of shape and appearance introduced in Section \ref{sec:prob_aam}. Denoting the model parameters as \mbox{$\Theta = \{\mathbf{\bar{s}}, \mathbf{S}, \mathbf{\Lambda}, \mathbf{\bar{a}}, \mathbf{A}, \mathbf{\Sigma}, \sigma^2\}$} and taking into account the prior distributions over the shape and texture parameters:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,max\;}} p(\mathbf{p}, \mathbf{c}, \mathbf{i}[\mathbf{p}] | \Theta) 
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,max\;}}  p(\mathbf{p} | \mathbf{\Lambda})  p(\mathbf{c} | \mathbf{\Sigma}) p(\mathbf{i}[\mathbf{p}] |
+        \mathbf{p}, \mathbf{c}, \Theta)  
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,max\;}}  \ln p(\mathbf{p} | \mathbf{\Lambda}) + \ln p(\mathbf{c} | \mathbf{\Sigma}) +
+        \\
+        & \qquad \qquad \quad \ln p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \mathbf{c}, \Theta)
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}}  \underbrace{\frac{}{} ||\mathbf{p}||^2_{\mathbf{\Lambda}^{-1}} + ||\mathbf{c}||^2_{\mathbf{\Sigma}^{-1}}}_{\mathcal{R}(\mathbf{p}, \mathbf{c})} +
+        \\
+        & \qquad \qquad \quad  \underbrace{ \frac{1}{\sigma^2} || \mathbf{i}[\mathbf{p}] - (\mathbf{\bar{a}} + \mathbf{A} \mathbf{c}) ||^2}_{\mathcal{D}(\mathbf{i}[\mathbf{p}], \mathbf{c})} 
+    \end{aligned}
+    \label{eq:prob_rssd}
+\end{equation}
+where we have assumed that the shape and appearance parameters are independent \footnote{Notice that this is a common assumption in compositional gradient descent algorithms \cite{Matthews2004}, however, in reality, some degree of dependence between these parameters is to be expected \cite{Cootes2001}.}
+
+The previous Maximum-A-Posteriori (MAP) formulation is a weighted version of the optimization problem defined by Equation \ref{eq:rssd}. The maximization of the prior probability over the shape and texture parameters led to the minimization of the regularization term $\mathcal{R}$ and the maximization of the conditional probability of the vectorized warped image given the shape, texture and model parameters led to the minimization of the data term $\mathcal{D}$.
+
+\subsubsection{Regularized Project-Out}
+\label{sec:po}
+
+Matthews and Baker showed in \cite{Matthews2004} that one could express the SSD between the vectorized warped image and the linear texture model as the sum of two different terms:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}_o, \mathbf{c}_o & =  \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} \mathbf{r}^T \mathbf{r} 
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} \mathbf{r}^T (\mathbf{A}\mathbf{A}^T + \mathbf{I} - \mathbf{A}\mathbf{A}^T) \mathbf{r}
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} \mathbf{r}^T (\mathbf{A}\mathbf{A}^T) \mathbf{r} + \mathbf{r}^T (\mathbf{I} - \mathbf{A}\mathbf{A}^T) \mathbf{r}
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|_{\mathbf{A}\mathbf{A}^T}^2 \, + 
+        \\
+        & \qquad \qquad \,\,\,\,\, \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|_{\mathbf{I} - \mathbf{A}\mathbf{A}^T}^2
+    \label{eq:po_cost}
+    \end{aligned}
+\end{equation}
+The first term defines the distance \emph{within} the learned appearance subspace and it is always $0$ regardless of the value of the shape parameters $\mathbf{p}$:
+\begin{equation}
+    \begin{aligned}
+        f_1(\mathbf{p}, \mathbf{c}) & = \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|_{\mathbf{A}\mathbf{A}^T}^2
+        \\
+        & = \underbrace{\mathbf{i}[\mathbf{p}]^T \mathbf{A}}_{\mathbf{c}^T} \underbrace{\mathbf{A}^T \mathbf{i}[\mathbf{p}]}_{\mathbf{c}} - \underbrace{2\overbrace{\mathbf{i}[\mathbf{p}]^T \mathbf{A}}^{\mathbf{c}^T} \overbrace{\mathbf{A}^T \bar{\mathbf{a}}}^{\mathbf{0}}}_{0} \, - 
+        \\
+        & \quad \,\, 2\underbrace{\mathbf{i}[\mathbf{p}]^T \mathbf{A}}_{\mathbf{c}^T} \underbrace{\overbrace{\mathbf{A}^T \mathbf{A}}^{\mathbf{I}} \mathbf{c}}_{\mathbf{c}} + \underbrace{\overbrace{\mathbf{a}^T \mathbf{A}}^{\mathbf{0}^T} \overbrace{\mathbf{A}^T \mathbf{a}}^{\mathbf{0}}}_{0} \, +
+        \\
+        & \quad \,\, \underbrace{\mathbf{c}^T \overbrace{\mathbf{A}^T \mathbf{A}}^{\mathbf{I}}}_{\mathbf{c}^T} \underbrace{\overbrace{\mathbf{A}^T \mathbf{A}}^{\mathbf{I}} \mathbf{c}}_{\mathbf{c}}
+        \\
+        & = \mathbf{c}^T\mathbf{c} - 2\mathbf{c}^T\mathbf{c} + \mathbf{c}^T\mathbf{c}
+        \\
+        & = 0
+    \end{aligned}
+\end{equation}
+The second term measures the distance \emph{to} the learned appearance subspace i.e. the distance within its orthogonal complement. After some algebraic manipulation, one can show that this term reduces to a function that only depends on the shape parameters $\mathbf{p}$:
+\begin{equation}
+    \begin{aligned}
+        f_2(\mathbf{p}, \mathbf{c}) & = \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|_{\mathbf{Q}}^2
+        \\
+        & = \mathbf{i}[\mathbf{p}]^T \mathbf{Q} \mathbf{i}[\mathbf{p}] - 2\mathbf{i}[\mathbf{p}]^T \mathbf{Q} \bar{\mathbf{a}} \, - 
+        \\
+        & \quad \,\, \underbrace{2\mathbf{i}[\mathbf{p}]^T \mathbf{Q} \mathbf{A}\mathbf{c}}_{0} + \mathbf{a}^T \mathbf{Q} \mathbf{a} + \underbrace{\mathbf{c}^T \mathbf{A}^T \mathbf{Q} \mathbf{A}\mathbf{c}}_{0}
+        \\
+        & = \mathbf{i}[\mathbf{p}]^T \mathbf{Q} \mathbf{i}[\mathbf{p}] - 2\mathbf{i}[\mathbf{p}]^T \mathbf{Q} \bar{\mathbf{a}} + \mathbf{a}^T \mathbf{Q} \mathbf{a}
+        \\
+        & = \left\| \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} \right\|_{\mathbf{Q}}^2
+    \end{aligned}
+\end{equation}
+where we have defined $\mathbf{Q}= \mathbf{I} -\mathbf{A}\mathbf{A}^T$. 
+
+Note that, as mentioned above, the previous term does not depend on the appearance parameters $\mathbf{c}$:
+\begin{equation}
+    \begin{aligned}
+        f_2(\mathbf{p}, \mathbf{c}) & = \hat{f}_2(\mathbf{p}) = \left\| \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} \right\|_{\mathbf{I} -\mathbf{A}\mathbf{A}^T }^2
+    \label{eq:po_cost}
+    \end{aligned}
+\end{equation}
+Therefore, the minimization problem defined by Eq. \ref{eq:po_cost} reduces to:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}_o & =  \underset{\mathbf{p}}{\mathrm{arg\,min\;}}  \left\| \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} \right\|_{\mathbf{I} -\mathbf{A}\mathbf{A}^T }^2
+    \label{eq:po_cost2}
+    \end{aligned}
+\end{equation}
+
+\subsubsection*{Probabilistic Interpretation}
+\label{sec:po_pi}
+
+In our previous work \cite{Alabort2014}, we showed that assuming the probabilistic models of shape and appearance defined in Section \ref{} the previous project-out cost function could be naturally derived by marginalizing Equation \ref{} over the appearance parameters:
+
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,max\;}} p(\mathbf{p}, \mathbf{c}, \mathbf{i}[\mathbf{p}] | \Theta) 
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,max\;}}  p(\mathbf{p} | \mathbf{\Lambda})  p(\mathbf{c} | \mathbf{\Sigma}) p(\mathbf{i}[\mathbf{p}] |
+        \mathbf{p}, \mathbf{c}, \Theta)  
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,max\;}}  \ln p(\mathbf{p} | \mathbf{\Lambda}) + \ln p(\mathbf{c} | \mathbf{\Sigma}) +
+        \\
+        & \qquad \qquad \quad \ln p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \mathbf{c}, \Theta)
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}}  \underbrace{-\ln p(\mathbf{p} | \mathbf{\Lambda}) -\ln p(\mathbf{c} | \mathbf{\Sigma})}_{R(\mathbf{p}, \mathbf{c})} +
+        \\
+        & \qquad \qquad \quad \underbrace{-\ln p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \mathbf{c}, \Theta)}_{D(\mathcal{I}, \mathbf{p}, \mathbf{c})}
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}}  \underbrace{\frac{}{} ||\mathbf{p}||^2_{\mathbf{\Lambda}^{-1}} + ||\mathbf{c}||^2_{\mathbf{\Sigma}^{-1}}}_{\mathcal{R}(\mathbf{p}, \mathbf{c})} +
+        \\
+        & \qquad \qquad \quad  \underbrace{ \frac{1}{\sigma^2} || \mathbf{i}[\mathbf{p}] - (\mathbf{\bar{a}} + \mathbf{A} \mathbf{c}) ||^2}_{\mathcal{D}(I, \mathbf{p}, \mathbf{c})} 
+    \end{aligned}
+    \label{eq:prob_aam_fitting}
+\end{equation}
+
+Note that in this derivation the is comprised of two different distances: (i) the Mahalanobis distance \emph{within}
+the appearance subspace W and (ii) the Euclidean distance
+\emph{to} its orthogonal complement W¯ = I − WWT
+weighted by the inverse of the estimated sample noise σ
+2
+.
+The first of these distances favors solutions with higher
+probability within latent subspace W, acting as a regularizer
+that ensures the solution x(po) can be well reconstructed
+by the texture model. The second distance captures
+everything that cannot be generated by the texture model
+(e.g. occlusions and other unseen variations) and weights it
+with respect to the estimated sample noise 4
+.
+Note that, the contribution of the second term 1
+σ2 ||x(p)−
+m||2
+I−WWT decreases as the estimated sample noise increases.
+On the other hand, when the variance Λ of the
+prior over the latent subspace increases (and especially as
+Λ → ∞) c becomes uniformly distributed and the contribution
+of the first term ||x(p) − m||2
+WD−1WT vanishes.
+Hence, under our Bayesian formulation, the project-out
+cost function arises naturally from assuming a uniform prior over the latent texture space

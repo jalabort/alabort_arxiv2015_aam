@@ -1,7 +1,7 @@
 \subsection{Probabilistic Formulation}
-\label{sec:paam}
+\label{sec:prob_aam}
 
-A probabilistic formulation of AAMs can be obtained by rewriting the previous equations \ref{eq:aam_1} and \ref{eq:aam_2} assuming probabilistic generative models for shape and appearance generation. In this paper, motivated by seminal works on Probabilistic Component Analysis (PPCA) and object tracking \cite{Tipping1999, Roweis1998, Moghaddam1997}, we will assume simple probabilistic models for shape and appearance generation with both Gaussian noise and a Gaussian prior over the latent shape and appearance subspaces\footnote{Notice that the previous formulation is general and one can assume other probabilistic generative models \cite{vanderMaaten2010, Bach2005, Prince2012, Nicolau2014} to define novel probabilistic versions of AAMs.}:
+A probabilistic formulation of AAMs can be obtained by rewriting the previous equations \ref{eq:aam_1} and \ref{eq:aam_2} assuming probabilistic generative models for shape and appearance generation. In this paper, motivated by seminal works on Probabilistic Component Analysis (PPCA) and object tracking \cite{Tipping1999, Roweis1998, Moghaddam1997}, we will assume probabilistic models for shape and appearance generation with both Gaussian noise and a Gaussian prior over the latent shape and appearance subspaces\footnote{Notice that the previous formulation is general and one could assume other probabilistic generative models \cite{vanderMaaten2010, Bach2005, Prince2012, Nicolau2014} to define novel probabilistic versions of AAMs.}:
 \begin{equation}
 	\begin{aligned}
 		\mathbf{s} & = \bar{\mathbf{s}} + \mathbf{S} \mathbf{p} + \boldsymbol{\varepsilon}

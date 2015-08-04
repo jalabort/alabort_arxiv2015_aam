@@ -7,110 +7,113 @@ AAM fitting is typically formulated as a search over the shape and appearance pa
 \label{eq:ssd}
 \end{align}
 
-Several techniques have been proposed to solve the non-linear minimization problem defined by Eq. \ref{eq:ssd}. In this paper, we will center the discussion around compositional gradient descent algorithms \cite{Matthews2004, Gross2005, Papandreou2008, Amberg2009, Tzimiropoulos2012, Tzimiropoulos2013} for fitting AAMs. Consequently, we will not review discriminative and regression based approaches. For these methods, we refer the interested reader to the existent literature \cite{Cootes2001, Hou2001, Batur2005, Donner2006, Liu2009, Saragih2009, Sauer2011, Xiong2013}.
+Several techniques have been proposed to solve the non-linear\footnote{Notice that Equation \ref{eq:ssd} is linear with respect to the appearance parameters $\mathbf{c}$ but non-linear with respect to the shape parameters $\mathbf{p}$ through the warp $\mathcal{W}(\mathbf{x}; \mathbf{p})$} minimization problem defined by Eq. \ref{eq:ssd}. In this paper, we will center the discussion around compositional gradient descent algorithms \cite{Matthews2004, Gross2005, Papandreou2008, Amberg2009, Tzimiropoulos2012, Tzimiropoulos2013} for fitting AAMs. Consequently, we will not review discriminative and regression based approaches. For these methods, we refer the interested reader to the existent literature \cite{Cootes2001, Hou2001, Batur2005, Donner2006, Liu2009, Saragih2009, Sauer2011, Xiong2013}.
 
-\subsection{Compositional Gauss-Newton}
-\label{sec:cgd}
-Assuming, for the time being, that the true appearance parameters $\mathbf{c}_o$ are known, the problem defined by Eq. \ref{eq:ssd} reduces to a non-rigid image alignment problem \cite{Baker2004, Munoz2014} between a particular instance of the object present in the image and its optimal appearance reconstruction by the appearance model:
-\begin{equation}
-    \begin{aligned}
-        \mathbf{p}_o & = \underset{\mathbf{p}}{\mathrm{arg\,min\;}} 
-        \left\| \mathbf{i}[\mathbf{p}] - \mathbf{a} \right\|^2 
-    \label{eq:ssd_shape}
-    \end{aligned}
-\end{equation}
-where $\mathbf{a} = \bar{\mathbf{a}} + \mathbf{A} \mathbf{c}_o$ is obtained by directly evaluating Eq. \ref{eq:app_model} given the true appearance parameters $\mathbf{c}_o$.
+In order to accurately introduce compositional gradient descent algorithms for fitting AAMs our discussion wil be divided in three different sections. In the first section we will introduce the most significant cost functions used to fit AAMs. In the second section we will introduce different types of compositions. In the third section we will present different algorithms to optimize the cost functions. Finally, in the fourth section we will relate the proposed compositional gradient descent framework to the extensive prior work on the subject. 
 
-Compositional Gauss-Newton algorithms solve the previous non-linear optimization problem with respect to the shape parameters $\mathbf{p}$ by:
-\begin{enumerate}
-    \item Introducing an incremental warp $\mathcal{W}(\mathbf{x}; \delta \mathbf{p})$; either on the image side:
-    \label{it:step_1}
-    \begin{equation}
-        \begin{aligned}
-            \delta \mathbf{p}_o & = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}} \left\| \mathbf{i} [\mathbf{p} \circ \delta \mathbf{p}] - \mathbf{a} \right\|^2 
-        \label{eq:fc}
-        \end{aligned}
-    \end{equation}
-    in what is known as \emph{Forward Composition} (FC) or on the model side: 
-    \begin{equation}
-        \begin{aligned}
-            \delta \mathbf{p}_o = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}}  \left\| \mathbf{i} [\mathbf{p}] - \mathbf{a}[\delta \mathbf{p}] \right\|^2 
-        \label{eq:ic}
-        \end{aligned}
-    \end{equation}
-    in what is known as \emph{Inverse Composition} (IC).
-    
-    \item Performing a Taylor expansion of the residual around the incremental warp
-    \begin{equation}
-        \begin{aligned}
-            \delta \mathbf{p}_o & = \underset{\delta\mathbf{p}}{\mathrm{arg\,min\;}} \left\| \mathbf{r}(\mathbf{p}) + \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \delta\mathbf{p} \right\|^2
-            \\
-            & = \underset{\delta\mathbf{p}}{\mathrm{arg\,min\;}} \left\| \mathbf{i} [\mathbf{p}] - \mathbf{a} + \mathbf{J} \delta \mathbf{p} \right\|^2
-        \label{eq:taylor}
-        \end{aligned}
-    \end{equation}
-    where $\mathbf{J} = \nabla \mathbf{i}[\mathbf{p}] \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ or $\mathbf{J} = -\nabla \mathbf{a} \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ depending on whether forward or inverse composition is used.
-    
-    \item Solving for $\delta\mathbf{p}$ by equating the derivative of Eq. \ref{eq:taylor} to $\mathbf{0}$:
-    \begin{equation}
-        \begin{aligned}
-            \frac{\partial \left\| \mathbf{r}(\mathbf{p}) + \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \delta\mathbf{p} \right\|^2}{\partial \mathbf{p}} & = \mathbf{0} 
-            \\
-            \left(\mathbf{r}(\mathbf{p}) + \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \delta\mathbf{p} \right) \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T  & = \mathbf{0} 
-            \\
-            \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T \mathbf{r}(\mathbf{p}) + \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \delta\mathbf{p} & = \mathbf{0} 
-        \label{eq:taylor}
-        \end{aligned}
-    \end{equation}
-    Rearranging, the optimal solution $\delta\mathbf{p}_o$ is given by:
-    \begin{equation}
-        \begin{aligned}
-            \delta\mathbf{p}_o & = - \left( \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \right)^{-1} \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T \mathbf{r}(\mathbf{p})
-            \\
-            & = - \mathbf{H}^{-1} \mathbf{J}^T \left( \mathbf{i}[\mathbf{p}] - \mathbf{a} \right)
-        \label{eq:solve_dp}
-        \end{aligned}
-    \end{equation}
-    
-    \item Updating the current estimate of the warp using one of the following update rules
-    \begin{equation}
-        \mathcal{W}(\mathbf{x}; \mathbf{p}_o) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}) \circ \mathcal{W}(\mathbf{x}; \delta \mathbf{p}_o) 
-        \label{eq:fc_update}
-    \end{equation}
-    for forward composition and
-    \begin{equation}
-        \mathcal{W}(\mathbf{x}; \mathbf{p}_o) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}) \circ \mathcal{W}(\mathbf{x}; \delta \mathbf{p}_o)^{-1} 
-        \label{eq:ic_update}
-    \end{equation}
-    for inverse.
-    
-    \item Going back to Step \ref{it:step_1} until: 
-    \begin{equation}
-        \begin{aligned}
-            \left\| \mathbf{p}_{k+1} - \mathbf{p}_k \right\|^2 < \epsilon
-        \end{aligned}
-    \end{equation}
-    where $\epsilon$ is a small number determining the convergence of the shape parameters $\mathbf{p}$.
-\end{enumerate}
-Further details on the computation of $\frac{\partial \mathcal{W}}{\partial \mathbf{p}}$, composition $\mathcal{W}(\mathbf{x}; \mathbf{p}) \circ \mathcal{W}(\mathbf{x}; \delta \mathbf{p})$ and inversion $\mathcal{W}(\mathbf{x};\delta \mathbf{p})^{-1}$ of typical AAM motion models such as PWA and TPS warps can be found in \cite{Matthews2004, Papandreou2008}.
 
-In general, optimization of Eq. \ref{eq:ssd} with respect to the appearance parameters is highly dependent on the particular algorithm being used. The next subsections provide a detailed review of the main existent strategies used by compositional Gauss-Newton algorithms to deal with the appearance parameters.
+% \subsection{Compositional Gauss-Newton}
+% \label{sec:cgd}
+% Assuming, for the time being, that the true appearance parameters $\mathbf{c}_o$ are known, the problem defined by Eq. \ref{eq:ssd} reduces to a non-rigid image alignment problem \cite{Baker2004, Munoz2014} between a particular instance of the object present in the image and its optimal appearance reconstruction by the appearance model:
+% \begin{equation}
+%     \begin{aligned}
+%         \mathbf{p}_o & = \underset{\mathbf{p}}{\mathrm{arg\,min\;}} 
+%         \left\| \mathbf{i}[\mathbf{p}] - \mathbf{a} \right\|^2 
+%     \label{eq:ssd_shape}
+%     \end{aligned}
+% \end{equation}
+% where $\mathbf{a} = \bar{\mathbf{a}} + \mathbf{A} \mathbf{c}_o$ is obtained by directly evaluating Eq. \ref{eq:app_model} given the true appearance parameters $\mathbf{c}_o$.
 
-\begin{table*}
-\begin{tabular}{lccccccc}
-\hline\noalign{\smallskip}
-Algorithm& $\mathbf{a}$ & $\mathbf{J}$ & $\mathbf{J}^T\mathbf{Q}$ & $\mathbf{H}$ & $\mathbf{H}^{-1}$ & $\mathbf{J}^T\mathbf{e}$ & $\mathbf{H}^{-1}\mathbf{J}^T\mathbf{e}$ \\
-\noalign{\smallskip}\hline\noalign{\smallskip}
-PFC & - & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
-PIC & - & - & - & - & - & $O(nF)$ & - \\
-SFC & $O(mF)$ & $O(nF)$ & - & $O((m+n)^2F)$ & $O((m+n)^3)$ & $O((m+n)F)$ & $O((m+n)^2)$ \\
-SIC & $O(mF)$ & $O(nF)$ & - & $O((m+n)^2F)$ & $O((m+n)^3)$ & $O((m+n)F)$ & $O((m+n)^2)$ \\
-AFC & $O(mF)$ & $O(nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
-AIC & $O(mF)$ & $O(nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
-Fast-SFC & - & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
-Fast-SIC &  $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
-\noalign{\smallskip}\hline
-\end{tabular}
-\caption{Computational cost per iteration of Compositional Gradient Descent algorithms for fitting AAMs.}
-\label{tab:complexity}  
-\end{table*}
+% Compositional Gauss-Newton algorithms solve the previous non-linear optimization problem with respect to the shape parameters $\mathbf{p}$ by:
+% \begin{enumerate}
+%     \item Introducing an incremental warp $\mathcal{W}(\mathbf{x}; \delta \mathbf{p})$; either on the image side:
+%     \label{it:step_1}
+%     \begin{equation}
+%         \begin{aligned}
+%             \delta \mathbf{p}_o & = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}} \left\| \mathbf{i} [\mathbf{p} \circ \delta \mathbf{p}] - \mathbf{a} \right\|^2 
+%         \label{eq:fc}
+%         \end{aligned}
+%     \end{equation}
+%     in what is known as \emph{Forward Composition} (FC) or on the model side: 
+%     \begin{equation}
+%         \begin{aligned}
+%             \delta \mathbf{p}_o = \underset{\delta \mathbf{p}}{\mathrm{arg\,min\;}}  \left\| \mathbf{i} [\mathbf{p}] - \mathbf{a}[\delta \mathbf{p}] \right\|^2 
+%         \label{eq:ic}
+%         \end{aligned}
+%     \end{equation}
+%     in what is known as \emph{Inverse Composition} (IC).
+    
+%     \item Performing a Taylor expansion of the residual around the incremental warp
+%     \begin{equation}
+%         \begin{aligned}
+%             \delta \mathbf{p}_o & = \underset{\delta\mathbf{p}}{\mathrm{arg\,min\;}} \left\| \mathbf{r}(\mathbf{p}) + \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \delta\mathbf{p} \right\|^2
+%             \\
+%             & = \underset{\delta\mathbf{p}}{\mathrm{arg\,min\;}} \left\| \mathbf{i} [\mathbf{p}] - \mathbf{a} + \mathbf{J} \delta \mathbf{p} \right\|^2
+%         \label{eq:taylor}
+%         \end{aligned}
+%     \end{equation}
+%     where $\mathbf{J} = \nabla \mathbf{i}[\mathbf{p}] \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ or $\mathbf{J} = -\nabla \mathbf{a} \frac{\partial\mathcal{W}}{\partial\mathbf{p}}$ depending on whether forward or inverse composition is used.
+    
+%     \item Solving for $\delta\mathbf{p}$ by equating the derivative of Eq. \ref{eq:taylor} to $\mathbf{0}$:
+%     \begin{equation}
+%         \begin{aligned}
+%             \frac{\partial \left\| \mathbf{r}(\mathbf{p}) + \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \delta\mathbf{p} \right\|^2}{\partial \mathbf{p}} & = \mathbf{0} 
+%             \\
+%             \left(\mathbf{r}(\mathbf{p}) + \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \delta\mathbf{p} \right) \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T  & = \mathbf{0} 
+%             \\
+%             \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T \mathbf{r}(\mathbf{p}) + \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \delta\mathbf{p} & = \mathbf{0} 
+%         \label{eq:taylor}
+%         \end{aligned}
+%     \end{equation}
+%     Rearranging, the optimal solution $\delta\mathbf{p}_o$ is given by:
+%     \begin{equation}
+%         \begin{aligned}
+%             \delta\mathbf{p}_o & = - \left( \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T \frac{\partial\mathbf{r}}{\partial\mathbf{p}} \right)^{-1} \frac{\partial\mathbf{r}}{\partial\mathbf{p}}^T \mathbf{r}(\mathbf{p})
+%             \\
+%             & = - \mathbf{H}^{-1} \mathbf{J}^T \left( \mathbf{i}[\mathbf{p}] - \mathbf{a} \right)
+%         \label{eq:solve_dp}
+%         \end{aligned}
+%     \end{equation}
+    
+%     \item Updating the current estimate of the warp using one of the following update rules
+%     \begin{equation}
+%         \mathcal{W}(\mathbf{x}; \mathbf{p}_o) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}) \circ \mathcal{W}(\mathbf{x}; \delta \mathbf{p}_o) 
+%         \label{eq:fc_update}
+%     \end{equation}
+%     for forward composition and
+%     \begin{equation}
+%         \mathcal{W}(\mathbf{x}; \mathbf{p}_o) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}) \circ \mathcal{W}(\mathbf{x}; \delta \mathbf{p}_o)^{-1} 
+%         \label{eq:ic_update}
+%     \end{equation}
+%     for inverse.
+    
+%     \item Going back to Step \ref{it:step_1} until: 
+%     \begin{equation}
+%         \begin{aligned}
+%             \left\| \mathbf{p}_{k+1} - \mathbf{p}_k \right\|^2 < \epsilon
+%         \end{aligned}
+%     \end{equation}
+%     where $\epsilon$ is a small number determining the convergence of the shape parameters $\mathbf{p}$.
+% \end{enumerate}
+% Further details on the computation of $\frac{\partial \mathcal{W}}{\partial \mathbf{p}}$, composition $\mathcal{W}(\mathbf{x}; \mathbf{p}) \circ \mathcal{W}(\mathbf{x}; \delta \mathbf{p})$ and inversion $\mathcal{W}(\mathbf{x};\delta \mathbf{p})^{-1}$ of typical AAM motion models such as PWA and TPS warps can be found in \cite{Matthews2004, Papandreou2008}.
+
+% In general, optimization of Eq. \ref{eq:ssd} with respect to the appearance parameters is highly dependent on the particular algorithm being used. The next subsections provide a detailed review of the main existent strategies used by compositional Gauss-Newton algorithms to deal with the appearance parameters.
+
+% \begin{table*}
+% \begin{tabular}{lccccccc}
+% \hline\noalign{\smallskip}
+% Algorithm& $\mathbf{a}$ & $\mathbf{J}$ & $\mathbf{J}^T\mathbf{Q}$ & $\mathbf{H}$ & $\mathbf{H}^{-1}$ & $\mathbf{J}^T\mathbf{e}$ & $\mathbf{H}^{-1}\mathbf{J}^T\mathbf{e}$ \\
+% \noalign{\smallskip}\hline\noalign{\smallskip}
+% PFC & - & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
+% PIC & - & - & - & - & - & $O(nF)$ & - \\
+% SFC & $O(mF)$ & $O(nF)$ & - & $O((m+n)^2F)$ & $O((m+n)^3)$ & $O((m+n)F)$ & $O((m+n)^2)$ \\
+% SIC & $O(mF)$ & $O(nF)$ & - & $O((m+n)^2F)$ & $O((m+n)^3)$ & $O((m+n)F)$ & $O((m+n)^2)$ \\
+% AFC & $O(mF)$ & $O(nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
+% AIC & $O(mF)$ & $O(nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
+% Fast-SFC & - & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
+% Fast-SIC &  $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(nF)$ & $O(n^2)$ \\
+% \noalign{\smallskip}\hline
+% \end{tabular}
+% \caption{Computational cost per iteration of Compositional Gradient Descent algorithms for fitting AAMs.}
+% \label{tab:complexity}  
+% \end{table*}
