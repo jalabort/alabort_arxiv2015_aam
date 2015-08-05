@@ -1,4 +1,4 @@
-\subsection{Composition}
+\subsection{Type of Composition}
 \label{sec:composition}
 
 The optimization problems define by Equations \ref{eq:} and \ref{eq:} are both non-linear optimization
@@ -17,12 +17,39 @@ The optimization problems define by Equations \ref{eq:} and \ref{eq:} are both n
 \subsubsection{Inverse}
 \label{sec:inverse}
 
+\begin{equation}
+ 	\begin{aligned}
+    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \Delta \mathbf{p}^*)^{-1} 
+    \label{eq:ic_update}
+    \end{aligned}
+\end{equation}
+
 \subsubsection{Asymmetric}
 \label{sec:asymmetric}
 
+\begin{equation}
+ 	\begin{aligned}
+    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \alpha \Delta \mathbf{p}^*)\circ \mathcal{W}(\mathbf{x}; (1-\alpha) \Delta \mathbf{p}^*) 
+    \label{eq:ac_update}
+    \end{aligned}
+\end{equation}
 
 \paragraph{Symmetric}
 \label{sec:symmetric}
 
+\begin{equation}
+ 	\begin{aligned}
+    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \frac{1}{2} \Delta \mathbf{p}^*)\circ \mathcal{W}(\mathbf{x}; \frac{1}{2} \Delta \mathbf{p}^*) 
+    \label{eq:ac_update}
+    \end{aligned}
+\end{equation}
+
 \subsubsection{Bidirectional}
 \label{sec:bidirectional}
+
+\begin{equation}
+ 	\begin{aligned}
+    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \Delta \mathbf{p}^*)\circ \mathcal{W}(\mathbf{x}; \Delta \mathbf{q}^*)^{-1} 
+    \label{eq:bc_update}
+    \end{aligned}
+\end{equation}
