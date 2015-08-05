@@ -1,14 +1,25 @@
 \subsection{Composition}
 \label{sec:composition}
 
+The optimization problems define by Equations \ref{eq:} and \ref{eq:} are both non-linear optimization
+
 \subsubsection{Forward}
 \label{sec:forward}
+
+\begin{equation}
+ 	\begin{aligned}
+    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \Delta \mathbf{p}^*) 
+    \label{eq:fc_update}
+    \end{aligned}
+\end{equation}
+
 
 \subsubsection{Inverse}
 \label{sec:inverse}
 
 \subsubsection{Asymmetric}
 \label{sec:asymmetric}
+
 
 \paragraph{Symmetric}
 \label{sec:symmetric}

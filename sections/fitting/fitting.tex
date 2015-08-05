@@ -1,15 +1,27 @@
 \section{Fitting Active Appearance Models}
 \label{sec:fit}
+
 AAM fitting is typically formulated as a search over the shape and appearance parameters that minimize the \emph{Sum of Squared pixel Differences} (SSD) between the warped input image and the linear appearance model
-\begin{align}
-\mathbf{p}_o, \mathbf{c}_o & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} 
-\left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|^2 
-\label{eq:ssd}
-\end{align}
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}_o, \mathbf{c}_o & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} \mathbf{r}^T\mathbf{r}
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} 
+        \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|^2 
+    \label{eq:ssd}
+    \end{aligned}
+\end{equation}
 
-Several techniques have been proposed to solve the non-linear\footnote{Notice that Equation \ref{eq:ssd} is linear with respect to the appearance parameters $\mathbf{c}$ but non-linear with respect to the shape parameters $\mathbf{p}$ through the warp $\mathcal{W}(\mathbf{x}; \mathbf{p})$} minimization problem defined by Eq. \ref{eq:ssd}. In this paper, we will center the discussion around compositional gradient descent algorithms \cite{Matthews2004, Gross2005, Papandreou2008, Amberg2009, Tzimiropoulos2012, Tzimiropoulos2013} for fitting AAMs. Consequently, we will not review discriminative and regression based approaches. For these methods, we refer the interested reader to the existent literature \cite{Cootes2001, Hou2001, Batur2005, Donner2006, Liu2009, Saragih2009, Sauer2011, Xiong2013}.
+Several techniques have been proposed to solve the non-linear\footnote{Notice that the residual $\mathbf{r}$ in Equation \ref{eq:ssd} is linear with respect to the appearance parameters $\mathbf{c}$ and non-linear with respect to the shape parameters $\mathbf{p}$ through the warp $\mathcal{W}(\mathbf{x}; \mathbf{p})$.} minimization problem defined by Equation \ref{eq:ssd}. In this paper, we will center the discussion around Compositional Gradient Descent (CGD) algorithms \cite{Matthews2004, Gross2005, Papandreou2008, Amberg2009, Tzimiropoulos2012, Tzimiropoulos2013} for fitting AAMs. Consequently, we will not review discriminative and regression based approaches. For these methods, the interested reader is referred to the existent literature \cite{Cootes2001, Hou2001, Batur2005, Donner2006, Liu2009, Saragih2009, Sauer2011, Xiong2013}.
 
-In order to accurately introduce compositional gradient descent algorithms for fitting AAMs our discussion wil be divided in three different sections. In the first section we will introduce the most significant cost functions used to fit AAMs. In the second section we will introduce different types of compositions. In the third section we will present different algorithms to optimize the cost functions. Finally, in the fourth section we will relate the proposed compositional gradient descent framework to the extensive prior work on the subject. 
+In the following subsections we present a unified and complete framework the previous CGD algorithms. We classify CGD algorithms with respect to three main characteristics: 
+\begin{inparaenum}[\itshape a\upshape)]
+\item cost function; 
+\item type of composition; and 
+\item optimization method.
+\end{inparaenum}
+
+% In order to accurately describe and study CGD algorithms our discussion will be divided in three different sections. In the first section we will introduce the most significant cost functions used to fit AAMs. In the second section we will introduce different types of compositions. In the third section we will present different algorithms to optimize the cost functions. Finally, in the fourth section we will relate the proposed compositional gradient descent framework to the extensive prior work on the subject. 
 
 
 % \subsection{Compositional Gauss-Newton}
