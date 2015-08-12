@@ -40,7 +40,7 @@ A probabilistic interpretation of the previous cost function can be naturally de
         \\
         & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}}  \underbrace{\frac{}{} ||\mathbf{p}||^2_{\mathbf{\Lambda}^{-1}} + ||\mathbf{c}||^2_{\mathbf{\Sigma}^{-1}}}_{\mathcal{R}(\mathbf{p}, \mathbf{c})} +
         \\
-        & \qquad \qquad \quad  \underbrace{ \frac{1}{\sigma^2} || \mathbf{i}[\mathbf{p}] - (\mathbf{\bar{a}} + \mathbf{A} \mathbf{c}) ||^2}_{\mathcal{D}(\mathbf{i}[\mathbf{p}], \mathbf{c})} 
+        & \qquad \qquad \quad \underbrace{ \frac{1}{\sigma^2} || \mathbf{i}[\mathbf{p}] - (\mathbf{\bar{a}} + \mathbf{A} \mathbf{c}) ||^2}_{\mathcal{D}(\mathbf{i}[\mathbf{p}], \mathbf{c})} 
     \end{aligned}
     \label{eq:prob_rssd}
 \end{equation}
@@ -147,7 +147,7 @@ and using the Woodbury formula\footnote{
         \\
         & \quad \, \frac{1}{\sigma^2}|| \mathbf{i}[\mathbf{p}] - \mathbf{\bar{a}} ||^2_{\bar{\mathbf{A}}}
     \end{aligned}
-    \label{eq:marginal}
+    \label{eq:prob_po}
 \end{equation}
 where $\mathbf{D} = \textrm{diag}[\lambda_1 + \sigma^2, \cdots, \lambda_m + \sigma^2]$.
 
@@ -171,6 +171,6 @@ A MAP formulation for the general Bayesian interpretation of the project-out cos
         \\
         & = \underset{\mathbf{p}}{\mathrm{arg\,min\;}}  \underbrace{\frac{}{} ||\mathbf{p}||^2_{\mathbf{\Lambda}^{-1}}}_{\mathcal{R}(\mathbf{p})} + \underbrace{\frac{1}{\sigma^2}|| \mathbf{i}[\mathbf{p}] - \mathbf{\bar{a}} ||^2_{\mathbf{Q}}}_{\mathcal{D}(\mathbf{i}[\mathbf{p}])}
     \end{aligned}
-    \label{eq:prob_aam_fitting}
+    \label{eq:prob_rpo}
 \end{equation}
 where we have defined the Bayesian project-out operator as $\mathbf{Q} = \mathbf{I} - \mathbf{A}(\mathbf{I} - \sigma^2\mathbf{D}^{-1})\mathbf{A}^T$.

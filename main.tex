@@ -19,14 +19,18 @@
 % please place your own definitions here and don't use \def but
 % \newcommand{}{}
 
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+
 % Insert the name of "your journal" with
 %\journalname{International Journal of Computer Vision}
 
 \begin{document}
 
-\title{Unifying Active Appearance Models Fitting}
+\title{Advances in Active Appearance Models Fitting}
 
-\subtitle{A Complete Framework for Fitting Active Appearance Models to Images}
+\subtitle{Unifying Compositional Gradient Descent algorithms}
 
 %\titlerunning{Short form of title}        % if too long for running head
 

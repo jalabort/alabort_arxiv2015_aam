@@ -1,25 +1,79 @@
 \subsection{Type of Composition}
 \label{sec:composition}
 
-The optimization problems define by Equations \ref{eq:} and \ref{eq:} are both non-linear optimization
+Regardless of the particular optimization method used (Section \ref{sec:optimization}) and assuming, for the time being, that the true appearance parameters $\mathbf{c}_o$ are known, the problem defined by Equation \ref{eq:ssd} reduces to a non-rigid image alignment problem \cite{Baker2004, Munoz2014} between the particular instance of the object present in the image and its optimal appearance reconstruction by the appearance model:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}_o & = \underset{\mathbf{p}}{\mathrm{arg\,min\;}} 
+        \left\| \mathbf{i}[\mathbf{p}] - \mathbf{a} \right\|^2 
+    \label{eq:ssd_shape}
+    \end{aligned}
+\end{equation}
+where $\mathbf{a} = \bar{\mathbf{a}} + \mathbf{A} \mathbf{c}_o$ is obtained by directly evaluating Equation \ref{eq:app_model} given the true appearance parameters $\mathbf{c}_o$.
+
+CGD algorithms iteratively solve the previous non-linear optimization problem with respect to the shape parameters $\mathbf{p}$ by:
+\begin{enumerate}
+    \item Introducing an incremental warp according to the particular composition scheme being used.
+    \label{it:step_1}
+    
+    \item Linearizing the cost function around the previous incremental warp.
+    \label{it:step_2}
+    
+    \item Solving for the parameters of the incremental warp.
+    \label{it:step_3}
+
+    \item Updating the current estimate of the warp by using an appropriate compositional update rule.
+    \label{it:step_4}
+
+    \item Going back to Step \ref{it:step_1} until a particular convergence criteria is met.
+    \label{it:step_5}
+\end{enumerate}
+
+The incremental warp is a warp of the same family as the warp $\mathcal{W}(\mathbf{x}, \Delta \mathbf{p})$ used to warp the image... bla, bla, bla...
+
+Existent CGD algorithm have introduced the incremental warp either on the image or the model side in what are known as the \emph{forward} and \emph{inverse} compositional frameworks \cite{Matthews2004, Gross2005, Papandreou2008, Amberg2009, Martins2010, Tzimiropoulos2013} respectively. In this paper, inspired by related works in field of image alignment \cite{Malis2004, Megret2008, Autheserre2009, Megret2010}, we note that novel CGD algorithms can be derived by introducing incremental warps on both the image and the model sides simultaneously. Depending on the exact relationship between these incremental warps we define two novel types of composition:
+\begin{inparaenum}[\itshape i\upshape)]
+    \item \emph{asymmetric}; and
+    \item \emph{bidirectional}.
+\end{inparaenum}
+
+The following subsections detail the previous Step \ref{it:step_1} (how to introduce the incremental warp(s)) and \ref{it:step_5} (how to update the current warp estimate) for the four types of composition considered in this paper. Note that, for convenience, all derivation regarding Step \ref{it:step_1} will be given using the simplified optimization problem defined by Equation \ref{eq:ssd_shape}.
 
 \subsubsection{Forward}
 \label{sec:forward}
 
+In the forward compositional framework the incremental warp $\Delta \mathbf{p}$ is introduced on the image side at each iteration by composing it with the current warp estimate $\mathbf{p}_{k-1}^*$:
+\begin{equation}
+    \begin{aligned}
+        \Delta \mathbf{p}^* & = \underset{\Delta \mathbf{p}} {\mathrm{arg\, min\;}} || \mathbf{i}[\mathbf{p}_{k-1}^* \circ \Delta \mathbf{p}] - \mathbf{a} ||^2
+    \label{eq:ssd_fc}
+    \end{aligned}
+\end{equation}
+
+Once the optimal value for the parameters of the incremental warp are obtained the current warp estimate is updated according to the following compositional\footnote{\label{foot:warp}Further details regarding the composition, $\mathbf{p} \circ \Delta \mathbf{p}$, and inversion, $\Delta \mathbf{p}^{-1}$, of typical AAMs' motion models such as PWA and TPS warps can be found in \cite{Matthews2004, Papandreou2008}.} update rule:
 \begin{equation}
  	\begin{aligned}
-    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \Delta \mathbf{p}^*) 
+    	\mathbf{p}_k^* \leftarrow \mathbf{p}_{k-1}^* \circ \Delta \mathbf{p}^*
     \label{eq:fc_update}
     \end{aligned}
 \end{equation}
 
-
 \subsubsection{Inverse}
 \label{sec:inverse}
 
+On the other hand, the inverse compositional framework inverts the roles of the image and the model by introducing the incremental warp on the model side:
+\begin{equation}
+    \begin{aligned}
+        \Delta \mathbf{p}^* & = \underset{\Delta \mathbf{p}} {\mathrm{arg\, min\;}} || \mathbf{i}[\mathbf{p}_{k-1}] - \mathbf{a} [\Delta \mathbf{p}] ||^2
+    \label{eq:ssd_ic}
+    \end{aligned}
+\end{equation}
+Notice that in this case the model is the the one we seek to deform using the incremental warp.
+
+Because the incremental warp is introduced on the model side the solution $\Delta \mathbf{p}^*$ needs to be inverted\footnoteref{foot:warp} before it is composed with the current warp estimate:
 \begin{equation}
  	\begin{aligned}
-    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \Delta \mathbf{p}^*)^{-1} 
+    	\mathbf{p}_k^* \leftarrow \mathbf{p}_{k-1}^* \circ \Delta {\mathbf{p}^*}^{-1} 
     \label{eq:ic_update}
     \end{aligned}
 \end{equation}
@@ -27,29 +81,41 @@ The optimization problems define by Equations \ref{eq:} and \ref{eq:} are both n
 \subsubsection{Asymmetric}
 \label{sec:asymmetric}
 
+Asymmetric composition introduces two related incremental warps onto the cost function; one on the image side (forward incremental warp) and the other on the model side (inverse incremental warp): 
+\begin{equation}
+    \begin{aligned}
+        \Delta \mathbf{p}^* & = \underset{\Delta \mathbf{p}} {\mathrm{arg\, min\;}} || \mathbf{i}[\mathbf{p}_{k-1} \circ \alpha \Delta \mathbf{p}] - \mathbf{a} [\beta \Delta \mathbf{p}^{-1}] ||^2
+    \label{eq:ssd_ac}
+    \end{aligned}
+\end{equation}
+The previous two incremental warps are defined to be each others inverse and although the cost function will need to be linearized around both incremental warps in Step \ref{it:step_4} the parameters $\Delta \mathbf{p}^* $ controlling both incremental warps are the same. Also, note that the parameter $\alpha \in [0, 1]$ and $\beta=(1-\alpha)$ controls the relative contribution of both incremental warps in the computation of the optimal value for $\Delta \mathbf{p}^*$. 
+
+In this case, the update rule for the current warp estimate is obtained, as expected, by combining the previous forward and inverse compositional update rules into a single weighted compositional update rule:
 \begin{equation}
  	\begin{aligned}
-    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \alpha \Delta \mathbf{p}^*)\circ \mathcal{W}(\mathbf{x}; (1-\alpha) \Delta \mathbf{p}^*) 
+    	\mathbf{p}_k^* \leftarrow \mathbf{p}_{k-1}^* \circ \alpha \Delta \mathbf{p}^* \circ \beta \Delta \mathbf{p}^* 
     \label{eq:ac_update}
     \end{aligned}
 \end{equation}
 
-\paragraph{Symmetric}
-\label{sec:symmetric}
-
-\begin{equation}
- 	\begin{aligned}
-    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \frac{1}{2} \Delta \mathbf{p}^*)\circ \mathcal{W}(\mathbf{x}; \frac{1}{2} \Delta \mathbf{p}^*) 
-    \label{eq:ac_update}
-    \end{aligned}
-\end{equation}
+Note that, the special case in which $\alpha = \beta = 0.5$ is also referred to as \emph{symmetric} composition \cite{Megret2008, Autheserre2009, Megret2010}.
 
 \subsubsection{Bidirectional}
 \label{sec:bidirectional}
 
+Similar to the previous asymmetric composition, bidirectional composition also introduces incremental warps on both the image and model sides, however, in this case, the incremental warps are assumed to be independent from each other:
+\begin{equation}
+    \begin{aligned}
+        \Delta \mathbf{p}^*, \Delta \mathbf{q}^*  & = \underset{\Delta \mathbf{p}, \Delta \mathbf{q}} {\mathrm{arg\, min\;}} || \mathbf{i}[\mathbf{p}_{k-1} \circ \Delta \mathbf{p}] - \mathbf{a} [\Delta \mathbf{q}] ||^2
+    \label{eq:ssd_bc}
+    \end{aligned}
+\end{equation}
+Consequently, this cost function needs to be linearized around both incremental warps and solve with respect to the two different sets of parameters controlling them, $\Delta \mathbf{p}^*$ and $\Delta \mathbf{q}^*$. 
+
+Once the optimal value for both sets of parameters is recovered the current estimate of the warp is updated using:
 \begin{equation}
  	\begin{aligned}
-    	\mathcal{W}(\mathbf{x}; \mathbf{p}_k^*) \leftarrow \mathcal{W}(\mathbf{x}; \mathbf{p}_{k-1}^*) \circ \mathcal{W}(\mathbf{x}; \Delta \mathbf{p}^*)\circ \mathcal{W}(\mathbf{x}; \Delta \mathbf{q}^*)^{-1} 
+    	\mathbf{p}_k^* \leftarrow \mathbf{p}_{k-1}^* \circ \Delta \mathbf{p}^* \circ \Delta {\mathbf{q}^*}^{-1} 
     \label{eq:bc_update}
     \end{aligned}
 \end{equation}
