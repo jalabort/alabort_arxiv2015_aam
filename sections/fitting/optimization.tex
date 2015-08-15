@@ -4,7 +4,7 @@ Steps \ref{it:step_2} i.e. linearizing the cost function around the incremental 
 
 In this paper we distinguish between three main optimization methods\footnote{Notice that Amberg et al. proposed the use the \emph{Steepest Descent} method \cite{Boyd2004} in \cite{Amberg2009}. However, their approach requires a special formulation of the motion model and it performs poorly using the standard independent AAM formulation \cite{Matthews2004} used in this paper.}:
 \begin{inparaenum}[\itshape i\upshape)]
-    \item \emph{Gauss-Newton} \cite{Boyd2004, Matthews2004, Gross2005, Martins2010};
+    \item \emph{Gauss-Newton} \cite{Boyd2004, Matthews2004, Gross2005, Martins2010, Papandreou2008, Tzimiropoulos2013};
     \item \emph{Newton} \cite{Boyd2004, Kossaifi2014}; and
     \item \emph{Wiberg} \cite{Okatani2006, Strelow2012, Papandreou2008, Tzimiropoulos2013}.
 \end{inparaenum}
@@ -175,7 +175,8 @@ and the solution given by:
     \end{aligned}
 \end{equation}
 
-Note that, solving the previous equation by directly inverting $\left( \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}}^T \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}} \right)$ has complexity $O((m + 2n)^3)$. However, as noted in \cite{Papandreou2008}\footnote{Notice that the authors of \cite{Papandreou2008} applied the Schur complement using inverse composition while we apply it here using the more general \emph{asymmetric} (which includes \emph{forward}, \emph{inverse} and \emph{symmetric}) and \emph{bidirectional} compositions.}, one can take advantage of the inherent structure of the problem and derive an algorithm with smaller complexity by making use of the Schur complement. 
+Note that, solving the previous equation by directly inverting $\left( \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}}^T \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}} \right)$ has complexity $O((m + 2n)^3)$. However, %as noted in \cite{Papandreou2008}\footnote{Notice that the authors of \cite{Papandreou2008} applied the Schur complement using inverse composition while we apply it here using the more general \emph{asymmetric} (which includes \emph{forward}, \emph{inverse} and \emph{symmetric}) and \emph{bidirectional} compositions.}
+, one can take advantage of the inherent structure of the problem and derive an algorithm with smaller complexity by making use of the Schur complement. 
 
 For \emph{asymmetric} composition we have: 
 \begin{equation}
