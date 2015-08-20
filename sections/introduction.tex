@@ -1,45 +1,45 @@
 \section{Introduction}
 \label{sec:intro}
 
-Active Appearance Models (AAMs) \cite{Cootes2001, Matthews2004} are one of the most popular and well-established techniques for modeling and segmenting deformable objects in computer vision. AAMs are generative parametric models of shape and appearance that can be \emph{fitted} to images to obtain the set of model parameters that best describe particular instances of the object being modeled.
+Active Appearance Models (AAMs) \cite{Cootes2001, Matthews2004} are one of the most popular and well-established techniques for modeling and segmenting deformable objects in computer vision. AAMs are generative parametric models of shape and appearance that can be \emph{fitted} to images to recover the set of model parameters that best describe a particular instance of the object being modeled.
 
-AAM fitting is a \emph{non-linear optimization} problem that requires the  minimization (maximization) of a global error (similarity) measure between the input image and the initial model instance. Several strategies have been proposed to define and solve the previous optimization problem \cite{Cootes2001, Hou2001, Matthews2004, Batur2005, Gross2005, Donner2006, Papandreou2008, Liu2009, Saragih2009, Amberg2009, Tresadern2010, Martins2010, Sauer2011, Tzimiropoulos2013, Kossaifi2014, Antonakos2014}. Broadly speaking the previous strategies can be classified into: 
+Fitting AAMs is a non-linear optimization problem that requires the  minimization (maximization) of a global error (similarity) measure between the input image and an initial model instance. Several approaches \cite{Cootes2001, Hou2001, Matthews2004, Batur2005, Gross2005, Donner2006, Papandreou2008, Liu2009, Saragih2009, Amberg2009, Tresadern2010, Martins2010, Sauer2011, Tzimiropoulos2013, Kossaifi2014, Antonakos2014} have been proposed to define and solve the previous optimization problem. Broadly speaking, the they can be divided into two different groups: 
 \begin{itemize}
-\item \emph{Regression-based} \cite{Cootes2001, Hou2001, Batur2005, Donner2006, Liu2009, Saragih2009, Tresadern2010, Sauer2011, Xiong2013}
-\item \emph{Optimization-based} \cite{Matthews2004, Gross2005, Papandreou2008, Amberg2009, Martins2010, Tzimiropoulos2013, Kossaifi2014}
+\item \emph{Regression} based \cite{Cootes2001, Hou2001, Batur2005, Donner2006, Saragih2009, Tresadern2010, Sauer2011}
+\item \emph{Optimization} based \cite{Matthews2004, Gross2005, Papandreou2008, Amberg2009, Martins2010, Tzimiropoulos2013, Kossaifi2014}
 \end{itemize}
 
-Regression-based techniques attempt to solve the problem by learning a direct function mapping between the error measure and the optimal values of the AAM parameters. Most notable approaches include variations on the original fixed linear regression approach of \cite{Cootes2001, Hou2001, Donner2006}, the adaptive linear regression approach of \cite{Batur2005} and the works of \cite{Saragih2009} and \cite{Tresadern2010} which considerably improved the accuracy and convergence of the results by using boosted regression. Also, Cootes and Taylor \cite{Cootes2001b} and Tresadern et al. \cite{Tresadern2010} showed that the use of non-linear gradient-based and Haar-like features for appearance representation lead to better fitting performance in regression-based AAMs. 
+Regression based techniques attempt to solve the problem by learning a direct function mapping between the error measure and the optimal values of the parameters. Most notable approaches include variations on the original fixed linear regression approach of \cite{Cootes2001, Hou2001, Donner2006}, the adaptive linear regression approach of \cite{Batur2005}, and the works of \cite{Saragih2009} and \cite{Tresadern2010} which considerably improved upon previous techniques by using boosted regression. Also, Cootes and Taylor \cite{Cootes2001b} and Tresadern et al. \cite{Tresadern2010} showed that the use of non-linear gradient-based and Haar-like appearance representations, respectively, lead to better fitting accuracy in regression based AAMs. 
 
-Optimization-based methods for fitting AAMs were proposed by Matthews and Baker in \cite{Matthews2004}. These techniques are known as Compositional Gradient Decent (CGD) algorithms and are based on direct analytical optimization of the error measure defining the fitting problem. Popular CGD algorithms for fitting AAMs include the very fast Project-Out Inverse Compositional (PIC) algorithm \cite{Matthews2004}, the accurate but slow Simultaneous Inverse Compositional (SIC) algorithm \cite{Gross2005}, and the more efficient variations of the previous SIC algorithm presented in \cite{Papandreou2008} and \cite{ Tzimiropoulos2013}. 
+Optimization based methods for fitting AAMs were proposed by Matthews and Baker in \cite{Matthews2004}. These techniques are known as Compositional Gradient Decent (CGD) algorithms and are based on direct analytical optimization of the error measure. Popular CGD algorithms include the very fast project-out Inverse Compositional (PIC) algorithm \cite{Matthews2004}, the accurate but slow Simultaneous Inverse Compositional (SIC) algorithm \cite{Gross2005}, and the more efficient versions of the previous SIC algorithm presented in \cite{Papandreou2008} and \cite{Tzimiropoulos2013}. On the other hand, Lucey et al. \cite{Lucey2013} extended the previous algorithms to the Fourier domain increasing their robustness; and the authors of \cite{Antonakos2014} showed that optimization based AAMs using non-linear feature based (e.g. SIFT\cite{Lowe1999} and HOG \cite{Dalal2005}) appearance models were competitive with modern state-of-the-art techniques in non-rigid face alignment \cite{Xiong2013, Asthana2013} in terms of fitting accuracy.
 
-AAMs have been often criticized due to: 
-\begin{inparaenum}[\itshape a\upshape)] 
+AAMs have been often criticized due several reasons: 
+\begin{inparaenum}[\itshape i\upshape)] 
 \item the limited representational power of their linear appearance model; 
-\item the difficulties that arise (local minima, computational cost) when optimizing simultaneously with respect to shape and appearance; and
-\item their inappropriate treatment of occlusions. 
+\item the difficulty of optimizing shape and appearance parameters simultaneously; and
+\item the complexity involved in handling occlusions. 
 \end{inparaenum}
-However, recent works in this area \cite{Tzimiropoulos2012, Lucey2013, Tzimiropoulos2014, Antonakos2014} suggest that this limitation might have been over-stressed in the literature and that global texture models can produce highly accurate results if appropriate training data \cite{Tzimiropoulos2013}, image representations \cite{Tzimiropoulos2012, Lucey2013, Tzimiropoulos2014, Antonakos2014} and fitting strategies \cite{Tzimiropoulos2012, Tzimiropoulos2013} are employed.
+However, recent works in this area \cite{Papandreou2008, Saragih2009,Tresadern2010, Lucey2013, Tzimiropoulos2013, Antonakos2014} suggest that these limitations might have been over-stressed in the literature and that AAMs can produce highly accurate results if appropriate training data \cite{Tzimiropoulos2013}, appearance representations \cite{Tresadern2010, Lucey2013, Antonakos2014} and fitting strategies \cite{Papandreou2008, Saragih2009, Tresadern2010, Tzimiropoulos2013} are employed.
 
-In this paper, we study the problem of fitting AAMs using the Compositional Gradient Descent (CGD) algorithms in great detail.  Summarizing, our main contributions are:
+In this paper, we study the problem of fitting AAMs using CGD algorithms thoroughly. Summarizing, our main contributions are:
 \begin{itemize}
-	\item To present a unified and complete overview of the most relevant and recently published CGD algorithms for fitting AAMs \cite{Matthews2004, Gross2005, Papandreou2008, Amberg2009, Martins2010, Tzimiropoulos2013, Kossaifi2014}. To this end, we classify CGD algorithms with respect to three main characteristics: 
-	\begin{inparaenum}[\itshape a\upshape)] 
+	\item To present a unified and complete overview of the most relevant and recently published CGD algorithms for fitting AAMs \cite{Matthews2004, Gross2005, Papandreou2008, Amberg2009, Martins2010, Tzimiropoulos2012, Tzimiropoulos2013, Kossaifi2014}. To this end, we classify CGD algorithms with respect to three main characteristics: 
+	\begin{inparaenum}[\itshape i\upshape)] 
 		\item the \emph{cost function} defining the fitting problem; 
-		\item the type of \emph{composition} being used; and 
-		\item the \emph{optimization method} used to optimize the cost function. 
+		\item the type of \emph{composition} used; and 
+		\item the \emph{optimization method} employed to solve the non-linear optimization problem. 
 	\end{inparaenum}
 
-	\item To propose, within the previous framework, the use of two novel types of composition for AAMs:
-	\begin{inparaenum}[\itshape a\upshape)] 
+	\item To review the probabilistic interpretation of AAMs and propose a novel \emph{Bayesian formulation}\footnote{A preliminary version of this work \cite{Alabort2014} was presented at CVPR 2014.} of the fitting problem. We assume a probabilistic model for appearance generation with both Gaussian noise and a Gaussian prior over a latent appearance space. Marginalizing out the latent appearance space, we derive a novel cost function that only depends on shape parameters and that can be interpreted as a valid and more general probabilistic formulation of the well-known project-out cost function \cite{Matthews2004}. Our Bayesian formulation is motivated by seminal works on probabilistic component analysis and object tracking \cite{Moghaddam1997, Roweis1998, Tipping1999}.
+
+	\item To propose the use of two novel types of composition for AAMs:
+	\begin{inparaenum}[\itshape i\upshape)] 
 		\item \emph{asymmetric}; and 
-		\item \emph{bidirectional} . 
-	\end{inparaenum} These new types of composition, which have been widely used in the related field of parametric image alignment \cite{Malis2004, Megret2008, Autheserre2009, Megret2010}, use the gradients of both image and appearance model to obtain better convergent and more robust CGD algorithms.
+		\item \emph{bidirectional}. 
+	\end{inparaenum} These types of composition have been widely used in the related field of parametric image alignment \cite{Malis2004, Megret2008, Autheserre2009, Megret2010} and use the gradients of both image and appearance model to derive better convergent and more robust CGD algorithms.
 
-	\item To provide valuable insights into existent add-hoc strategies used to derived fast and exact simultaneous algorithms by reinterpreting them as direct applications of the Schur complement \cite{Boyd2004} and the Wiberg algorithm \cite{Okatani2006, Strelow2012}.
-
-	\item To review the probabilistic formulation of AAMs introduced in our previous work \cite{Alabort2014} in which we show...
+	\item To provide valuable insights into existent add-hoc strategies used to derived fast and exact simultaneous algorithms for fitting AAMs by reinterpreting them as direct applications of the \emph{Schur complement} \cite{Boyd2004} and the \emph{Wiberg algorithm} \cite{Okatani2006, Strelow2012}.
 \end{itemize}
 
-The reminder of the paper is structured as follows. Section \ref{sec:aam} introduces AAMs and revisits their probabilistic interpretation. Section \ref{sec:fitting} constitutes the main section of the paper and contains the discussion and derivations related to cost functions \ref{sec:cost_function}, composition types \ref{sec:composition} and optimization methods \ref{sec:optimization}. Implementation details are discussed in Section \ref{sec:implementation} and experimental results reported in Section \ref{sec:experiment}. Finally, conclusions are drawn in Section \ref{sec:conclusion}.
+The reminder of the paper is structured as follows. Section \ref{sec:aam} introduces AAMs and reviews their probabilistic interpretation. Section \ref{sec:fitting} constitutes the main section of the paper and contains the discussion and derivations related to the cost functions \ref{sec:cost_function}; composition types \ref{sec:composition}; and optimization methods \ref{sec:optimization}. Implementation details are provided in Section \ref{sec:implementation} and experimental results reported in Section \ref{sec:experiment}. Finally, conclusions are drawn in Section \ref{sec:conclusion}.
 

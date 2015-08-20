@@ -1,2 +1,10 @@
 \section{Implementation details}
-\label{sec:imp}
+\label{sec:implementation}
+
+% \paragraph{Code.} We developed our own open-source implementations\footnote{All implementations will be made publicly available as part of the Menpo Project \cite{Menpo2014} \url{http://www.menpo.org/}.} of the previously described deformable model fitting algorithms \ie PIC and AIC for AAMs, RLMS for CLMs and PIC+RLMS and AIC+RLMS for the proposed Unified model.
+
+% \paragraph{Training data.} Reported results for the previous algorithms are obtained by training our implementations on the same 813 images of the Labelled Face Parts in the Wild (LFPW) \cite{Belhumeur2011} training dataset. 
+
+% \paragraph{Shape and texture models.} All our methods are implemented using a 2 level multi-resolution pyramidal scheme (face images are normalized to have a face size of roughly 100 pixels on the top resolution level). Similar to \cite{Tzimiropoulos2014} we use a reduced version of the Dense Scale Invariant Feature Transform (DSIFT) \cite{Lowe1999} to define the image representation of both holistic and parts-based texture models. For holistic generative appearance models the number of texture components is set to 50 and kept constant throughout the optimization. Multi-Channel Correlation Filters \cite{Galoogahi2013} are used to learn parts-based discriminative appearance models. The size of each local patches is set to 17x17 and kept constant throughout the optimization. Finally, the dimensionality of the 2d shape model is set to 7 (4 similarity parameters + 3 nonrigid shape components) at the low resolution level and to 16 (4 + 12) at the top resolution one.
+
+% \paragraph{Run time.} The average run time for each method (20 iteration per image) using our unoptimized single threaded Python implementations on a laptop equipped with a 2.3GHz quad-core Intel Core i7 processor are: PIC $\sim$ 80 ms, AIC $\sim$ 130 ms, RLMS $\sim$ 100 ms, PIC-RLMS $\sim$ 110 ms, and AIC-RLMS $\sim$ 140 ms.

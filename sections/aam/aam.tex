@@ -10,7 +10,7 @@
 	\includegraphics[width=0.16\textwidth]{figures/img4.png}
 	\includegraphics[width=0.16\textwidth]{figures/img5.png}
 	\caption{Exemplar images from the Labeled Faces in-the-Wild (LFPW) dataset \cite{Belhumeur2011} for which a consistent set of sparse landmarks representing the shape of the object being model (human face) has been manually defined.}
-	\label{fig:afw_exp}
+	\label{fig:lfpw_images}
 \end{figure*}
 
 Active Appearance Models (AAMs) \cite{Cootes2001,Matthews2004} are generative parametric models that explain visual variations, in terms of shape and appearance, within a particular object class. AAMs are built from a collection of images for which the spatial position of a sparse set of landmark points $\mathbf{x}_i = (x_i, y_i)^T \in \mathcal{R}^2$ representing the shape $\mathbf{s} = (x_1, y_1, \dots, x_v, y_v)^T \in \mathcal{R}^{2v \times 1}$ of the object being modeled has been manually defined a priori. 
@@ -54,7 +54,7 @@ The appearance model is obtained by warping the original images onto a common re
 	\end{aligned}
     \label{eq:app_model}
 \end{equation}
-where $\mathbf{x} \in \Omega$ denote all pixels positions on the reference frame, and $\bar{A}(\mathbf{x})$, $A_i(\mathbf{x})$ and $c_i$ denote the mean texture, the appearance bases and appearance parameters, respectively. Denoting $\mathbf{a} = \text{vec}(A(\mathbf{x}))$ as the vectorized version of the previous appearance instance, equation \ref{eq:app_model} can be concisely written in vector form as
+where $\mathbf{x} \in \Omega$ denote all pixels positions on the reference frame, and $\bar{A}(\mathbf{x})$, $A_i(\mathbf{x})$ and $c_i$ denote the mean texture, the appearance bases and appearance parameters, respectively. Denoting $\mathbf{a} = \text{vec}(A(\mathbf{x}))$ as the vectorized version of the previous appearance instance, equation \ref{eq:app_model} can be concisely written in vector form as:
 \begin{equation}
 	\begin{aligned}
 		\mathbf{a} & = \mathbf{\bar{a}} + \mathbf{A} \mathbf{c}
@@ -76,7 +76,7 @@ Given an image $I(\mathbf{x})$ containing the object of interest, its manually a
 	    \label{eq:aam_1}
 	\end{eqnarray}
 
-	\item The object's appearance can be well approximated by the appearance model after the image is warped, using the motion model and the the previous shape approximation, onto the reference frame
+	\item The object's appearance can be well approximated by the appearance model after the image is warped, using the motion model and the the previous shape approximation, onto the reference frame:
 	\begin{eqnarray}
 		\begin{aligned}
 			\mathbf{i}[\mathbf{p}] & \approx \mathbf{\bar{a}} + \mathbf{A} \mathbf{c} 
@@ -86,5 +86,11 @@ Given an image $I(\mathbf{x})$ containing the object of interest, its manually a
 	where $\mathbf{i}[\mathbf{p}] = \mathrm{vec}(I(\mathcal{W}(\mathbf{x}; \mathbf{p})))$ denotes the vectorized version of the warped image. Note that, the warp $\mathcal{W}(\mathbf{x}; \mathbf{p}))$ which explicitly depends on the shape parameters $\mathbf{p}$, relates the previous shape and appearance models and it is a central part of the AAMs formulation
 \end{enumerate}
 
-Because of their explicit use of the motion model, the two previous assumptions provide a concise and unambiguous way to define AAMs. These assumption will be used in next section \ref{sec:paam} to introduce a more general and probabilistic formulation of AAMs. At this point, it is worth to mention that the vector notation of equations \ref{eq:aam_1} and \ref{eq:aam_2} will be, in general, the preferred notation in this paper.
+Because of their explicit use of the motion model, the two previous assumptions provide a concise and unambiguous way to define AAMs. These assumption will be used in next section \ref{sec:probabilistic_aam} to introduce a more general and probabilistic formulation of AAMs. At this point, it is worth to mention that the vector notation of equations \ref{eq:aam_1} and \ref{eq:aam_2} will be, in general, the preferred notation in this paper.
 
+% \begin{figure*}
+% 	\centering
+% 	\includegraphics[width=1\textwidth]{figures/AAMs.png}
+% 	\caption{Exemplar images from the Labeled Faces in-the-Wild (LFPW) dataset \cite{Belhumeur2011} for which a consistent set of sparse landmarks representing the shape of the object being model (human face) has been manually defined.}
+% 	\label{fig:aams}
+% \end{figure*}
