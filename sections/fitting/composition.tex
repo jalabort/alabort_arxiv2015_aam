@@ -1,7 +1,7 @@
 \subsection{Type of Composition}
 \label{sec:composition}
 
-Assuming, for the time being, that the true appearance parameters $\mathbf{c}_o$ are known, the problem defined by Equation \ref{eq:ssd} reduces to a non-rigid image alignment problem \cite{Baker2004, Munoz2014} between the particular instance of the object present in the image and its optimal appearance reconstruction by the appearance model:
+Assuming, for the time being, that the true appearance parameters $\mathbf{c}^*$ are known, the problem defined by Equation \ref{eq:ssd} reduces to a non-rigid image alignment problem \cite{Baker2004, Munoz2014} between the particular instance of the object present in the image and its optimal appearance reconstruction by the appearance model:
 \begin{equation}
     \begin{aligned}
         \mathbf{p}_o & = \underset{\mathbf{p}}{\mathrm{arg\,min\;}} 
@@ -9,7 +9,7 @@ Assuming, for the time being, that the true appearance parameters $\mathbf{c}_o$
     \label{eq:ssd_shape}
     \end{aligned}
 \end{equation}
-where $\mathbf{a} = \bar{\mathbf{a}} + \mathbf{A} \mathbf{c}_o$ is obtained by directly evaluating Equation \ref{eq:app_model} given the true appearance parameters $\mathbf{c}_o$.
+where $\mathbf{a} = \bar{\mathbf{a}} + \mathbf{A} \mathbf{c}^*$ is obtained by directly evaluating Equation \ref{eq:app_model} given the true appearance parameters $\mathbf{c}^*$.
 
 CGD algorithms iteratively solve the previous non-linear optimization problem with respect to the shape parameters $\mathbf{p}$ by:
 \begin{enumerate}
@@ -39,10 +39,10 @@ Existent CGD algorithm for fitting AAMs have introduced the incremental warp eit
 
 The following subsections explain how to introduce the incremental warp into the cost function and how to update the current warp estimate for the four types of composition considered in this paper: 
 \begin{inparaenum}[\itshape i\upshape)]
-    \item forward (Section \ref{sec:forward}); 
-    \item inverse (Section \ref{sec:inverse});
-    \item asymmetric (Section \ref{sec:asymmetric}); and
-    \item bidirectional (Section \ref{sec:bidirectional}).
+    \item forward; 
+    \item inverse;
+    \item asymmetric; and
+    \item bidirectional.
 \end{inparaenum} Note that, for convenience, in these subsections we will use the simplified cost function defined by Equation \ref{eq:ssd_shape}.
 
 \subsubsection{Forward}
@@ -56,7 +56,7 @@ In the forward compositional framework the incremental warp $\Delta \mathbf{p}$ 
     \end{aligned}
 \end{equation}
 
-Once the optimal values for the parameters of the incremental warp are obtained, the current warp estimate is updated according to the following compositional\footnote{\label{foot:warp}Further details regarding the composition, $\mathbf{p} \circ \Delta \mathbf{p}$, and inversion, $\Delta \mathbf{p}^{-1}$, of typical AAMs' motion models such as PWA and TPS warps can be found in \cite{Matthews2004, Papandreou2008}.} update rule:
+Once the optimal values for the parameters of the incremental warp are obtained, the current warp estimate is updated according to the following compositional\footnote{\label{foot:warp}Further details regarding composition, $\mathbf{p} \circ \Delta \mathbf{p}$, and inversion, $\Delta \mathbf{p}^{-1}$, of typical AAMs' motion models such as PWA and TPS warps can be found in \cite{Matthews2004, Papandreou2008}.} update rule:
 \begin{equation}
  	\begin{aligned}
     	\mathbf{p}_k^* \leftarrow \mathbf{p}_{k-1}^* \circ \Delta \mathbf{p}^*
