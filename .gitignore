@@ -4,5 +4,13 @@
 *.blg
 *.brf
 *.log
+
 *.pdf
+
 *.pkl.gz
+
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+
+*.DS_Store
