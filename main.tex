@@ -34,7 +34,7 @@
 
 %\titlerunning{Short form of title}        % if too long for running head
 
-\author{Joan Alabort-i-Medina  
+\author{Joan Alabort-i-Medina
         \and
         Stefanos Zafeiriou}
 
@@ -56,13 +56,13 @@
 \begin{abstract}+
 Active Appearance Models (AAMs) are one of the most popular and well-established techniques for modeling deformable objects in computer vision. In this paper, we study the problem of fitting AAMs using Compositional Gradient Descent (CGD) algorithms. We present a unified and complete view of these algorithms and classifying them with respect to three main characteristics:
 \begin{inparaenum}[\itshape i\upshape)]
-	\item \emph{cost function}; 
-	\item type of \emph{composition}; and 
-	\item \emph{optimization method}. 
-\end{inparaenum}. Furthermore, we extend the previous view by: 
+	\item \emph{cost function};
+	\item type of \emph{composition}; and
+	\item \emph{optimization method}.
+\end{inparaenum}. Furthermore, we extend the previous view by:
 \begin{inparaenum}[\itshape a\upshape)]
 	\item proposing a novel \emph{Bayesian cost function} that can be interpreted as general probabilistic formulation of the commonly used project-out loss;
-	\item introducing two new types of composition, \emph{asymmetric} and \emph{bidirectional}, that combine the gradients of both image and appearance model to derive better convergent and more robust CGD algorithms; and 
+	\item introducing two new types of composition, \emph{asymmetric} and \emph{bidirectional}, that combine the gradients of both image and appearance model to derive better convergent and more robust CGD algorithms; and
 	\item providing new valuable insights into existent CGD algorithms by reinterpreting them as direct applications of the \emph{Schur complement} and the \emph{Wiberg method}.
 \end{inparaenum}
 Finally, in order to encourage open research and facilitate future comparisons with our work, we make the implementation of the algorithms used in this paper publicly available as part of the Menpo Project \cite{Menpo2014} \footnote{\url{http://www.menpo.org}}.
@@ -75,7 +75,6 @@ Finally, in order to encourage open research and facilitate future comparisons w
 \input{sections/introduction}
 \input{sections/aam/main}
 \input{sections/fitting/main}
-\input{sections/implementation}
 \input{sections/experiments}
 \input{sections/conclusion}
 
