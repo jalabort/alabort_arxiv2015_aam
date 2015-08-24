@@ -14,7 +14,7 @@ quantifies the global measure of similarity between the vectorized warped image 
 \subsubsection{Regularized Sum of Squared Differences}
 \label{sec:rssd}
 
-Arguably, the most natural choices for the previous data and regularization terms are the SSD between the vectorized warped image and the linear appearance model\footnote{Notice that this choice of $\mathcal{D}$ is very related to the second main assumption behind AAMs, Equation \ref{eq:aam_2}.} and the sum of $\l_2^2$-norms over the shape and appearance parameters respectively:
+Arguably, the most natural choices for the previous data and regularization terms are the SSD between the vectorized warped image and the linear appearance model\footnote{This choice of $\mathcal{D}$ is very related to the second main assumption behind AAMs, Equation \ref{eq:aam_2}.} and the sum of $\l_2^2$-norms over the shape and appearance parameters respectively:
 \begin{equation}
     \begin{aligned}
         \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} \underbrace{\frac{1}{2}||\mathbf{p}||^2 + \frac{1}{2}||\mathbf{c}||^2}_{\mathcal{R} (\mathbf{p}, \mathbf{c})} +
@@ -44,7 +44,7 @@ A probabilistic interpretation of the previous cost function can be naturally de
     \end{aligned}
     \label{eq:prob_rssd}
 \end{equation}
-where we have assumed the shape and appearance parameters to be independent\footnote{Notice that this is a common assumption in CGD algorithms \cite{Matthews2004}, however, in reality, some degree of dependence between these parameters is to be expected \cite{Cootes2001}.}.
+where we have assumed the shape and appearance parameters to be independent\footnote{This is a common assumption in CGD algorithms \cite{Matthews2004}, however, in reality, some degree of dependence between these parameters is to be expected \cite{Cootes2001}.}.
 
 The previous Maximum-A-Posteriori (MAP) formulation is a weighted version of the optimization problem defined by Equation \ref{eq:rssd}. The maximization of the prior probability over the shape and texture parameters leads to the minimization of the regularization term $\mathcal{R}$ and the maximization of the conditional probability of the vectorized warped image given the shape, texture and model parameters leads to the minimization of the data term $\mathcal{D}$.
 
