@@ -321,7 +321,7 @@ The Schur complement can be re-applied to Equation \ref{eq:bidirectional_schur_s
 where we have defined the projection matrix $\mathbf{P}$ as:
 \begin{equation}
     \begin{aligned}
-		\mathbf{P} &= \bar{\mathbf{A}} - \bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}}^T \left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}}^T \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}
+		\mathbf{P} &= \bar{\mathbf{A}} - \bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}
 		\label{eq:bidirectional_schur_projection}
     \end{aligned}
 \end{equation}
@@ -1141,14 +1141,14 @@ On the other hand, the alternated update rules for the Newton method using the p
 \subsubsection{Wiberg}
 \label{sec:wiberg}
 
-The idea behind the Wiberg method is similar to the one used by the alternated Gauss-Newton method, Section \ref{sec:gauss_newton_alternated}. However Wiberg does so by rewriting the asymmetric $\mathbf{r}_a(\Delta\mathbf{c}, \Delta\mathbf{p})$ and bidirectional $\mathbf{r}_b(\Delta\mathbf{c}, \Delta\mathbf{p},\Delta\mathbf{q})$ residuals as functions that only depend on $\Delta\mathbf{p}$ and $\Delta\mathbf{q}$ respectively.
+The idea behind the Wiberg method is similar to the one used by the alternated Gauss-Newton method, Section \ref{sec:gauss_newton_alternated}, i.e. solving for one set of parameters at a time while keeping the other sets fixed. However, Wiberg does so by rewriting the asymmetric $\mathbf{r}_a(\Delta\mathbf{c}, \Delta\mathbf{p})$ and bidirectional $\mathbf{r}_b(\Delta\mathbf{c}, \Delta\mathbf{p},\Delta\mathbf{q})$ residuals as functions that only depend on $\Delta\mathbf{p}$ and $\Delta\mathbf{q}$ respectively.
 
-For \emph{asymmetric} composition, the previous Wiberg residual $\bar{\mathbf{r}}_a (\Delta \mathbf{p})$ is defined as follows:
+For \emph{asymmetric} composition, the residual $\bar{\mathbf{r}}_a (\Delta \mathbf{p})$ is defined as follows:
 \begin{equation}
     \begin{aligned}
-        \bar{\mathbf{r}}_a (\Delta \mathbf{p}) & = \mathbf{r}_a(\bar{\Delta \mathbf{c}}(\Delta \mathbf{p}), \Delta \mathbf{p})
+        \bar{\mathbf{r}}_a (\Delta \mathbf{p}) & = \mathbf{r}_a(\bar{\Delta \mathbf{c}}, \Delta \mathbf{p})
         \\
-        & = \mathbf{i}[\mathbf{p} \circ \alpha \Delta \mathbf{p}] - (\mathbf{a} + \mathbf{A}(\mathbf{c} + \bar{\Delta \mathbf{c}}_a(\Delta \mathbf{p}))) [\beta \Delta\mathbf{p}]
+        & = \mathbf{i}[\mathbf{p} \circ \alpha \Delta \mathbf{p}] - (\mathbf{a} + \mathbf{A}(\mathbf{c} + \bar{\Delta \mathbf{c}}_a)) [\beta \Delta\mathbf{p}]
     \label{eq:asymmetric_wiberg_residual}
     \end{aligned}
 \end{equation}
@@ -1159,24 +1159,24 @@ where the function $\bar{\Delta \mathbf{c}}_a(\Delta \mathbf{p})$ is obtained by
         \label{eq:asymmetric_wiberg_c_function}
     \end{aligned}
 \end{equation}
-Given the previous residual, the Wiberg method defines the following equivalent optimization problem:
+Given the previous residual, the Wiberg method proceeds to define the following optimization problem with respect to $\Delta\mathbf{p}$:
 \begin{equation}
     \begin{aligned}
         \Delta\mathbf{p}^* & = \underset{\Delta\mathbf{p}}{\mathrm{arg\,min\;}} \bar{\mathbf{r}}_a^T\bar{\mathbf{r}}_a
     \label{eq:asymmetric_wiberg_problem1}
     \end{aligned}
 \end{equation}
-which then solves approximately by performing a first order Taylor expansion of the new Wiberg residual $\bar{\mathbf{r}}_a (\Delta \mathbf{p})$:
+which then solves approximately by performing a first order Taylor of the residual around the incremental warp:
 \begin{equation}
     \begin{aligned}
         \Delta\mathbf{p}^* & = \underset{\Delta\mathbf{p}}{\mathrm{arg\,min\;}}  \left\| \bar{\mathbf{r}}_a(\Delta\mathbf{p}) + \frac{\partial \bar{\mathbf{r}}_a}{\partial\Delta\mathbf{p}} \Delta\mathbf{p} \right\|^2
     \label{eq:asymmetric_wiberg_problem2}
     \end{aligned}
 \end{equation}
-Notice that the Jacobian $\frac{\partial\bar{\mathbf{r}}}{\partial\Delta\mathbf{p}}$ is substantially different from the Gauss-Newton one in Equation \ref{eq:asymmetric_jacobian}, and it is defined as follows:
+In this case, the Jacobian $\frac{\partial \bar{\mathbf{r}}}{\partial \Delta \mathbf{p}}$ can be obtain by direct application of the \emph{chain rule} and it is defined as follows:
 \begin{equation}
     \begin{aligned}
-        \frac{d \bar{\mathbf{r}}_a}{d \Delta \mathbf{p}} & = \frac{\partial \bar{\mathbf{r}}_a}{\partial \Delta \mathbf{p}} + \frac{\partial \bar{\mathbf{r}}_a}{\partial \bar{\Delta \mathbf{c}}} \frac{\partial \bar{\Delta \mathbf{c}}}{\partial \Delta \mathbf{p}}
+        \frac{d \bar{\mathbf{r}}_a}{d \Delta \mathbf{p}} & = \frac{\partial \bar{\mathbf{r}}_a}{\partial \Delta \mathbf{p}} + \frac{\partial \bar{\mathbf{r}}_a}{\partial \bar{\Delta \mathbf{c}}_a} \frac{\partial \bar{\Delta \mathbf{c}}_a}{\partial \Delta \mathbf{p}}
         \\
         & = \mathbf{J}_{\mathbf{t}} - \mathbf{A}\mathbf{A}^T\mathbf{J}_{\mathbf{t}}
         \\
@@ -1184,238 +1184,145 @@ Notice that the Jacobian $\frac{\partial\bar{\mathbf{r}}}{\partial\Delta\mathbf{
     \label{eq:asymmetric_wiberg_jacobian}
     \end{aligned}
 \end{equation}
- The solution for $\Delta\mathbf{p}$ is obtained as usual by equating the derivative of \ref{eq:asymmetric_wiberg_problem2} with respect to $\Delta\mathbf{p}$ to 0:
- \begin{equation}
+The solution for $\Delta\mathbf{p}$ is obtained as usual by equating the derivative of \ref{eq:asymmetric_wiberg_problem1} with respect to $\Delta\mathbf{p}$ to 0:
+\begin{equation}
     \begin{aligned}
-    	\Delta \mathbf{p}^* & = \left( \mathbf{J}_{\mathbf{t}}^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T \bar{\mathbf{A}} \bar{\mathbf{r}}_a
+    	\Delta \mathbf{p}^* & = - \left( \left( \bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{t}} \right)^{-1} \left( \bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^T \bar{\mathbf{r}}_a
+    	\\
+    	& = - \left( \mathbf{J}_{\mathbf{t}}^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T \bar{\mathbf{A}} \bar{\mathbf{r}}_a
     \label{eq:asymmetric_wiberg_solution}
     \end{aligned}
 \end{equation}
+where we have used:
+\begin{equation}
+	\begin{aligned}
+		\left( \bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^T & = \mathbf{J}_{\mathbf{t}}^T \bar{\mathbf{A}}^T
+		\\
+		& = \mathbf{J}_{\mathbf{t}}^T \left( \mathbf{I} - \mathbf{A}\mathbf{A}^T \right)^T
+		\\
+		& = \mathbf{J}_{\mathbf{t}}^T \left( \mathbf{I}^T - \left( \mathbf{A}\mathbf{A}^T \right)^T \right)
+		\\
+		& = \mathbf{J}_{\mathbf{t}}^T \left( \mathbf{I} - \mathbf{A}\mathbf{A}^T \right)
+		\\
+		& = \mathbf{J}_{\mathbf{t}}^T \bar{\mathbf{A}}
+	\label{eq:transposed_jacobian}
+    \end{aligned}
+\end{equation}
+and the fact that the matrix $\bar{\mathbf{A}}$ is idempotent:
+ \begin{equation}
+    \begin{aligned}
+    	\bar{\mathbf{A}}\bar{\mathbf{A}} & = \left( \mathbf{I} - \mathbf{A}\mathbf{A}^T \right) \left( \mathbf{I} - \mathbf{A}\mathbf{A}^T \right)
+    	\\
+    	& = \mathbf{I}^T\mathbf{I} - 2\mathbf{A}\mathbf{A}^T + \mathbf{A}\underbrace{\mathbf{A}^T\mathbf{A}}_{\mathbf{I}}\mathbf{A}^T
+    	\\
+    	& = \mathbf{I}^T\mathbf{I} - 2\mathbf{A}\mathbf{A}^T + \mathbf{A}\mathbf{A}^T
+    	\\
+    	& = \mathbf{I}^T\mathbf{I} - \mathbf{A}\mathbf{A}^T 
+    \label{eq:idempotent_bar_A}
+    \end{aligned}
+\end{equation}
+Therefore, the Wiberg method solves explicitly, at each iteration,  for $\Delta\mathbf{p}$ using the previous expression and implicitly for $\Delta\mathbf{c}$ (through $\bar{\Delta \mathbf{c}}_a(\Delta \mathbf{p})$) using Equation \ref{eq:asymmetric_wiberg_c_function}. The complexity per iteration of the Wiberg method is the same as the one of the Gauss-Newton method after applying the Schur complement, Equation \ref{eq:complexity_schur_asymmetric}. In fact, note that the Wiberg solution for $\Delta\mathbf{p}$ (Equation \ref{eq:asymmetric_wiberg_solution}) is the same as the one of the Gauss-Newton method after applying the Schur complement, Equation \ref{eq:asymmetric_schur_solution1}; and also note the similarity between the solutions for $\Delta\mathbf{c}$ of both methods, Equations \ref{eq:asymmetric_wiberg_c_function} and \ref{eq:asymmetric_schur_solution2}.
 
-For \emph{bidirectional} composition, the Wiberg residual $\bar{\mathbf{r}}_b (\Delta \mathbf{p})$ is defined as:
+On the other hand, for \emph{bidirectional} composition, the residual $\bar{\mathbf{r}}_b (\Delta \mathbf{p})$ is defined as:
 \begin{equation}
     \begin{aligned}
-        \bar{\mathbf{r}}_b(\Delta\mathbf{q}) & = \mathbf{r}_b(\bar{\Delta \mathbf{c}}(\Delta\mathbf{q}), \bar{\Delta \mathbf{p}}(\bar{\Delta \mathbf{c}}(\Delta\mathbf{q}), \Delta\mathbf{q}), \Delta\mathbf{q})
+        \bar{\mathbf{r}}_b(\Delta\mathbf{q}) & = \mathbf{r}_b(\bar{\Delta \mathbf{c}}_b, \bar{\Delta \mathbf{p}}_b, \Delta\mathbf{q})
         \\
-        & = \mathbf{i}[\mathbf{p} \circ \bar{\Delta \mathbf{p}}(\bar{\Delta \mathbf{c}}(\Delta\mathbf{q}), \Delta\mathbf{q})] - (\mathbf{a} - \mathbf{A}(\mathbf{c} + \bar{\Delta \mathbf{c}})(\Delta\mathbf{q}))[\Delta \mathbf{q}]
+        & = \mathbf{i}[\mathbf{p} \circ \bar{\Delta \mathbf{p}}_b] - (\mathbf{a} - \mathbf{A}(\mathbf{c} + \bar{\Delta \mathbf{c}}_b))[\Delta \mathbf{q}]
     \label{eq:bidirectional_wiberg_residual}
     \end{aligned}
 \end{equation}
-where, similarly as before, the function $\bar{\Delta \mathbf{c}}_b(\Delta \mathbf{q})$ is defined as:
+where, similarly as before, the function $\bar{\Delta \mathbf{c}}_b(\Delta \mathbf{p}, \Delta \mathbf{q})$ is obtained solving for $\Delta \mathbf{c}$ while keeping both $\Delta \mathbf{p}$ and $\Delta \mathbf{q}$ fixed:
 \begin{equation}
     \begin{aligned}
-        \bar{\Delta \mathbf{c}}_b(\Delta \mathbf{q}) & = \mathbf{A}^T \mathbf{r}_b
+        \bar{\Delta \mathbf{c}}_b(\Delta \mathbf{p}, \Delta \mathbf{q}) & = \mathbf{A}^T \mathbf{r}_b
         \label{eq:asymmetric_wiberg_c_function}
     \end{aligned}
 \end{equation}
-and the function $\bar{\Delta \mathbf{p}}(\bar{\Delta \mathbf{c}}(\Delta\mathbf{q}), \Delta\mathbf{q})$ is obtained by solving for $\Delta\mathbf{p}$ while keeping $\Delta \mathbf{q}$ fixed and $\Delta\mathbf{c}$ as given by the previous function $\bar{\Delta \mathbf{c}}_b(\Delta \mathbf{q})$:
+and the function $\bar{\Delta \mathbf{p}}_b(\bar{\Delta \mathbf{c}}_b, \Delta\mathbf{q})$ is obtained by solving for $\Delta\mathbf{p}$ using the Wiberg method while keeping $\Delta \mathbf{q}$ fixed:
 \begin{equation}
     \begin{aligned}
-        \bar{\Delta \mathbf{p}}(\bar{\Delta \mathbf{c}}(\Delta\mathbf{q}), \Delta\mathbf{q}) & = \left( \mathbf{J}_i^T \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T  \mathbf{r}_b
+        \bar{\Delta \mathbf{p}}_b(\bar{\Delta \mathbf{c}}_b, \Delta\mathbf{q}) & = -\left( \mathbf{J}_{\mathbf{i}}^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T \bar{\mathbf{A}} \bar{\mathbf{r}}_b
         \label{eq:asymmetric_wiberg_p_function}
     \end{aligned}
 \end{equation}
-The Wiberg method proceeds to define the following equivalent optimization problem:
+At this point, the Wiberg method proceeds to define the following optimization problem with respect to $\Delta\mathbf{q}$:
 \begin{equation}
     \begin{aligned}
         \Delta\mathbf{q}^* & = \underset{\Delta\mathbf{q}}{\mathrm{arg\,min\;}} \bar{\mathbf{r}}_b^T\bar{\mathbf{r}}_b
     \label{eq:bidirectional_wiberg_problem1}
     \end{aligned}
 \end{equation}
-and then solves approximately by performing a first order Taylor expansion of the Wiberg residual $\bar{\mathbf{r}}_a (\Delta \mathbf{q})$ around $\Delta\mathbf{q}$:
+which, as before, then solves approximately by performing a first order Taylor expansion around $\Delta\mathbf{q}$:
 \begin{equation}
     \begin{aligned}
         \Delta\mathbf{q}^* & = \underset{\Delta\mathbf{q}}{\mathrm{arg\,min\;}}  \left\| \bar{\mathbf{r}}_b(\Delta\mathbf{q}) + \frac{\partial \bar{\mathbf{r}}_b}{\partial\Delta\mathbf{q}} \Delta\mathbf{q} \right\|^2
     \label{eq:bidirectional_wiberg_problem2}
     \end{aligned}
 \end{equation}
-where, in this case, the Jacobian of the residual takes the following form:
+In this case, the Jacobian of the residual can also be obtained by direct application of the chain rule and takes the following form:
 \begin{equation}
     \begin{aligned}
-        \frac{d \bar{\mathbf{r}}_b}{d \Delta \mathbf{q}} & = \frac{\partial \bar{\mathbf{r}}_b}{\partial \Delta \mathbf{q}} + \frac{\partial \bar{\mathbf{r}}_b}{\partial \bar{\Delta \mathbf{p}}} \frac{\partial \bar{\Delta \mathbf{p}}}{\partial \Delta \mathbf{q}} +
+        \frac{d \bar{\mathbf{r}}_b}{d \Delta \mathbf{q}} & = \frac{\partial \bar{\mathbf{r}}_b}{\partial \Delta \mathbf{q}} + \frac{\partial \bar{\mathbf{r}}_b}{\partial \bar{\Delta \mathbf{p}}_b} \frac{\partial \bar{\Delta \mathbf{p}}_b}{\partial \Delta \mathbf{q}} +
         \\
-        & \quad \left( \frac{\partial\bar{\mathbf{r}}_b}{\partial \bar{\Delta \mathbf{c}}} + \frac{\partial \bar{\mathbf{r}}_b}{\partial \bar{\Delta \mathbf{p}}} \frac{\partial \bar{\Delta \mathbf{p}}}{\partial \bar{\Delta \mathbf{c}}} \right) \frac{\partial \bar{\Delta \mathbf{c}}}{\partial \Delta \mathbf{q}}
+        & \quad \left( \frac{\partial\bar{\mathbf{r}}_b}{\partial \bar{\Delta \mathbf{c}}_b} + \frac{\partial \bar{\mathbf{r}}_b}{\partial \bar{\Delta \mathbf{p}}_b} \frac{\partial \bar{\Delta \mathbf{p}}_b}{\partial \bar{\Delta \mathbf{c}}} \right) \frac{\partial \bar{\Delta \mathbf{c}}_b}{\partial \Delta \mathbf{q}}
         \\
-        & = - \mathbf{J}_{\mathbf{a}} - \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \mathbf{J}_{\mathbf{a}} +
+        & = - \mathbf{J}_{\mathbf{a}} + \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}} +
         \\
-        & \quad \left(\mathbf{A} + \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \mathbf{A} \right) \mathbf{A}^T \mathbf{J}_{\mathbf{a}}
+        & \quad \, \left(\mathbf{A} - \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{A} \right) \mathbf{A}^T \mathbf{J}_{\mathbf{a}}
+        \\
+        & = - \mathbf{J}_{\mathbf{a}} + \mathbf{A}\mathbf{A}^T \mathbf{J}_{\mathbf{a}} +
+        \\
+        & \quad \, \, \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}} +
+        \\
+        & \quad - \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{A} \mathbf{A}^T \mathbf{J}_{\mathbf{a}}
+        \\
+        & = - \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}} +
+        \\
+        & \quad \, \, \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} (\mathbf{J}_{\mathbf{a}} - \mathbf{A} \mathbf{A}^T \mathbf{J}_{\mathbf{a}})
+        \\
+        & = - \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}} + \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \underbrace{\bar{\mathbf{A}} \bar{\mathbf{A}}}_{\bar{\mathbf{A}}} \mathbf{J}_{\mathbf{a}}
+        \\
+        & = \left( -\bar{\mathbf{A}} + \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \right) \mathbf{J}_{\mathbf{a}}
+        \\
+        & = - \mathbf{P} \mathbf{J}_{\mathbf{a}}
     \label{eq:bidirectional_wiberg_jacobian}
     \end{aligned}
 \end{equation}
- The solution for $\Delta\mathbf{p}$ is obtained as usual by equating the derivative of \ref{eq:asymmetric_wiberg_problem2} with respect to $\Delta\mathbf{p}$ to 0:
+ And, again, the solution for $\Delta\mathbf{q}$ is obtained as usual by equating the derivative of \ref{eq:bidirectional_wiberg_problem2} with respect to $\Delta\mathbf{q}$ to 0:
  \begin{equation}
     \begin{aligned}
-    	\Delta \mathbf{p}^* & = \left( \mathbf{J}_{\mathbf{t}}^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T \bar{\mathbf{A}} \bar{\mathbf{r}}_a
-    \label{eq:asymmetric_wiberg_solution}
+    	\Delta \mathbf{q}^* & = \left( \left( \mathbf{P} \mathbf{J}_{\mathbf{t}} \right)^T \mathbf{P} \mathbf{J}_{\mathbf{t}} \right)^{-1} \left( \mathbf{P} \mathbf{J}_{\mathbf{t}} \right)^T \bar{\mathbf{r}}_a
+    \label{eq:bidirectional_wiberg_solution}
     \end{aligned}
 \end{equation}
 
+On the other hand, the Wiberg solutions using the project-out cost function are:
+\begin{itemize}
+	\item For \emph{asymmetric} composition:
+	Because the project-out cost function only depends on one set of parameters, $\Delta \mathbf{p}$, in this case Wiberg reduces to Gauss-Newton.
 
-
-
-
-\begin{equation}
-    \begin{aligned}
-        \Delta\mathbf{q}^* & = \underset{\Delta\mathbf{q}}{\mathrm{arg\,min\;}} \tilde{\mathbf{r}}(\Delta\mathbf{q})^T \tilde{\mathbf{r}}(\Delta\mathbf{q})
-        \\
-        & = \underset{\Delta\mathbf{q}}{\mathrm{arg\,min\;}}  \left\| \mathbf{i}[\mathbf{p} \circ \tilde{\Delta \mathbf{p}}] - (\mathbf{a} - \mathbf{A}(\mathbf{c} + \tilde{\Delta \mathbf{c}}))[\Delta \mathbf{q}] \right\|^2
-    \label{eq:ssd_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \Delta\mathbf{q}^* & = \underset{\Delta\mathbf{q}}{\mathrm{arg\,min\;}}  \left\| \mathbf{r}(\Delta\mathbf{q}) + \frac{\partial\mathbf{r}}{\partial\Delta\mathbf{q}} \Delta\mathbf{q} \right\|^2
-    \label{eq:ssd_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \frac{d \tilde{\mathbf{r}}}{d \Delta \mathbf{q}} & = \frac{\partial \tilde{\mathbf{r}}}{\partial \Delta \mathbf{q}} + \frac{\partial \tilde{\mathbf{r}}}{\partial \tilde{\Delta \mathbf{p}}} \frac{\partial \tilde{\Delta \mathbf{p}}}{\partial \Delta \mathbf{q}} + \left( \frac{\partial\tilde{\mathbf{r}}}{\partial \tilde{\Delta \mathbf{c}}} + \frac{\partial \tilde{\mathbf{r}}}{\partial \tilde{\Delta \mathbf{p}}} \frac{\partial \tilde{\Delta \mathbf{p}}}{\partial \tilde{\Delta \mathbf{c}}} \right) \frac{\partial \tilde{\Delta \mathbf{c}}}{\partial \Delta \mathbf{q}}
-    \label{eq:wiberg_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \frac{\partial \tilde{\mathbf{r}}}{\partial \Delta \mathbf{q}} &= - \mathbf{J}_{\mathbf{a}}
-    \label{eq:wiberg_inverse1}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \frac{\partial \tilde{\mathbf{r}}}{\partial \tilde{\Delta \mathbf{p}}} \frac{\partial \tilde{\Delta \mathbf{q}}}{\partial \Delta \mathbf{p}} & = - \mathbf{A}^T \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_{\mathbf{i}}^T \mathbf{A} \mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T \mathbf{A} \mathbf{J}_{\mathbf{a}}
-    \label{eq:wiberg_inverse2}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \left( \frac{\partial\tilde{\mathbf{r}}}{\partial \tilde{\Delta \mathbf{c}}} + \frac{\partial \tilde{\mathbf{r}}}{\partial \tilde{\Delta \mathbf{p}}} \frac{\partial \tilde{\Delta \mathbf{p}}}{\partial \tilde{\Delta \mathbf{c}}} \right) \frac{\partial \tilde{\Delta \mathbf{c}}}{\partial \Delta \mathbf{q}} & = \left( \mathbf{A} + \mathbf{A}^T \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_{\mathbf{i}}^T \mathbf{A} \mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T \mathbf{A} \mathbf{A}^T \right) \mathbf{A} \mathbf{J}_{\mathbf{a}}
-    \label{eq:wiberg_inverse3}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \frac{d \tilde{\mathbf{r}}}{d \Delta \mathbf{p}} & = \mathbf{J}_{\mathbf{i}} - \mathbf{A} \mathbf{A}^T \mathbf{J}_{\mathbf{i}}
-        \\
-        & = (\mathbf{I} - \mathbf{A} \mathbf{A}^T) \mathbf{J}_{\mathbf{i}}
-        \\
-        & = \bar{\mathbf{A}} \mathbf{J}_{\mathbf{i}}
-    \label{eq:wiberg_forward}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \frac{d \tilde{\mathbf{r}}}{d \Delta \mathbf{q}} & = \left( \bar{\mathbf{A}} - \bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \left(\mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}}\right)^{-1} \mathbf{J}_{\mathbf{i}}^T \bar{\mathbf{A}}^T \right) \mathbf{J}_{\mathbf{a}}
-    \label{eq:wiberg_appearance}
-    \end{aligned}
-\end{equation}
-
-
-
-
-
-
-
-
-
-\begin{equation}
-    \begin{aligned}
-        \mathbf{r}(\Delta \mathbf{c}, \Delta \mathbf{p}, \Delta \mathbf{q}) & = \mathbf{i}[\mathbf{p} \circ \Delta \mathbf{p}] - (\mathbf{a} - \mathbf{A}(\mathbf{c} + \Delta \mathbf{c}))[\Delta \mathbf{q}]
-    \label{eq:wiberg_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \Delta\mathbf{c}^* & = \underset{\Delta\mathbf{c}}{\mathrm{arg\,min\;}} \mathbf{r}^T\mathbf{r}
-    \label{eq:ssd_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \Delta \mathbf{c}^* & = \mathbf{A}^T \mathbf{r}(\mathbf{0}, \Delta \mathbf{p}, \Delta \mathbf{q})
-    \label{eq:wiberg_appearance}
-    \end{aligned}
-\end{equation}
-
-
-\begin{equation}
-    \begin{aligned}
-        \tilde{\Delta \mathbf{c}}(\Delta \mathbf{p}, \Delta \mathbf{q}) & = \mathbf{A}^T \mathbf{r}(\mathbf{0}, \Delta \mathbf{p}, \Delta \mathbf{q})
-    \label{eq:wiberg_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \tilde{\mathbf{r}}(\tilde{\Delta \mathbf{c}}, \Delta \mathbf{p}, \Delta \mathbf{q}) & = \mathbf{i}[\mathbf{p} \circ \Delta \mathbf{p}] - (\mathbf{a} - \mathbf{A}(\mathbf{c} + \tilde{\Delta \mathbf{c}}))[\Delta \mathbf{q}]
-    \label{eq:wiberg_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \Delta\mathbf{p}^* & = \underset{\Delta\mathbf{c}}{\mathrm{arg\,min\;}} \tilde{\mathbf{r}}^T\tilde{\mathbf{r}}
-    \label{eq:ssd_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \Delta\mathbf{p}^* & = \underset{\Delta\mathbf{p}}{\mathrm{arg\,min\;}}  \left\| \tilde{\mathbf{r}}(\Delta\mathbf{p}) + \frac{\partial\tilde{\mathbf{r}}}{\partial\Delta\mathbf{p}} \Delta\mathbf{p} \right\|^2
-    \label{eq:ssd_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \frac{d \tilde{\mathbf{r}}}{d \Delta \mathbf{p}} & = \frac{\partial \tilde{\mathbf{r}}}{\partial \Delta \mathbf{p}} + \frac{\partial \tilde{\mathbf{r}}}{\partial \tilde{\Delta \mathbf{c}}} \frac{\partial \tilde{\Delta \mathbf{c}}}{\partial \Delta \mathbf{p}}
-    \label{eq:wiberg_forward}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \frac{\partial \tilde{\mathbf{r}}}{\partial \Delta \mathbf{p}} &= \mathbf{J}_{\mathbf{i}}
-    \label{eq:wiberg_forward1}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \frac{\partial \tilde{\mathbf{r}}}{\partial \tilde{\Delta \mathbf{c}}} \frac{\partial \tilde{\Delta \mathbf{c}}}{\partial \Delta \mathbf{p}} & = - \mathbf{A}\mathbf{A}^T\mathbf{J}_{\mathbf{i}}
-    \label{eq:wiberg_forward2}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \frac{d \tilde{\mathbf{r}}}{d \Delta \mathbf{p}} & = \mathbf{J}_{\mathbf{i}} - \mathbf{A} \mathbf{A}^T \mathbf{J}_{\mathbf{i}}
-        \\
-        & = (\mathbf{I} - \mathbf{A} \mathbf{A}^T) \mathbf{J}_{\mathbf{i}}
-        \\
-        & = \bar{\mathbf{A}} \mathbf{J}_{\mathbf{i}}
-    \label{eq:wiberg_forward}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \Delta \mathbf{p}^* & = \left( \mathbf{J}_{\mathbf{i}}^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T \bar{\mathbf{A}} \tilde{\mathbf{r}}(\Delta\mathbf{c}^*, \mathbf{0})
-    \label{eq:wiberg_appearance}
-    \end{aligned}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-        \tilde{\Delta \mathbf{p}}(\Delta \mathbf{q}) & = \left( \mathbf{J}_{\mathbf{i}}^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T \bar{\mathbf{A}} \tilde{\mathbf{r}}(\Delta\mathbf{c}^*, \mathbf{0})
-    \label{eq:wiberg_appearance}
-    \end{aligned}
-\end{equation}
+	\item For \emph{bidirectional} composition:
+	\begin{equation}
+	    \begin{aligned}
+	    	\bar{\Delta \mathbf{p}} & = - \left( \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \mathbf{J}_\mathbf{i} \right)^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{i}} \mathbf{r}
+	    	\\
+	        \Delta \mathbf{q} & = \left( \mathbf{J}_{\bar{\mathbf{a}}}^T \mathbf{P} \mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T \mathbf{P} \mathbf{r}
+	    \label{eq:bidirectional_wiberg_po_solution}
+	    \end{aligned}
+	\end{equation}
+	where the bidirectional project-out Wiberg residual $\bar{\mathbf{r}}$ is defined as:
+	\begin{equation}
+	    \begin{aligned}
+	        \bar{\mathbf{r}} = \mathbf{i}[\mathbf{p} \circ \bar{\Delta\mathbf{p}}] - \bar{\mathbf{a}}[\Delta\mathbf{q}]
+	    \label{eq:po_wiberg_residual}
+	    \end{aligned}
+	\end{equation}
+	and the optimization problem with respect to $\Delta\mathbf{q}$: 
+	\begin{equation}
+	    \begin{aligned}
+	        \Delta\mathbf{q}^* & = \underset{\Delta\mathbf{q}}{\mathrm{arg\,min\;}} \bar{\mathbf{r}}^T\bar{\mathbf{A}}\bar{\mathbf{r}}
+	    \label{eq:bidirectional_wiberg_problem1}
+	    \end{aligned}
+	\end{equation}
+\end{itemize}
