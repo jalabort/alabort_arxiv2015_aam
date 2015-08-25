@@ -1215,9 +1215,11 @@ and the fact that the matrix $\bar{\mathbf{A}}$ is idempotent:
     	\\
     	& = \mathbf{I}^T\mathbf{I} - 2\mathbf{A}\mathbf{A}^T + \mathbf{A}\underbrace{\mathbf{A}^T\mathbf{A}}_{\mathbf{I}}\mathbf{A}^T
     	\\
-    	& = \mathbf{I}^T\mathbf{I} - 2\mathbf{A}\mathbf{A}^T + \mathbf{A}\mathbf{A}^T
+    	& = \mathbf{I} - 2\mathbf{A}\mathbf{A}^T + \mathbf{A}\mathbf{A}^T
     	\\
-    	& = \mathbf{I}^T\mathbf{I} - \mathbf{A}\mathbf{A}^T 
+    	& = \mathbf{I} - \mathbf{A}\mathbf{A}^T 
+        \\
+        & =\bar{\mathbf{A}} 
     \label{eq:idempotent_bar_A}
     \end{aligned}
 \end{equation}
@@ -1273,17 +1275,17 @@ In this case, the Jacobian of the residual can also be obtained by direct applic
         \\
         & = - \mathbf{J}_{\mathbf{a}} + \mathbf{A}\mathbf{A}^T \mathbf{J}_{\mathbf{a}} +
         \\
-        & \quad \, \, \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}} +
+        & \quad \, \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}} -
         \\
-        & \quad - \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{A} \mathbf{A}^T \mathbf{J}_{\mathbf{a}}
+        & \quad \, \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{A} \mathbf{A}^T \mathbf{J}_{\mathbf{a}}
         \\
-        & = - \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}} +
+        & = - \left( \mathbf{I} - \mathbf{A}\mathbf{A}^T \right) \mathbf{J}_{\mathbf{a}} +
         \\
-        & \quad \, \, \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} (\mathbf{J}_{\mathbf{a}} - \mathbf{A} \mathbf{A}^T \mathbf{J}_{\mathbf{a}})
+        & \quad \, \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \left( \mathbf{I} - \mathbf{A}\mathbf{A}^T \right) \mathbf{J}_{\mathbf{a}}
         \\
-        & = - \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}} + \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \underbrace{\bar{\mathbf{A}} \bar{\mathbf{A}}}_{\bar{\mathbf{A}}} \mathbf{J}_{\mathbf{a}}
+        & = - \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}} + \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}}
         \\
-        & = \left( -\bar{\mathbf{A}} + \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \right) \mathbf{J}_{\mathbf{a}}
+        & = \left( -\mathbf{I} + \mathbf{J}_{\mathbf{i}} \left( \mathbf{J}_i^T \bar{\mathbf{A}} \mathbf{J}_i \right)^{-1} \mathbf{J}_i^T \bar{\mathbf{A}} \right) \bar{\mathbf{A}} \mathbf{J}_{\mathbf{a}}
         \\
         & = - \mathbf{P} \mathbf{J}_{\mathbf{a}}
     \label{eq:bidirectional_wiberg_jacobian}
@@ -1305,7 +1307,7 @@ On the other hand, the Wiberg solutions using the project-out cost function are:
 	\item For \emph{bidirectional} composition:
 	\begin{equation}
 	    \begin{aligned}
-	    	\bar{\Delta \mathbf{p}} & = - \left( \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \mathbf{J}_\mathbf{i} \right)^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{i}} \mathbf{r}
+	    	\bar{\Delta \mathbf{p}} & = - \left( \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \mathbf{J}_\mathbf{i} \right)^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \mathbf{r}
 	    	\\
 	        \Delta \mathbf{q} & = \left( \mathbf{J}_{\bar{\mathbf{a}}}^T \mathbf{P} \mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T \mathbf{P} \mathbf{r}
 	    \label{eq:bidirectional_wiberg_po_solution}
