@@ -1,24 +1,18 @@
 \section{Experiments}
 \label{sec:experiment}
 
- In this section we analyse the performance of all CGC algorithms derived in Section \ref{sec:fitting} on the specific problem of non-rigid face alignment in-the-wild. We start by quantifying the fitting accuracy and convergence properties of each algorithm. Then we
+In this section we analyse the performance of all CGC algorithms derived in Section \ref{sec:fitting} on the specific problem of non-rigid face alignment in-the-wild. We start by quantifying the fitting accuracy and convergence properties of each algorithm. Then we
+
+All algorithms were tested using the same AAM which was built using ~800  training images of the Labelled Face Parts in the Wild (LFPW) \cite{Belhumeur2011} and ~2000 Helen \cite{Le2012} databases.
+
+All algorithms are implemented using a coarse to fine optimization strategy using a gaussian pyramid with $2$ levels (face images are normalized to a \emph{face size}\footnote{We use the definition of face size given in \cite{Zhu2012} i.e. the mean of height and width of the face.} of roughly $150$ pixels at the top level). Similar to \cite{Tzimiropoulos2014}, we use a modified version of the \emph{Dense} Scale Invariant Feature Transform (DSIFT) \cite{Lowe1999, } to define the image representation of the linear appearance models. In particular, each pixel is described using a reduced DSIFT representation with $8$ features using the public implementation provided by the authors of \cite{Vedaldi2008vlfeat}. In all experiments, we optimized over $7$ shape parameters ($4$ similarity transform and $3$ non-rigid shape prameters) at the first pyramid level and over $16$ shape parameters ($4$ similarity transform and $12$ non-rigid shape prameters) at the second one. The dimensionality of the both appearance models is kept to represent $75\%$ of the total variance. This results in $225$ and $280$ appearance parameters at the first and second piramid levels respectively.
+
+In this paper, we treated all previous parameters as hyperparameters and we set their values experimentally after testing on a small hold out set of the training data. 
 
 
- All algorithms were implemented using a coarse to fine optimization strategy using a gaussian pyramid with two levels (face images were previouly normalized to a face size of roughly 200 pixels at the top level). We used a reduced length version of the \emph{Dense} Scale Invariant Feature Transform (DSIFT) \cite{Lowe1999} proposed in \cite{} to define the image representation used to learn the AAM's linear appearance model. In all experiment, we optimized over seven shape parameters (four similarity transform and three non-rigid shape prameters) at the first pyramid level and over fifteen shape parameters (four similarity transform and nine non-rigid shape prameters) second one.
-
-
-
- the  of both holistic and parts-based texture models.
-
-
- For holistic generative appearance models the number of texture components is set to 50 and kept constant throughout the optimization. Multi-Channel Correlation Filters \cite{Galoogahi2013} are used to learn parts-based discriminative appearance models. The size of each local patches is set to 17x17 and kept constant throughout the optimization. Finally, the dimensionality of the 2d shape model is set to 7 (4 similarity parameters + 3 nonrigid shape components) at the low resolution level and to 16 (4 + 12) at the top resolution one.
-
-
- All algorithms were tested using the same AAM which was built using ~800  training images of the Labelled Face Parts in the Wild (LFPW) \cite{Belhumeur2011} and ~2000 Helen \cite{Le2012} databases.
 \subsection{CGD algorithms comparison on LFPW}
 
 In this experiment, we report the fitting accuracy and convergence properties of each of the previous algorithms. In order to keep the information on each figure and table easily readible and interpretable the experiment by grouping al...
-
 
 \subsubsection{Project-Out Gauss-Newton algorithms}
 
