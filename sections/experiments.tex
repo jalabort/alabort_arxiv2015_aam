@@ -1,79 +1,184 @@
 \section{Experiments}
 \label{sec:experiment}
 
-In this section we analyse the performance of all CGC algorithms derived in Section \ref{sec:fitting} on the specific problem of non-rigid face alignment in-the-wild. We start by quantifying the fitting accuracy and convergence properties of each algorithm. Then we
+In this section we analyse the performance of all CGD algorithms derived in Section \ref{sec:fitting} on the specific problem of non-rigid face alignment in-the-wild. We start by quantifying the fitting accuracy and convergence properties of each algorithm. Then we
 
-All algorithms were tested using the same AAM which was built using ~800  training images of the Labelled Face Parts in the Wild (LFPW) \cite{Belhumeur2011} and ~2000 Helen \cite{Le2012} databases.
+All algorithms were tested using the same AAM which was built using $\sim800$  training images of the Labelled Face Parts in the Wild (LFPW) \cite{Belhumeur2011} and $\sim2000$ Helen \cite{Le2012} databases.
 
-All algorithms are implemented using a coarse to fine optimization strategy using a gaussian pyramid with $2$ levels (face images are normalized to a \emph{face size}\footnote{We use the definition of face size given in \cite{Zhu2012} i.e. the mean of height and width of the face.} of roughly $150$ pixels at the top level). Similar to \cite{Tzimiropoulos2014}, we use a modified version of the \emph{Dense} Scale Invariant Feature Transform (DSIFT) \cite{Lowe1999, } to define the image representation of the linear appearance models. In particular, each pixel is described using a reduced DSIFT representation with $8$ features using the public implementation provided by the authors of \cite{Vedaldi2008vlfeat}. In all experiments, we optimized over $7$ shape parameters ($4$ similarity transform and $3$ non-rigid shape prameters) at the first pyramid level and over $16$ shape parameters ($4$ similarity transform and $12$ non-rigid shape prameters) at the second one. The dimensionality of the both appearance models is kept to represent $75\%$ of the total variance. This results in $225$ and $280$ appearance parameters at the first and second piramid levels respectively.
+All algorithms are implemented using a coarse to fine optimization strategy using a gaussian pyramid with $2$ levels (face images are normalized to a \emph{face size}\footnote{We use the definition of face size given in \cite{Zhu2012} i.e. the mean of height and width of the face.} of roughly $150$ pixels at the top level). Similar to \cite{Tzimiropoulos2014}, we use a modified version of the \emph{Dense} Scale Invariant Feature Transform (DSIFT) \cite{Lowe1999, Dalal2005} to define the image representation of the linear appearance models. In particular, each pixel is described using a reduced DSIFT representation with $8$ features using the public implementation provided by the authors of \cite{Vedaldi2008vlfeat}. In all experiments, we optimized over $7$ shape parameters ($4$ similarity transform and $3$ non-rigid shape prameters) at the first pyramid level and over $16$ shape parameters ($4$ similarity transform and $12$ non-rigid shape prameters) at the second one. The dimensionality of the both appearance models is kept to represent $75\%$ of the total variance. This results in $225$ and $280$ appearance parameters at the first and second piramid levels respectively.
 
 In this paper, we treated all previous parameters as hyperparameters and we set their values experimentally after testing on a small hold out set of the training data. 
 
+We initialize all algorithms in all experiments by perturbing the similarity transforms that align the shape model's mean shape (a frontal pose and neutral expression looking shape) to the ground truth shape of  each image. These transforms are perturbed by adding a particular amounts of uniformly distributed random noise to their scale, rotation and translation parameters. Exemplar initializations obtained by this procedure for different amounts of uniform noiseare shown in Figure \ref{fig:initializations}.
 
-\subsection{CGD algorithms comparison on LFPW}
+
+\subsection{Comparison on LFPW}
 
 In this experiment, we report the fitting accuracy and convergence properties of each of the previous algorithms. In order to keep the information on each figure and table easily readible and interpretable the experiment by grouping al...
 
-\subsubsection{Project-Out Gauss-Newton algorithms}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_gn/ced_po_gn_4.png}
-    \caption{CED graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $4$\% uniform noise.}
-    \label{fig:ced_po_gn_4}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_gn/mean_error_vs_iters_po_gn_4.png}
-    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $4$\% uniform noise.}
-    \label{fig:mean_error_vs_iters_po_gn_4}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_gn/mean_cost_vs_iters1_po_gn_4.png}
-    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $4$\% uniform noise.}
-    \label{fig:mean_cost_vs_iters1_po_gn_4}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_gn/mean_cost_vs_iters2_po_gn_4.png}
-    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $4$\% uniform noise.}
-    \label{fig:mean_cost_vs_iters2_po_gn_4}
-\end{figure}
+\subsubsection{SSD algorithms}
 
 
-\subsubsection{Project-Out Newton algorithms}
+\subsubsection*{Gauss-Newton}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/ced_po_n_4.png}
-    \caption{CED graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
-    \label{fig:ced_po_gn_4}
-\end{figure}
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/ced_ssd_gn_5.png}
+	    \caption{Cumulative Error Distribution graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:ced_ssd_gn_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/mean_error_vs_iters_ssd_gn_5.png}
+	    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_error_vs_iters_ssd_gn_5}
+	\end{subfigure}
+	\par\medskip
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/mean_cost_vs_iters1_ssd_gn_5.png}
+	    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters1_ssd_gn_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/mean_cost_vs_iters2_ssd_gn_5.png}
+	    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters2_ssd_gn_5}
+	\end{subfigure}
+	\label{fig:ssd_gn_5}
+	\caption{}
+\end{figure*}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/mean_error_vs_iters_po_n_4.png}
-    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $4$\% uniform noise.}
-    \label{fig:mean_error_vs_iters_po_n_4}
-\end{figure}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/mean_cost_vs_iters1_po_n_4.png}
-    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
-    \label{fig:mean_cost_vs_iters1_po_n_4}
-\end{figure}
+\subsubsection*{Wiberg}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/mean_cost_vs_iters2_po_n_4.png}
-    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
-    \label{fig:mean_cost_vs_iters2_po_n_4}
-\end{figure}
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_w/ced_ssd_w_5.png}
+	    \caption{Cumulative Error Distribution graph on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:ced_ssd_w_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_w/mean_error_vs_iters_ssd_w_5.png}
+	    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_error_vs_iters_ssd_w_5}
+	\end{subfigure}
+	\par\medskip
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_w/mean_cost_vs_iters1_ssd_w_5.png}
+	    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters1_ssd_w_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_w/mean_cost_vs_iters2_ssd_w_5.png}
+	    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters2_ssd_w_5}
+	\end{subfigure}
+	\label{fig:ssd_w_5}
+	\caption{}
+\end{figure*}
+
+
+\subsubsection{Project-Out algorithms}
+
+
+\subsubsection*{Gauss-Newton}
+
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_gn/ced_po_gn_5.png}
+	    \caption{Cumulative Error Distribution graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:ced_po_gn_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_gn/mean_error_vs_iters_po_gn_5.png}
+	    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_error_vs_iters_po_gn_5}
+	\end{subfigure}
+	\par\medskip
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_gn/mean_cost_vs_iters1_po_gn_5.png}
+	    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters1_po_gn_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_gn/mean_cost_vs_iters2_po_gn_5.png}
+	    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters2_po_gn_5}
+	\end{subfigure}
+	\label{fig:po_gn_5}
+	\caption{}
+\end{figure*}
+
+
+% \subsubsection{Project-Out Newton algorithms}
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/ced_po_n_5.png}
+%     \caption{CED graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
+%     \label{fig:ced_po_gn_4}
+% \end{figure}
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/mean_error_vs_iters_po_n_5.png}
+%     \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
+%     \label{fig:mean_error_vs_iters_po_n_4}
+% \end{figure}
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/mean_cost_vs_iters1_po_n_5.png}
+%     \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
+%     \label{fig:mean_cost_vs_iters1_po_n_4}
+% \end{figure}
+
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/mean_cost_vs_iters2_po_n_5.png}
+%     \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
+%     \label{fig:mean_cost_vs_iters2_po_n_4}
+% \end{figure}
+
+\subsubsection*{Wiberg}
+
+\begin{figure*}[h!]
+	\centering
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_w/ced_po_w_5.png}
+	    \caption{Cumulative Error Distribution graph on the LFPW test dataset for all Project-Out Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:ced_po_w_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_w/mean_error_vs_iters_po_w_5.png}
+	    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all Project-Out Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_error_vs_iters_po_w_5}
+	\end{subfigure}
+	\par\medskip
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_w/mean_cost_vs_iters1_po_w_5.png}
+	    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all Project-Out Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters1_po_w_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_w/mean_cost_vs_iters2_po_w_5.png}
+	    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all Project-Out Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters2_po_w_5}
+	\end{subfigure}
+	\label{fig:po_w_5}
+	\caption{}
+\end{figure*}
 
 
 % \begin{figure}[h!]
@@ -96,53 +201,65 @@ In this experiment, we report the fitting accuracy and convergence properties of
 
 \subsubsection{Weighted Bayesian project-out}
 
+\begin{figure}[h!]
+	\includegraphics[width=0.48\textwidth]{experiments/rho/mean_error_vs_rho_5.png}
+    \caption{Mean normalized point-to-point error vs rho on the LFPW test dataset for all PO Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+    \label{fig:ced_ssd_gn_5}
+\end{figure}
+
 \subsubsection{Optimal asymmetric composition}
+
+\begin{figure}[h!]
+    \includegraphics[width=0.48\textwidth]{experiments/alpha/mean_error_vs_alpha_5.png}
+    \caption{Mean normalized point-to-point error vs alpha on the LFPW test dataset for all Asymmetric Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+    \label{fig:ced_ssd_gn_5}
+\end{figure}
 
 \subsubsection{Sampling}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.45\textwidth]{experiments/noise_vs_sampling/po_asymmetric_gn/noise_vs_sampling_po_asymmetric.png}
+    \includegraphics[width=0.45\textwidth]{experiments/sampling/po_asymmetric_gn/noise_vs_sampling_po_asymmetric.png}
     \caption{Mean and Std of normalized point-to-point error obtained on the LFPW test dataset by the Project-Out Asymmetric Gauss-Newton algorithm for different sampling rates versus different amounts of noise \% on the initialization.}
     \label{fig:noise_vs_sampling_po_asymmetric}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.50\textwidth]{experiments/noise_vs_sampling/po_asymmetric_gn/ced_po_asymmetric_gn_4.png}
+    \includegraphics[width=0.50\textwidth]{experiments/sampling/po_asymmetric_gn/ced_po_asymmetric_gn_4.png}
     \caption{CED graph on the LFPW test dataset obtained by the Project-Out Asymmetric Gauss-Newton algorithm for $4$\% noise on the initialization.}
     \label{fig:ced_po_asymmetric_gn_4}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.50\textwidth]{experiments/noise_vs_sampling/po_asymmetric_gn/mean_error_vs_iters_po_asymmetric_gn_4.png}
+    \includegraphics[width=0.50\textwidth]{experiments/sampling/po_asymmetric_gn/mean_error_vs_iters_po_asymmetric_gn_4.png}
     \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset obtained by the Project-Out Asymmetric Gauss-Newton algorithm for $4$\% noise on the initialization.}
     \label{fig:mean_error_vs_iters_po_asymmetric_gn_4}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.45\textwidth]{experiments/noise_vs_sampling/ssd_asymmetric_gn/noise_vs_sampling_ssd_asymmetric.png}
+    \includegraphics[width=0.45\textwidth]{experiments/sampling/ssd_asymmetric_gn/noise_vs_sampling_ssd_asymmetric.png}
     \caption{Mean and Std of normalized point-to-point error obtained on the LFPW test dataset by the SSD Asymmetric Gauss-Newton Schur algorithm for different sampling rates versus different amounts of noise \% on the initialization.}
     \label{fig:noise_vs_sampling_ssd_asymmetric}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.50\textwidth]{experiments/noise_vs_sampling/ssd_asymmetric_gn/ced_ssd_asymmetric_gn_4.png}
+    \includegraphics[width=0.50\textwidth]{experiments/sampling/ssd_asymmetric_gn/ced_ssd_asymmetric_gn_4.png}
     \caption{CED graph on the LFPW test dataset obtained by the SSD Asymmetric Gauss-Newton Schur algorithm for $4$\% noise on the initialization.}
     \label{fig:ced_ssd_asymmetric_gn_4}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.50\textwidth]{experiments/noise_vs_sampling/ssd_asymmetric_gn/mean_error_vs_iters_ssd_asymmetric_gn_4.png}
+    \includegraphics[width=0.50\textwidth]{experiments/sampling/ssd_asymmetric_gn/mean_error_vs_iters_ssd_asymmetric_gn_4.png}
     \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset obtained by the SSD Asymmetric Gauss-Newton Schur algorithm for $4$\% noise on the initialization.}
     \label{fig:mean_error_vs_iters_ssd_asymmetric_gn_4}
 \end{figure}
 
-\subsection{CGD algorithms comparison on Helen and AFW}
+\subsection{Comparison on Helen and AFW}
 
 
 
