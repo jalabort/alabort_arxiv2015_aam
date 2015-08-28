@@ -1,7 +1,7 @@
 \subsection{Probabilistic Formulation}
 \label{sec:probabilistic_aam}
 
-A probabilistic interpretation of AAMs can be obtained by rewriting equations \ref{eq:aam_1} and \ref{eq:aam_2} assuming probabilistic generative models for shape and appearance generation. In this paper, motivated by seminal works on Probabilistic Component Analysis (PPCA) and object tracking \cite{Tipping1999, Roweis1998, Moghaddam1997}, we will assume probabilistic models for shape and appearance generation with both Gaussian noise and Gaussian priors over the latent shape and appearance spaces\footnote{This formulation is general and one could assume other probabilistic generative models \cite{vanderMaaten2010, Bach2005, Prince2012, Nicolau2014} to define novel probabilistic versions of AAMs.}:
+A probabilistic interpretation of AAMs can be obtained by rewriting Equations \ref{eq:aam_1} and \ref{eq:aam_2} assuming probabilistic generative models for shape and appearance generation. In this paper, motivated by seminal works on Probabilistic Component Analysis (PPCA) and object tracking \cite{Tipping1999, Roweis1998, Moghaddam1997}, we will assume probabilistic models for shape and appearance generation with both Gaussian noise and Gaussian priors over the latent shape and appearance spaces\footnote{This formulation is generic and one could assume other probabilistic generative models \cite{vanderMaaten2010, Bach2005, Prince2012, Nicolau2014} to define novel probabilistic versions of AAMs.}:
 \begin{equation}
 	\begin{aligned}
 		\mathbf{s} & = \bar{\mathbf{s}} + \mathbf{S} \mathbf{p} + \boldsymbol{\varepsilon}
@@ -20,7 +20,7 @@ A probabilistic interpretation of AAMs can be obtained by rewriting equations \r
 		\boldsymbol{\epsilon} & \sim \mathcal{N} \left( \mathbf{0}, \sigma^2 \mathbf{I} \right) 
 	\end{aligned}
 \end{equation}
-where $\mathbf{\Lambda}$ and $\mathbf{\Sigma}$ are diagonal matrices containing the eigenvalues associated to shape and texture bases and where $\lambda^2$ and $\sigma^2$ denote the estimated shape and image noises respectively\footnote{\label{foot:noise}Theoretically, the optimal value for $\lambda^2$ and $\sigma^2$ is the average value of the eigenvalues associated to the discarted shape and appearance eigenvectors respectively i.e. \mbox{$\lambda^{2*} = \frac{1}{n-n^*}\sum_{i=n^*}^m \lambda_{i}$} and \mbox{$\sigma^{2*} = \frac{1}{m-m^*}\sum_{i=m^*}^m \sigma_{i}$} \cite{Moghaddam1997}.}.
+where $\mathbf{\Lambda}$ and $\mathbf{\Sigma}$ are diagonal matrices containing the eigenvalues associated to shape and texture bases and where $\lambda^2$ and $\sigma^2$ denote the estimated shape and image noises respectively\footnote{\label{foot:noise}Theoretically, the optimal value for $\lambda^2$ and $\sigma^2$ is the average value of the eigenvalues associated to the discarded shape and appearance eigenvectors respectively i.e. \mbox{$\lambda^{2*} = \frac{1}{n-n^*}\sum_{i=n^*}^m \lambda_{i}$} and \mbox{$\sigma^{2*} = \frac{1}{m-m^*}\sum_{i=m^*}^m \sigma_{i}$} \cite{Moghaddam1997}.}.
 
 This probabilistic formulation will be used to derive the well defined Maximum A Posteriori (MAP) and Bayesian cost functions for fitting AAMs presented in Sections \ref{sec:rssd} and \ref{sec:rpo}.
 

@@ -11,10 +11,11 @@ In this paper, we define AAM fitting as the \emph{regularized} search over the s
 where $\mathcal{R}$ is a regularization term that penalizes complex shape and appearance deformations and $\mathcal{D}$ is a data term that
 quantifies the global measure of similarity between the vectorized warped image and the appearance model.
 
+
 \subsubsection{Regularized Sum of Squared Differences}
 \label{sec:rssd}
 
-Arguably, the most natural choices for the previous data and regularization terms are the SSD between the vectorized warped image and the linear appearance model\footnote{This choice of $\mathcal{D}$ is very related to the second main assumption behind AAMs, Equation \ref{eq:aam_2}.} and the sum of $\l_2^2$-norms over the shape and appearance parameters respectively:
+Arguably, the most natural choices for the previous data and regularization terms are the SSD between the vectorized warped image and the linear appearance model\footnote{This choice of $\mathcal{D}$ is very related to the second main assumption behind AAMs, Equation \ref{eq:aam_2}.} and the sum of ${\ell_2}^2$-norms over the shape and appearance parameters respectively:
 \begin{equation}
     \begin{aligned}
         \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} \underbrace{\frac{1}{2}||\mathbf{p}||^2 + \frac{1}{2}||\mathbf{c}||^2}_{\mathcal{R} (\mathbf{p}, \mathbf{c})} +
@@ -23,6 +24,8 @@ Arguably, the most natural choices for the previous data and regularization term
     \end{aligned}
     \label{eq:rssd}
 \end{equation}
+
+
 \subsubsection*{Probabilistic Formulation}
 \label{sec:rssd_pi}
 
@@ -116,7 +119,7 @@ Therefore, using the previous \emph{project-out trick}, the minimization problem
 
 \subsubsection*{Probabilistic Formulation}
 \label{sec:po_pi}
-In our preliminary work \cite{Alabort2014}, we showed that assuming the probabilistic models defined in Section \ref{sec:probabilistic_aam} a Bayesian version of the previous project-out data term could be naturally derived by marginalizing over the appearance parameters to obtain the following marginalized density:
+In our preliminary work \cite{Alabort2014}, we showed that by assuming the probabilistic models defined in Section \ref{sec:probabilistic_aam}, a Bayesian version of the previous project-out data term could be naturally derived by marginalizing over the appearance parameters to obtain the following marginalized density:
 \begin{equation}
     \begin{aligned}
         p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \Theta) & = \int_c p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \mathbf{c}, \Theta) p(\mathbf{c}|\mathbf{\Sigma}) d\mathbf{c} 
@@ -125,7 +128,7 @@ In our preliminary work \cite{Alabort2014}, we showed that assuming the probabil
     \end{aligned}
     \label{eq:marginal}
 \end{equation}
-and using the Woodbury formula\footnote{
+and that the Woodbury formula\footnote{
 \begin{equation*}
     \begin{aligned}
     \small
@@ -138,7 +141,7 @@ and using the Woodbury formula\footnote{
     	& = \mathbf{A}\mathbf{D}^{-1}\mathbf{A}^T + \frac{1}{\sigma^2} (\mathbf{I} - \mathbf{A}\mathbf{A}^T)
     \end{aligned}
     \label{eq:woodbury}
-\end{equation*}} \cite{Woodbury1950} to decompose the logarithm of the previous density into the sum of two different terms:
+\end{equation*}} \cite{Woodbury1950} can be used to decompose the natural logarithm of the previous density into the sum of two different terms:
 \begin{equation}
     \begin{aligned}
         \ln p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \Theta) & = \frac{1}{2}|| \mathbf{i}[\mathbf{p}] - \mathbf{\bar{a}} ||^2_{(\mathbf{A}\mathbf{\Sigma}\mathbf{A}^T + \sigma^2 \mathbf{I})^{-1}}
@@ -151,7 +154,7 @@ and using the Woodbury formula\footnote{
 \end{equation}
 where $\mathbf{D} = \textrm{diag}[\lambda_1 + \sigma^2, \cdots, \lambda_m + \sigma^2]$.
 
-As depict by Figure \ref{fig:bayes}, the previous two terms define respectively: 
+As depicted by Figure \ref{fig:bayes}, the previous two terms define respectively: 
 \begin{inparaenum}[\itshape i\upshape)]
     \item the Mahalanobis distance \emph{within} the linear appearance subspace; and 
     \item the Euclidean distance \emph{to} the linear appearance subspace (i.e. the Euclidean distance within its orthogonal complement) weighted by the inverse of the estimated image noise.
@@ -178,6 +181,6 @@ where we have defined the Bayesian project-out operator as $\mathbf{Q} = \mathbf
 \begin{figure}
     \centering
     \includegraphics[width=0.50\textwidth]{figures/bayes.png}
-    \caption{The Bayesian project-out formulation fits AAMs by minimiz- ing two different distances: $i)$ the Mahalanobis distance \emph{within} the linear appearance subspace; and $ii)$ the Euclidean distance \emph{to} the linear appearance subspace (i.e. the Euclidean distance within its orthogonal complement) weighted by the inverse of the estimated image noise.}
+    \caption{The Bayesian project-out formulation fits AAMs by minimizing two different distances: $i)$ the Mahalanobis distance \emph{within} the linear appearance subspace; and $ii)$ the Euclidean distance \emph{to} the linear appearance subspace (i.e. the Euclidean distance within its orthogonal complement) weighted by the inverse of the estimated image noise.}
     \label{fig:bayes}
 \end{figure}

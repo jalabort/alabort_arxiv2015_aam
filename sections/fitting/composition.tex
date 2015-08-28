@@ -16,7 +16,7 @@ CGD algorithms iteratively solve the previous non-linear optimization problem wi
     \item Introducing an incremental warp $\Delta\mathbf{p}$ according to the particular composition scheme being used.
     \label{it:step_1}
     
-    \item Linearizing the around the previous incremental warp.
+    \item Linearizing around the previous incremental warp.
     \label{it:step_2}
     
     \item Solving for the parameters of the incremental warp.
@@ -76,7 +76,7 @@ On the other hand, the inverse compositional framework inverts the roles of the 
 \end{equation}
 Note that, in this case, the model is the the one we seek to deform using the incremental warp.
 
-Because the incremental warp is introduced on the model side the solution $\Delta \mathbf{p}^*$ needs to be inverted\footnoteref{foot:warp} before it is composed with the current warp estimate:
+Because the incremental warp is introduced on the model side, the solution $\Delta \mathbf{p}^*$ needs to be inverted\footnoteref{foot:warp} before it is composed with the current warp estimate:
 \begin{equation}
  	\begin{aligned}
     	\mathbf{p}_k^* \leftarrow \mathbf{p}_{k-1}^* \circ \Delta {\mathbf{p}^*}^{-1} 

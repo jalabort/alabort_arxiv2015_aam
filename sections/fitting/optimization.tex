@@ -280,7 +280,7 @@ Applying the Schur complement once, the combined solution for $(\Delta\mathbf{p}
     \label{eq:bidirectional_schur_solution1}
     \end{aligned}
 \end{equation}
-Note that the complexity of inverting this new approximation to the Hessian matrix is $O((2n)^3)$\footnote{This is an important reduction in complexity because usually $m >> n$ in CGD algorithms.}. Similar as before, plugging the solutions for $\Delta\mathbf{p}$ and $\Delta\mathbf{q}$ into Equation \ref{eq:bidirectional_structure} we can infer the optimal value for $\Delta\mathbf{c}$ using:
+Note that the complexity of inverting this new approximation to the Hessian matrix is $O((2n)^3)$\footnote{This is an important reduction in complexity because usually $m >> n$ in CGD algorithms.}. Similar to before, plugging the solutions for $\Delta\mathbf{p}$ and $\Delta\mathbf{q}$ into Equation \ref{eq:bidirectional_structure} we can infer the optimal value for $\Delta\mathbf{c}$ using:
 \begin{equation}
     \begin{aligned}
         \Delta\mathbf{c} & = \mathbf{A}^T \left( \mathbf{r}_b - \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p}^* + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
@@ -507,7 +507,7 @@ Note that all previous alternated update rules, Equations \ref{eq:asymmetric_alt
 
 The use of \emph{asymmetric} composition together with the Gauss-Newton method has been proven to naturally lead to Efficient Second order Minimization (ESM) algorithms in the related field of parametric image alignment \cite{Malis2004, Benhimane2004, Megret2008, Megret2010}. Following a similar line of reasoning, in this subsection we show that asymmetric Gauss-Newton algorithms for fitting AAMs can also be interpreted as ESM algorithms with respect to the incremental warp $\Delta \mathbf{p}$.
 
-In order to show the previous relationship we will make use of the simplified data term\footnote{Notice that similar derivations can also be obtained using the SSD and project-out data terms, but we use the simplified one here to favor clarity.} introduced by Equation \ref{eq:ssd_shape}. Using \emph{forward} composition, the optimization problem defined by:
+In order to show the previous relationship we will make use of the simplified data term\footnote{Notice that similar derivations can also be obtained using the SSD and project-out data terms, but we use the simplified one here for clarity.} introduced by Equation \ref{eq:ssd_shape}. Using \emph{forward} composition, the optimization problem defined by:
 \begin{equation}
     \begin{aligned}
         \Delta \mathbf{p}^* & = \underset{\Delta \mathbf{p}}{\mathrm{arg\,min\;}} \frac{1}{2} \mathbf{r}_f^T\bar{\mathbf{A}}\mathbf{r}_f
@@ -524,7 +524,7 @@ where the forward residual $\mathbf{r}_f$ is defined as:
 As seen before, Gauss-Newton solves the previous optimization problem by first performing a \emph{first} order Taylor expansion of the residual around $\Delta \mathbf{p}$:
 \begin{equation}
     \begin{aligned}
-		\hat{\mathbf{r}}_f(\Delta\mathbf{p}) & = \mathbf{r}_f + \frac{\partial \mathbf{r}_f}{\partial\Delta \mathbf{p}}\Delta\mathbf{p} + \underbrace{O_{\mathbf{r}_f}(\Delta\mathbf{p}^2)}_{\textrm{reminder}}
+		\hat{\mathbf{r}}_f(\Delta\mathbf{p}) & = \mathbf{r}_f + \frac{\partial \mathbf{r}_f}{\partial\Delta \mathbf{p}}\Delta\mathbf{p} + \underbrace{O_{\mathbf{r}_f}(\Delta\mathbf{p}^2)}_{\textrm{remainder}}
 		\\
 		& = \mathbf{i}[\mathbf{p}_{k-1}^*] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} + O_{\mathbf{r}_f}(\Delta\mathbf{p}^2)
     \label{eq:po_forward_residual_taylor}
@@ -560,10 +560,10 @@ Then, given the second main assumption behind AAMs (Equation \ref{eq:aam_2}) the
 		\label{eq:jacobian_aproximation}
 	\end{aligned}
 \end{equation}
-and because the previous $\mathbf{J}_\mathbf{i}$ and $\mathbf{J}_\mathbf{a}$ are functions of $\Delta\mathbf{p}$ we can perform a first oder Taylor expansion around the former to obtain:
+and because the previous $\mathbf{J}_\mathbf{i}$ and $\mathbf{J}_\mathbf{a}$ are functions of $\Delta\mathbf{p}$ we can perform a first order Taylor expansion around the former to obtain:
 \begin{equation}
 	\begin{aligned}
-	\mathbf{J}_\mathbf{i} (\Delta\mathbf{p}) & \approx \mathbf{J}_\mathbf{i} + \Delta\mathbf{p}^T \frac{\partial\mathbf{J}_\mathbf{i}}{\partial\Delta\mathbf{p}} + \underbrace{O_{\mathbf{J}_\mathbf{i}}(\Delta\mathbf{p}^2)}_{\textrm{reminder}}
+	\mathbf{J}_\mathbf{i} (\Delta\mathbf{p}) & \approx \mathbf{J}_\mathbf{i} + \Delta\mathbf{p}^T \frac{\partial\mathbf{J}_\mathbf{i}}{\partial\Delta\mathbf{p}} + \underbrace{O_{\mathbf{J}_\mathbf{i}}(\Delta\mathbf{p}^2)}_{\textrm{remainder}}
 	\\
 	& \approx \mathbf{J}_\mathbf{i} + \Delta\mathbf{p}^T \mathbf{H}_\mathbf{i} + O_{\mathbf{J}_\mathbf{i}}(\Delta\mathbf{p}^2)
 	\\
@@ -574,7 +574,7 @@ and because the previous $\mathbf{J}_\mathbf{i}$ and $\mathbf{J}_\mathbf{a}$ are
 	\end{aligned}
 \end{equation}
 
-Finally, substituting the previous approximation for $\Delta\mathbf{p}^T \mathbf{H}_\mathbf{i}$ into equation \ref{eq:po_forward_residual_taylor2} we have:
+Finally, substituting the previous approximation for $\Delta\mathbf{p}^T \mathbf{H}_\mathbf{i}$ into Equation \ref{eq:po_forward_residual_taylor2} we have:
 \begin{equation}
     \begin{aligned}
 		\check{\mathbf{r}}_f(\Delta\mathbf{p}) & = \mathbf{i}[\mathbf{p}_{k-1}^*] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} \, +
@@ -593,7 +593,7 @@ Finally, substituting the previous approximation for $\Delta\mathbf{p}^T \mathbf
     \label{eq:po_asymmetric_residual_approximation}
     \end{aligned}
 \end{equation}
-where the total reminder is cubic with respect to $\Delta \mathbf{p}$:
+where the total remainder is cubic with respect to $\Delta \mathbf{p}$:
 \begin{equation}
     \begin{aligned}
 		O_{\textrm{total}}(\Delta\mathbf{p}^3) = O_{\mathbf{r}_f}(\Delta\mathbf{p}^3) - O_{\mathbf{J}_\mathbf{i}}(\Delta\mathbf{p}^2) \Delta\mathbf{p}
@@ -638,7 +638,7 @@ and solves the approximate problem:
     \end{aligned}
 \end{equation}
 
-Assuming \emph{asymmetric} composition, the previous data term is define as:
+Assuming \emph{asymmetric} composition, the previous data term is defined as:
 \begin{equation}
     \begin{aligned}
 		\mathcal{D}_a(\Delta \boldsymbol{\ell}) & = \frac{1}{2}\mathbf{r}_a^T \mathbf{r}_a
@@ -703,14 +703,14 @@ where we have defined $\mathbf{J}_\mathbf{A} = [\nabla \mathbf{a}_1, \cdots, \na
     \end{aligned}
 \end{equation}
 
-A similar derivation can be obtained for \emph{bidirectional} composition where, as expected, the data term is define as:
+A similar derivation can be obtained for \emph{bidirectional} composition where, as expected, the data term is defined as:
 \begin{equation}
     \begin{aligned}
 		\mathcal{D}_b(\Delta \boldsymbol{\ell}) & = \frac{1}{2}\mathbf{r}_b^T \mathbf{r}_b
     \label{eq:bidirectional_data}
     \end{aligned}
 \end{equation}
-In this case, the Jacobian matrix writes:
+In this case, the Jacobian matrix becomes:
 \begin{equation}
     \begin{aligned}
 		\frac{\partial \mathcal{D}_b}{\partial \Delta \boldsymbol{\ell}} & = \left( \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{c}}, \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{p}}, \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{q}} \right)
@@ -817,7 +817,7 @@ with the solution given by:
     \end{aligned}
 \end{equation}
 
-Note that, similar to the Gauss-Newton method, the complexity of inverting the Hessian matrix $\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \boldsymbol{\ell}}$ is $O((m+2n)^3)$ for asymmetric composition and $O((2n + m)^3)$ for bidirectional composition. As shown by by Kossaifi et al. \cite{Kossaifi2014}\footnote{In \cite{Kossaifi2014}, Kossaifi et al. applied the Schur complement to the Newton method using \emph{only} inverse composition while we apply it here using the more general \emph{asymmetric} (which includes \emph{forward}, \emph{inverse} and \emph{symmetric}) and \emph{bidirectional} compositions.}, we can take advantage of the structure of the Hessian in Equations \ref{eq:asymmetric_newton_hessian} and \ref{eq:bidirectional_newton_hessian} and apply the Schur complement to obtain more efficient solutions.
+Note that, similar to the Gauss-Newton method, the complexity of inverting the Hessian matrix $\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \boldsymbol{\ell}}$ is $O((m+2n)^3)$ for asymmetric composition and $O((2n + m)^3)$ for bidirectional composition. As shown by Kossaifi et al. \cite{Kossaifi2014}\footnote{In \cite{Kossaifi2014}, Kossaifi et al. applied the Schur complement to the Newton method using \emph{only} inverse composition while we apply it here using the more general \emph{asymmetric} (which includes \emph{forward}, \emph{inverse} and \emph{symmetric}) and \emph{bidirectional} compositions.}, we can take advantage of the structure of the Hessian in Equations \ref{eq:asymmetric_newton_hessian} and \ref{eq:bidirectional_newton_hessian} and apply the Schur complement to obtain more efficient solutions.
 
 The solutions for $\Delta\mathbf{p}$ and $\Delta\mathbf{c}$ using \emph{asymmetric} composition are given by the following expressions:
 \begin{equation}
@@ -1017,7 +1017,7 @@ with complexity:
         O(
         \underbrace{nmF}_{\frac{\partial^2 \mathcal{D}_a}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{c}}}
         +
-        \underbrace{2n^2F + n^3}_{\frac{\partial^2 \mathcal{D}_a}{(\partial^2 \Delta \mathbf{p}})^{-1}}
+        \underbrace{2n^2F + n^3}_{\frac{\partial^2 \mathcal{D}_a}{\partial^2 \Delta \mathbf{p}}^{-1}}
         )
     \label{eq:complexity_alt_asymmetric_newton}
     \end{aligned}
