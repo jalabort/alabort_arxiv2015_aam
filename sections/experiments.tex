@@ -1,42 +1,15 @@
 \section{Experiments}
 \label{sec:experiment}
 
-\begin{figure*}[t!]
-	\centering
-	\begin{subfigure}{0.16\textwidth}
-		\includegraphics[width=\textwidth]{figures/ini_0.png}
-		\caption{$0\%$}
-		\label{fig:ini_0}
-	\end{subfigure}
-	\begin{subfigure}{0.16\textwidth}
-		\includegraphics[width=\textwidth]{figures/ini_1.png}
-		\caption{$2.5\%$}
-		\label{fig:ini_1}
-	\end{subfigure}
-	\begin{subfigure}{0.16\textwidth}
-		\includegraphics[width=\textwidth]{figures/ini_2.png}
-		\caption{$5\%$}
-		\label{fig:ini_2}
-	\end{subfigure}
-	\begin{subfigure}{0.16\textwidth}
-		\includegraphics[width=\textwidth]{figures/ini_3.png}
-		\caption{$7.5\%$}
-		\label{fig:ini_3}
-	\end{subfigure}
-	\begin{subfigure}{0.16\textwidth}
-		\includegraphics[width=\textwidth]{figures/ini_4.png}
-		\caption{$10\%$}
-		\label{fig:ini_4}
-	\end{subfigure}
-    \caption{Exemplar initializations obtained by varying the percentage of uniform noise added to the similarity parameters. Note that, increasing the percentage of noise produces more challenging initialization.}
-    \label{fig:ini}
-\end{figure*}
+In this section we analyze the performance of the CGD algorithms derived in Section \ref{sec:fitting} on the specific problem of non-rigid face alignment in-the-wild. 
 
-In this section we analyze the performance of all CGD algorithms derived in Section \ref{sec:fitting} on the specific problem of non-rigid face alignment in-the-wild. We start by quantifying the fitting accuracy and convergence properties of each algorithm.
+Results for five experiments are reported. The first one compares the fitting accuracy and convergence properties of all algorithms on the test set of the popular Labeled Faces in-the-Wild (LFPW) \cite{Belhumeur2011} database. The second experiment quantifies the importance of the two terms in the Bayesian project-out cost function in relation to the fitting results obtained by Project-Out algorithms. In the third experiment, we study the effect that varying the value of the parameters $\alpha$ and $\beta$ has on the performance of Asymmetric algorithms. The forth experiment explores the effect that optimizing the cost functions using a subset of the total number of pixels has on the accuracy and computational efficiency of CGD algorithms. Finally, in the fifth and last experiment we report the performance of the two most accurate CGD algorithms on the test set of the Helen \cite{Le2012} database and on the entire Annotated Faces in-the-Wild (AFW) \cite{Zhu2012} database. 
 
-We use a single AAM, built with $\sim800$ training images of the Labeled Face Parts in the Wild (LFPW) \cite{Belhumeur2011} and $\sim2000$ Helen \cite{Le2012} databases, to test all algorithms. Similar to \cite{Tzimiropoulos2014}, a modified version of the \emph{Dense} Scale Invariant Feature Transform (DSIFT) \cite{Lowe1999, Dalal2005} is used to define the appearance representation of the previous AAM. In particular, we describe each pixel with a reduced SIFT descriptor of length $8$ using the public implementation provided by the authors of \cite{Vedaldi2008vlfeat}. All algorithms are implemented in a coarse to fine manner using a Gaussian pyramid with $2$ levels (face images are normalized to a \emph{face size}\footnote{We use the definition of face size given in \cite{Zhu2012} i.e. computed as the mean of the face height and width.} of roughly $150$ pixels at the top level). In all experiments, we optimized over $7$ shape parameters ($4$ similarity transform and $3$ non-rigid shape parameters) at the first pyramid level and over $16$ shape parameters ($4$ similarity transform and $12$ non-rigid shape parameters) at the second one. The dimensionality of the appearance models is kept to represent $75\%$ of the total variance in both levels. This results in $225$ and $280$ appearance parameters at the first and second pyramid levels respectively. The previous choices were determined by testing on a small hold out set of the training data. 
+In all experiments, we use a single AAM, built with $\sim800$ training images of the LFPW and $\sim2000$ Helen databases, to test all algorithms. Similar to \cite{Tzimiropoulos2014}, a modified version of the \emph{Dense} Scale Invariant Feature Transform (DSIFT) \cite{Lowe1999, Dalal2005} is used to define the appearance representation of the previous AAM. In particular, we describe each pixel with a reduced SIFT descriptor of length $8$ using the public implementation provided by the authors of \cite{Vedaldi2008vlfeat}. All algorithms are implemented in a coarse to fine manner using a Gaussian pyramid with $2$ levels (face images are normalized to a \emph{face size}\footnote{We use the definition of face size given in \cite{Zhu2012} i.e. computed as the mean of the face height and width.} of roughly $150$ pixels at the top level). In all experiments, we optimized over $7$ shape parameters ($4$ similarity transform and $3$ non-rigid shape parameters) at the first pyramid level and over $16$ shape parameters ($4$ similarity transform and $12$ non-rigid shape parameters) at the second one. The dimensionality of the appearance models is kept to represent $75\%$ of the total variance in both levels. This results in $225$ and $280$ appearance parameters at the first and second pyramid levels respectively. The previous choices were determined by testing on a small hold out set of the training data. 
 
-In all experiments, algorithms are initialized by perturbing the similarity transforms that perfectly align the model's mean shape (a frontal pose and neutral expression looking shape) with the ground truth shape of each image. These transforms are perturbed by adding uniformly distributed random noise to their scale, rotation and translation parameters. Exemplar initializations obtained by this procedure for different percentages of uniform noise are shown in Figure \ref{fig:ini}.
+In all experiments, algorithms are initialized by perturbing the similarity transforms that perfectly align the model's mean shape (a frontal pose and neutral expression looking shape) with the ground truth shape of each image. These transforms are perturbed by adding uniformly distributed random noise to their scale, rotation and translation parameters. Exemplar initializations obtained by this procedure for different amounts of noise are shown in Figure \ref{fig:ini}.
+
+Unless stated otherwise, algorithms are initialized with $5\%$ uniform noise, results for Project-Out algorithms are obtained using the Bayesian project-out cost function defined by Equation \ref{eq:prob_po}, and Asymmetric algorithms  results are reported for the special case of symmetric composition i.e. $\alpha=\beta=0.5$ in Equation \ref{eq:ssd_ac}.
 
 Finally, in order to encourage open research and facilitate future comparisons with the results presented in this section, we make the implementation of all CGD algorithms publicly available as part of the Menpo Project \cite{Menpo2014}.
 
@@ -322,6 +295,36 @@ We again repeat the experimental set up described in the first experiments and r
 
 \subsubsection{Sampling}
 
+\begin{figure*}[t!]
+	\centering
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/sampling_100.png}
+		\caption{$100\%$}
+		\label{fig:sampling_100}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/sampling_50.png}
+		\caption{$50\%$}
+		\label{fig:sampling_50}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/sampling_25.png}
+		\caption{$25\%$}
+		\label{fig:sampling_25}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/sampling_12.png}
+		\caption{$12\%$}
+		\label{fig:ini_3}
+	\end{subfigure}
+	\caption{Subset of pixels on the reference frame used to optimize the SSD and Project-Out cost functions for different rates of sampling.}
+    \label{fig:sampling_12}
+\end{figure*}
+
+In this experiment, we explore the effect of optimizing the SSD and Project-Out cost functions using only a subset of all pixels in the reference frame. In AAMs the total number of pixels on the reference frame, $F$, is typically several orders of magnitude bigger than the number of shape, $n$, and appearance, $m$, components i.e. $F>>m>>n$. Therefore, a significant reduction in the execution time of CGD algorithms can be obtained by reducing the number of pixels that are used to optimize the previous cost functions. To this end, compare the accuracy achieve by and by optimizing by reducing the number of pixels used by $50\%$, $25\%$ and $12\%$ of the total number of pixels on the reference frame. For all amounts of sampling we tried to evenly distribute the number of pixels across the reference frame, Figure \ref{fig:sampling_masks}.
+
+Result for this experiment are shown in Figure \ref{fig:sampling}.
+
 \begin{figure*}[h!]
 	\centering
 	\begin{subfigure}{0.48\textwidth}
@@ -342,7 +345,7 @@ We again repeat the experimental set up described in the first experiments and r
 
 \subsection{Comparison on Helen and AFW}
 
-In this experiment, we report the fitting accuracy of the best performing CGD algorithms on the Helen database test set and on the entire AFW \cite{Zhu2012} database.
+In this last experiment, we report the fitting accuracy of the SSD and Project-Out Asymmetric Gauss-Newton algorithms on the test set of the Helen database and on the entire AFW database. We chose these two algorithm because they were the best performing algorithms in the previous experiments. 
 
 \begin{figure*}[h!]
 	\centering
@@ -455,6 +458,221 @@ In this experiment, we report the fitting accuracy of the best performing CGD al
 % \caption{Cumulative Error Distributions over 49 landmarks for the AFW dataset.}
 % \label{fig:afw_exp}
 % \end{figure}
+
+\begin{table*}
+\begin{tabular}{lcc}
+\hline\noalign{\smallskip}
+Gauss-Newton algorithms & Iterative solutions
+\\
+\noalign{\bigskip}
+\noalign{\bigskip}
+PO\_For\_GN \cite{Amberg2009, Tzimiropoulos2013} & 
+$
+\Delta \mathbf{p} = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+\\
+\noalign{\smallskip}
+\noalign{\smallskip}
+PO\_Inv\_GN \cite{Matthews2004} & 
+$
+\Delta \mathbf{p} = -\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+\\
+\noalign{\smallskip}
+\noalign{\smallskip}
+PO\_Asy\_GN & 
+$
+\Delta \mathbf{p} = -\left( \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+PO\_Bid\_GN\_Sch & 
+{$\!\begin{aligned}
+	\Delta \mathbf{q} & = -\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}
+	\\
+	\Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+\end{aligned}$}
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+PO\_Bid\_GN\_Alt & 
+{$\!\begin{aligned}
+	\Delta \mathbf{q} & = -\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
+	\\
+	\Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+ 	\\
+	O(
+	\underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+	+
+	\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+	+
+	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+	+
+	\underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
+	+
+	\underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
+	+
+	\underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	+
+	\underbrace{n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	)
+\end{aligned}$}
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+SSD\_For\_GN\_Sch \cite{Amberg2009, Tzimiropoulos2013} & $O(
+			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+			   \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
+               +
+               \underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+               +
+               \underbrace{n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
+               )
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+SSD\_For\_GN\_Alt & $O(
+			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
+               +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\mathbf{r}}
+               +
+               \underbrace{2n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
+               )
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+SSD\_Inv\_GN\_Sch \cite{Papandreou2008, Tzimiropoulos2013} & $O(
+			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+			   \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
+               +
+               \underbrace{mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
+               +
+               \underbrace{nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}
+               +
+               \underbrace{n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}$
+               )
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+SSD\_Inv\_GN\_Alt \cite{Tzimiropoulos2012, Antonakos2014} & $O(
+			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+               \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{J}_\mathbf{a}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
+               +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{r}}
+               +
+               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r}}$
+               )
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+SSD\_Asy\_GN\_Sch & $O(
+               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+			   \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
+               +
+               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
+               +
+               \underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
+               +
+               \underbrace{n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}$
+               )
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+SSD\_Asy\_GN\_Alt & $O(
+               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+               \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\mathbf{J}_\mathbf{t}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
+               +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{t}^T\mathbf{r}}
+               +
+               \underbrace{2n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\mathbf{r}}$
+               )
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+SSD\_Bid\_GN\_Sch & $O(
+			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+               +
+               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}}
+               +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+               +
+               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
+               )
+\\
+\noalign{\smallskip}
+% \hline
+\noalign{\smallskip}
+SSD\_Bid\_GN\_Alt & $O(
+			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+               +
+               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1}\, \& \, \mathbf{H}_\mathbf{i}^{-1}}
+               +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+               +
+               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
+               )
+\\
+\noalign{\smallskip}
+\noalign{\smallskip}
+\end{tabular}
+\caption{Solutions at each iteration of all Gauss-Newton CGD algorithms used in this work.}
+\label{tab:complexity}
+\end{table*}
 
 
 \begin{table*}

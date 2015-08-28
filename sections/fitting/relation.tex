@@ -36,6 +36,37 @@ Papandreou and Maragos \cite{Papandreou2008} proposed an algorithm that is equiv
 
 On the other hand, the forward version of the previous algorithm i.e. the \emph{Simultaneous Forward Compositonal} (SFC) algorithm was first proposed by Martins et al. in \cite{Martins2010}\footnote{Note that Martins et al.  used an additive update rule for the shape parameters, $\mathbf{p}_o =  \mathbf{p} + \delta\mathbf{p}$, so strictly speaking they derived an additive version of the algorithm i.e the \emph{Simultaneous Forward Additive} (SFA) algorithm.}. In this case, the Jacobian with respect to $\delta\mathbf{p}$ depends on the current value of the shape parameters $\mathbf{p}$ through the warped image $\mathbf{i}[\mathbf{p}]$ and also needs to be recomputed at every iteration. Consequently, the complexity if the algorithm is the same as in the naive inverse approach of Gross et al. In this paper, we refer to this algorithm as the \emph{SSD Forward Gauss-Newton} algorithm. It is important to notice that Tzimiropoulos and Pantic \cite{Tzimiropoulos2013} derived a more efficient version of this algorithm ($O(nmF + n^2F + n^3)$) by applying the same derivation used to obtain their Fast-SIC algorithm. They showed that in the forward case their derivation removed the need to explicitly solve for the appearance parameters. Their algorithm is equivalent to the previous \emph{Project-Out Forward Gauss-Newton}.
 
+\begin{figure*}[t!]
+	\centering
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/ini_0.png}
+		\caption{$0\%$}
+		\label{fig:ini_0}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/ini_1.png}
+		\caption{$2.5\%$}
+		\label{fig:ini_1}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/ini_2.png}
+		\caption{$5\%$}
+		\label{fig:ini_2}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/ini_3.png}
+		\caption{$7.5\%$}
+		\label{fig:ini_3}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/ini_4.png}
+		\caption{$10\%$}
+		\label{fig:ini_4}
+	\end{subfigure}
+    \caption{Exemplar initializations obtained by varying the percentage of uniform noise added to the similarity parameters. Note that, increasing the percentage of noise produces more challenging initialization.}
+    \label{fig:ini}
+\end{figure*}
+
 Finally, Kossaifi et al. derived the \emph{SSD Inverse Newton Schur} algorithm in \cite{Kossaifi2014}. This algorithm has a total complexity per iteration of $O(nmF + n^2m + 2n^2F + n^3)$ and was shown to slightly underperform its equivalent Gauss-Newton counterpart.
 
 The remaining SSD algorithms derived in Section \ref{sec:fitting}, i.e.:
