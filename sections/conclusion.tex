@@ -1,7 +1,27 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-% \begin{inparaenum}[\itshape a\upshape)]
-% \item Adapt existent learning-based descent algorithms for face alignment to AAMs and study their relationship with the gradient-based descent algorithms described in this paper. 
-% \item Study the impact that locally-defined warps have in improving the perfomance of AAMs.  
-% \end{inparaenum}. 
+In this paper we thoroughly studied the problem of fitting AAMs using CGD algorithms. We presented a unified and complete view of these algorithms and classified them with respect to three of their main characteristics:
+\begin{itemize} 
+	\item the \emph{cost function} defining the fitting problem; 
+	\item the type of \emph{composition} used; and 
+	\item the \emph{optimization method} employed to solve the non-linear optimization problem. 
+\end{itemize}
+
+Furthermore, we extended the previous view by:
+\begin{itemize}
+	\item Proposing a novel \emph{Bayesian cost function} for fitting AAMs that can be interpreted as a more general formulation of the well-known project-out loss. We assumed a probabilistic model for appearance generation with both Gaussian noise and a Gaussian prior over a latent appearance space. Marginalizing out the latent appearance space, we derived a novel cost function that only depends on shape parameters and that can be interpreted as a valid and more general probabilistic formulation of the well-known project-out cost function \cite{Matthews2004}. In the experiments, we showed that our Bayesian formulation considerably outperforms the original project-out cost function.
+	
+	\item Proposing \emph{asymmetric} and \emph{bidirectional} compositions for CGD algorithms. We showed the connection between Gauss-Newton Asymmetric algorithms and Efficient Second-order Minimization (ESM) algorithms and experimentally proved that these two novel types of composition lead to better convergent and more robust CGD algorithm for fitting AAMs.
+	
+	\item Providing new valuable insights into existent CGD algorithms by reinterpreting them as direct applications of the \emph{Schur complement} and the \emph{Wiberg method}.
+\end{itemize} 
+
+Finally, we made the implementation of all algorithms studied in this paper publicly available as part of the Menpo Project\footnote{\url{http://www.menpo.org}}.
+
+In terms of future work, we plan to:
+\begin{itemize}
+	\item Adapt existent Supervised Descent (SD) algorithms for face alignment \ref{Xiong2013, Tzimiropoulos2015} to AAMs and investigate their relationship with the CGD algorithms studied in this paper. 
+	
+	\item Investigate if our Bayesian cost function and the proposed asymmetric and bidirectional compositions can also be successfully applied to similar generative parametric models, such as the Gauss-Newton Parts-Based Deformable Model (GN-DPM) proposed in \cite{Tzimiropoulos2014}.   
+\end{itemize} 

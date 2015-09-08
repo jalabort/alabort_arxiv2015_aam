@@ -15,19 +15,17 @@ Finally, in order to encourage open research and facilitate future comparisons w
 
 \subsection{Comparison on LFPW}
 
-In this experiment, we report the fitting accuracy and convergence properties of each of the previous algorithms. In order to keep the information on each figure and table easily readible and interpretable the experiment by grouping al...
-
+In this experiment, we report the fitting accuracy and convergence properties of all CGD algorithms studied in this paper. Results are reported on the ~220 test images of the LFPW database. In order to keep the information on each figure and table easily readible and interpretable result are reported by grouping algorithms by cost function, SSD or project-out, and optimization method, Gauss-Newton, Newton or Wiberg.
 
 \subsubsection{SSD algorithms}
 
-
-\subsubsection*{Gauss-Newton}
+Results for SSD Gauss-Newton algorithms are reported on Figure \ref{fig:ssd_gn_5}.
 
 \begin{figure*}[h!]
 	\centering
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/ced_ssd_gn_5.png}
-	    \caption{Cumulative Error Distribution graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \caption{CED on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:ced_ssd_gn_5}
 	\end{subfigure}
 	\hfill
@@ -36,7 +34,7 @@ In this experiment, we report the fitting accuracy and convergence properties of
 	    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_error_vs_iters_ssd_gn_5}
 	\end{subfigure}
-	\par\medskip
+	\par\bigskip
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/mean_cost_vs_iters1_ssd_gn_5.png}
 	    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
@@ -48,12 +46,35 @@ In this experiment, we report the fitting accuracy and convergence properties of
 	    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_cost_vs_iters2_ssd_gn_5}
 	\end{subfigure}
+	\par\bigskip
+	\begin{subfigure}{\textwidth}
+		\center
+		\begin{tabular}{lcccccc}
+		    Algorithm & $<0.02$ & $<0.03$ & $<0.04$ & Mean & Sdt & Median 
+		    \\
+		    SSD\_For\_GN\_Sch 
+		    \\
+		    SSD\_For\_GN\_Alt
+		    \\
+		    SSD\_Inv\_GN\_Sch 
+		    \\
+		    SSD\_Inv\_GN\_Alt
+		    \\
+		    SSD\_Asy\_GN\_Sch 
+		    \\
+		    SSD\_Asy\_GN\_Alt
+		    \\
+		    SSD\_Bid\_GN\_Sch 
+		    \\
+		    SSD\_Bid\_GN\_Alt
+	  	\end{tabular}
+	  	\caption{Table summarizing the...}
+	    \label{tab:stats_ssd_gn_5}
+	\end{subfigure}
 	\label{fig:ssd_gn_5}
-	\caption{}
+	\caption{Results showing the fitting accuracy and convergence properties of the SSD Gauss-Newton algorithms on the LFPW test dataset.}
 \end{figure*}
 
-
-\subsubsection*{Wiberg}
 
 \begin{figure*}[h!]
 	\centering
@@ -88,7 +109,7 @@ In this experiment, we report the fitting accuracy and convergence properties of
 \subsubsection{Project-Out algorithms}
 
 
-\subsubsection*{Gauss-Newton}
+Results for Project-Out Gauss-Newton algorithms are reported on Figure \ref{fig:po_gn_5}.
 
 \begin{figure*}[h!]
 	\centering
@@ -200,7 +221,7 @@ In this experiment, we report the fitting accuracy and convergence properties of
 % \end{figure}
 
 
-\subsubsection{Weighted Bayesian project-out}
+\subsection{Weighted Bayesian project-out}
 
 In this experiment, we quantify the importance of each of the two terms in our Bayesian project-out cost function, Equation \ref{eq:prob_po}. To this end, we introduce the parameters, $\rho \in [0, 1]$ and $\gamma = 1 - \rho$, to weight up the relative contribution of both terms as follows:
 \begin{equation}
@@ -257,7 +278,7 @@ In order to asses the impact that each term has on the fitting accuracy obtained
 % \end{figure}
 
 
-\subsubsection{Optimal asymmetric composition}
+\subsection{Optimal asymmetric composition}
 
 This experiment quantifies the effect that varying the value of the parameters $\alpha \in [0, 1]$ and $\beta = 1 -\alpha$ in Equation \ref{eq:ssd_ac} has in the fitting accuracy obtained by the asymmetric algorithms. Note that for $\alpha=1$, $\beta=0$ and $\alpha=0$, $\beta=1$ these algorithms reduce to their forward and inverse versions respectively. Remember that, in previous experiments, we used the symmetric case $\alpha=\beta=0.5$ to generate the results reported for asymmetric algorithms.
 
@@ -293,7 +314,7 @@ We again repeat the experimental set up described in the first experiments and r
 % \end{figure}
 
 
-\subsubsection{Sampling}
+\subsection{Sampling}
 
 \begin{figure*}[t!]
 	\centering
@@ -321,9 +342,10 @@ We again repeat the experimental set up described in the first experiments and r
     \label{fig:sampling_12}
 \end{figure*}
 
-In this experiment, we explore the effect of optimizing the SSD and Project-Out cost functions using only a subset of all pixels in the reference frame. In AAMs the total number of pixels on the reference frame, $F$, is typically several orders of magnitude bigger than the number of shape, $n$, and appearance, $m$, components i.e. $F>>m>>n$. Therefore, a significant reduction in the execution time of CGD algorithms can be obtained by reducing the number of pixels that are used to optimize the previous cost functions. To this end, compare the accuracy achieve by and by optimizing by reducing the number of pixels used by $50\%$, $25\%$ and $12\%$ of the total number of pixels on the reference frame. For all amounts of sampling we tried to evenly distribute the number of pixels across the reference frame, Figure \ref{fig:sampling_masks}.
+In this experiment, we explore the effect of optimizing the SSD and Project-Out cost functions using only a subset of all pixels in the reference frame. In AAMs the total number of pixels on the reference frame, $F$, is typically several orders of magnitude bigger than the number of shape, $n$, and appearance, $m$, components i.e. $F>>m>>n$. Therefore, a significant reduction in the complexity (and running time) of CGD algorithms can be obtained by decreasing the number of pixels that are used to optimize the previous cost functions. To this end, we compare the accuracy obtained by using $100\%$, $50\%$, $25\%$ and $12\%$ of the total number of pixels on the reference frame. Note that, pixels are (approximately) evenly sampled across the reference frame in all cases, Figure \ref{fig:sampling_masks}.
 
-Result for this experiment are shown in Figure \ref{fig:sampling}.
+Once more we repeat the experimental set up of the first experiment and report the fitting accuracy obtained by the Project Out and SSD Asymmetric Gauss-Newton algorithms by using $100\%$, $50\%$, $25\%$ and $12\%$ of the total number of pixels on the reference frame.
+Result for this experiment are shown in Figure \ref{fig:sampling}. It can be seen that reducing the number of pixels up to $25\%$ has little impact on the fitting accuracy achieved by both algorithms while reducing them to $12\%$ has a clear negative impact.
 
 \begin{figure*}[h!]
 	\centering
@@ -361,7 +383,7 @@ In this last experiment, we report the fitting accuracy of the SSD and Project-O
 	    \label{fig:ced_po_inv_gn}
 	\end{subfigure}
 	\label{fig:alpha}
-	\caption{Results quantifying the effect of varying the value of the parameters $\alpha$ and $\beta$ in Asymmetric algorithms.}
+	\caption{Results showing the fitting accuracy of the SSD and Project-Out Asymmetric Gauss-Newton algorithms on the Helen and AFW databases.}
 \end{figure*}
 
 % \begin{figure*}[h!]
