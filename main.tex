@@ -17,6 +17,8 @@
 \usepackage{paralist}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{afterpage}
 
 % please place your own definitions here and don't use \def but
 % \newcommand{}{}
@@ -30,7 +32,9 @@
 
 \begin{document}
 
-\title{A Unified framework for Active Appearance Models Fitting}
+\title{A Unified Framework for Active Appearance Models Fitting}
+%\title{Unifying Compositional Gradient Descent fitting for Active Appearance Models}
+%\title{A Unified Framework for Fitting Active Appearance Models with Compositional Gradient Descent Algorithms}
 
 %\titlerunning{Short form of title}        % if too long for running head
 
@@ -86,5 +90,9 @@ Finally, in order to encourage open research and facilitate future comparisons w
 % BibTeX users please use one of
 \bibliographystyle{spbasic}      % basic style, author-year citations
 \bibliography{main.bib}   % name your BibTeX data base
+
+\appendix 
+
+\input{sections/appendix}
 
 \end{document}

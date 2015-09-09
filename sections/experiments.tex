@@ -13,167 +13,334 @@ Unless stated otherwise, algorithms are initialized with $5\%$ uniform noise, re
 
 Finally, in order to encourage open research and facilitate future comparisons with the results presented in this section, we make the implementation of all CGD algorithms publicly available as part of the Menpo Project \cite{Menpo2014}.
 
+
 \subsection{Comparison on LFPW}
 
 In this experiment, we report the fitting accuracy and convergence properties of all CGD algorithms studied in this paper. Results are reported on the ~220 test images of the LFPW database. In order to keep the information on each figure and table easily readible and interpretable result are reported by grouping algorithms by cost function, SSD or project-out, and optimization method, Gauss-Newton, Newton or Wiberg.
+
 
 \subsubsection{SSD algorithms}
 
 Results for SSD Gauss-Newton algorithms are reported on Figure \ref{fig:ssd_gn_5}.
 
-\begin{figure*}[h!]
+\begin{figure*}[t!]
+	\centering
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/sampling_100.png}
+		\caption{$100\%$}
+		\label{fig:sampling_100}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/sampling_50.png}
+		\caption{$50\%$}
+		\label{fig:sampling_50}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/sampling_25.png}
+		\caption{$25\%$}
+		\label{fig:sampling_25}
+	\end{subfigure}
+	\begin{subfigure}{0.16\textwidth}
+		\includegraphics[width=\textwidth]{figures/sampling_12.png}
+		\caption{$12\%$}
+		\label{fig:ini_12}
+	\end{subfigure}
+	\caption{Subset of pixels on the reference frame used to optimize the SSD and Project-Out cost functions for different rates of sampling.}
+    \label{fig:sampling_masks}
+\end{figure*}
+
+
+\begin{figure*}[p]
 	\centering
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/ced_ssd_gn_5.png}
-	    \caption{CED on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Cumulative error distribution on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:ced_ssd_gn_5}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/mean_error_vs_iters_ssd_gn_5.png}
-	    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Mean normalized point-to-point error vs number of iterations on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_error_vs_iters_ssd_gn_5}
 	\end{subfigure}
-	\par\bigskip
+	\par\bigskip\bigskip
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/mean_cost_vs_iters1_ssd_gn_5.png}
-	    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Mean normalized cost vs number of first scale iterations on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_cost_vs_iters1_ssd_gn_5}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_gn/mean_cost_vs_iters2_ssd_gn_5.png}
-	    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Mean normalized cost vs number of second scale iterations on the LFPW test dataset for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_cost_vs_iters2_ssd_gn_5}
 	\end{subfigure}
-	\par\bigskip
+	\par\bigskip\bigskip
 	\begin{subfigure}{\textwidth}
 		\center
 		\begin{tabular}{lcccccc}
+			\toprule
 		    Algorithm & $<0.02$ & $<0.03$ & $<0.04$ & Mean & Sdt & Median 
 		    \\
-		    SSD\_For\_GN\_Sch 
+		    \midrule
+		    Initialization & 0.000 & 0.004 & 0.055 & 0.080 & 0.028 & 0.078
 		    \\
-		    SSD\_For\_GN\_Alt
+		    SSD\_For\_GN\_Sch & 0.456 & 0.707 & 0.777 & 0.033 & 0.030 & 0.021 
 		    \\
-		    SSD\_Inv\_GN\_Sch 
+		    SSD\_For\_GN\_Alt & 0.445 & 0.702 & 0.766 & 0.033 & 0.030 & 0.021
 		    \\
-		    SSD\_Inv\_GN\_Alt
+		    SSD\_Inv\_GN\_Sch & 0.686 & 0.906 & 0.939 & 0.022 & \textbf{0.019} & \textbf{0.017}
 		    \\
-		    SSD\_Asy\_GN\_Sch 
+		    SSD\_Inv\_GN\_Alt & 0.673 & 0.897 & 0.933 & 0.022 & 0.020 & \textbf{0.017}
 		    \\
-		    SSD\_Asy\_GN\_Alt
+		    SSD\_Asy\_GN\_Sch & 0.640 & 0.891 & 0.929 & 0.023 & 0.021 & 0.018
 		    \\
-		    SSD\_Bid\_GN\_Sch 
+		    SSD\_Asy\_GN\_Alt & 0.635 & 0.882 & 0.924 & 0.023 & 0.021 & 0.018
 		    \\
-		    SSD\_Bid\_GN\_Alt
+		    SSD\_Bid\_GN\_Sch & 0.674 & 0.917 & 0.946 & 0.022 & \textbf{0.019} & \textbf{0.017}
+		    \\
+		    SSD\_Bid\_GN\_Alt & \textbf{0.680} & \textbf{0.924} & \textbf{0.951} & \textbf{0.021} & \textbf{0.019} & \textbf{0.017} 
+		    \\
+		    \bottomrule
 	  	\end{tabular}
-	  	\caption{Table summarizing the...}
+	  	\caption{Table showing the proportion of images fitted with a normalized point-to-point error below $0.02$, $0.03$ and $0.04$ together with the normalized point-to-point error Mean, Std and Median for all SSD Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{tab:stats_ssd_gn_5}
 	\end{subfigure}
+	\caption{Results showing the fitting accuracy and convergence properties of the SSD Gauss-Newton algorithms on the LFPW test dataset initialized with $5\%$ uniform noise.}
 	\label{fig:ssd_gn_5}
-	\caption{Results showing the fitting accuracy and convergence properties of the SSD Gauss-Newton algorithms on the LFPW test dataset.}
 \end{figure*}
 
 
-\begin{figure*}[h!]
+\begin{figure*}[p]
+	\centering
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_n/ced_ssd_n_5.png}
+	    \caption{Cumulative error distribution on the LFPW test dataset for all SSD Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:ced_ssd_n_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_n/mean_error_vs_iters_ssd_n_5.png}
+	    \caption{Mean normalized point-to-point error vs number of iterations on the LFPW test dataset for all SSD Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_error_vs_iters_ssd_n_5}
+	\end{subfigure}
+	\par\bigskip\bigskip
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_n/mean_cost_vs_iters1_ssd_n_5.png}
+	    \caption{Mean normalized cost vs number of first scale iterations on the LFPW test dataset for all SSD Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters1_ssd_n_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_n/mean_cost_vs_iters2_ssd_n_5.png}
+	    \caption{Mean normalized cost vs number of second scale iterations on the LFPW test dataset for all SSD Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters2_ssd_n_5}
+	\end{subfigure}
+	\par\bigskip\bigskip
+	\begin{subfigure}{\textwidth}
+		\center
+		\begin{tabular}{lcccccc}
+			\toprule
+		    Algorithm & $<0.02$ & $<0.03$ & $<0.04$ & Mean & Sdt & Median 
+		    \\
+		    \midrule
+		    Initialization & 0.000 & 0.004 & 0.055 & 0.080 & 0.028 & 0.078
+		    \\
+		    SSD\_For\_N\_Sch & 0.249 & 0.479 & 0.603 & 0.044 & 0.033 & 0.031
+		    \\
+		    SSD\_For\_N\_Alt & 0.244 & 0.476 & 0.600 & 0.044 & 0.033 & 0.032
+		    \\
+		    SSD\_Inv\_N\_Sch & 0.626 & 0.876 & 0.909 & 0.024 & 0.022 & \textbf{0.018}
+		    \\
+		    SSD\_Inv\_N\_Alt & 0.613 & 0.876 & 0.909 & 0.024 & 0.022 & \textbf{0.018}
+		    \\
+		    SSD\_Asy\_N\_Sch & 0.562 & 0.812 & 0.863 & 0.030 & 0.076 & 0.019
+		    \\
+		    SSD\_Asy\_N\_Alt & 0.557 & 0.808 & 0.862 & 0.027 & 0.025 & 0.019
+		    \\
+		    SSD\_Bid\_N\_Sch & \textbf{0.641} & 0.897 & 0.932 & \textbf{0.023} & 0.022 & \textbf{0.018}
+		    \\
+		    SSD\_Bid\_N\_Alt & 0.600 & \textbf{0.903} & \textbf{0.939} & \textbf{0.023} & \textbf{0.021} & \textbf{0.018}
+		    \\
+		    \bottomrule
+	  	\end{tabular}
+	  	\caption{Table showing the proportion of images fitted with a normalized point-to-point error below $0.02$, $0.03$ and $0.04$ together with the normalized point-to-point error Mean, Std and Median for all SSD Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{tab:stats_ssd_n_5}
+	\end{subfigure}
+	\caption{Results showing the fitting accuracy and convergence properties of the SSD Newton algorithms on the LFPW test dataset initialized with $5\%$ uniform noise.}
+	\label{fig:ssd_n_5}
+\end{figure*}
+
+
+\begin{figure*}[p]
 	\centering
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_w/ced_ssd_w_5.png}
-	    \caption{Cumulative Error Distribution graph on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \caption{CED on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:ced_ssd_w_5}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_w/mean_error_vs_iters_ssd_w_5.png}
-	    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Mean normalized point-to-point error vs number of iterations on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_error_vs_iters_ssd_w_5}
 	\end{subfigure}
-	\par\medskip
+	\par\bigskip\bigskip
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_w/mean_cost_vs_iters1_ssd_w_5.png}
-	    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Mean normalized cost vs number of first scale iterations on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_cost_vs_iters1_ssd_w_5}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/ssd_w/mean_cost_vs_iters2_ssd_w_5.png}
-	    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Mean normalized cost vs number of second scale iterations on the LFPW test dataset for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_cost_vs_iters2_ssd_w_5}
 	\end{subfigure}
+	\par\bigskip\bigskip
+	\begin{subfigure}{\textwidth}
+		\center
+		\begin{tabular}{lcccccc}
+		    \toprule
+		    Algorithm & $<0.02$ & $<0.03$ & $<0.04$ & Mean & Sdt & Median 
+		    \\
+		    \midrule
+		    Initialization & 0.000 & 0.004 & 0.055 & 0.080 & 0.028 & 0.078
+		    \\ 
+		    SSD\_For\_W & 0.457 & 0.707 & 0.777 & 0.33 & 0.030 & 0.021
+		    \\
+		    SSD\_Inv\_W & \textbf{0.689} & 0.903 & 0.939 & \textbf{0.22} & \textbf{0.019} & \textbf{0.017}
+		    \\
+		    SSD\_Asy\_W & 0.635 & 0.887 & 0.926 & 0.23 & 0.021 & 0.018
+		    \\
+		    SSD\_Bid\_W & 0.686 & \textbf{0.911} & \textbf{0.942} & \textbf{0.22} & \textbf{0.019} & \textbf{0.017}
+		    \\
+		    \bottomrule
+	  	\end{tabular}
+	  	\caption{Table showing the proportion of images fitted with a normalized point-to-point error below $0.02$, $0.03$ and $0.04$ together with the normalized point-to-point error Mean, Std and Median for all SSD Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{tab:stats_ssd_w_5}
+	\end{subfigure}
+	\caption{Results showing the fitting accuracy and convergence properties of the SSD Wiberg algorithms on the LFPW test dataset.}
 	\label{fig:ssd_w_5}
-	\caption{}
 \end{figure*}
 
 
 \subsubsection{Project-Out algorithms}
 
-
 Results for Project-Out Gauss-Newton algorithms are reported on Figure \ref{fig:po_gn_5}.
 
-\begin{figure*}[h!]
+
+\begin{figure*}[p]
 	\centering
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/po_gn/ced_po_gn_5.png}
-	    \caption{Cumulative Error Distribution graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \caption{CED graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:ced_po_gn_5}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/po_gn/mean_error_vs_iters_po_gn_5.png}
-	    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Mean normalized point-to-point error vs number of iterations on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_error_vs_iters_po_gn_5}
 	\end{subfigure}
-	\par\medskip
+	\par\bigskip\bigskip
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/po_gn/mean_cost_vs_iters1_po_gn_5.png}
-	    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Mean normalized cost vs number of first scale iterations on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_cost_vs_iters1_po_gn_5}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/po_gn/mean_cost_vs_iters2_po_gn_5.png}
-	    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \caption{Mean normalized cost vs number of second scale iterations on the LFPW test dataset for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_cost_vs_iters2_po_gn_5}
 	\end{subfigure}
+	\par\bigskip\bigskip
+	\begin{subfigure}{\textwidth}
+		\center
+		\begin{tabular}{lcccccc}
+		    \toprule
+		    Algorithm & $<0.02$ & $<0.03$ & $<0.04$ & Mean & Sdt & Median 
+		    \\
+		    \midrule
+		    Initialization & 0.000 & 0.004 & 0.055 & 0.080 & 0.028 & 0.078
+		    \\ 
+		    PO\_For\_GN\_Sch & 0.470 & 0.729 & 0.799 & 0.031 & 0.029 & 0.021
+		    \\
+		    PO\_For\_GN\_Alt & 0.458 & 0.719 & 0.780 & 0.035 & 0.044 & 0.021
+		    \\
+		    PO\_Inv\_GN\_Sch & \textbf{0.637} & \textbf{0.891} & \textbf{0.938} & \textbf{0.023} & \textbf{0.021} & \textbf{0.018}
+		    \\
+		    PO\_Bid\_GN\_Sch & 0.528 & 0.802 & 0.862 & 0.030 & 0.039 & 0.020
+		    \\
+		    PO\_Bid\_GN\_Alt & 0.528 & 0.805 & 0.865 & 0.030 & 0.040 & 0.019
+		    \\
+		    \bottomrule
+	  	\end{tabular}
+	  	\caption{Table showing the proportion of images fitted with a normalized point-to-point error below $0.02$, $0.03$ and $0.04$ together with the normalized point-to-point error Mean, Std and Median for all Project-Out Gauss-Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{tab:stats_po_gn_5}
+	\end{subfigure}
+	\caption{Results showing the fitting accuracy and convergence properties of the Project-Out Gauss-Newton algorithms on the LFPW test dataset.}
 	\label{fig:po_gn_5}
-	\caption{}
 \end{figure*}
 
 
-% \subsubsection{Project-Out Newton algorithms}
+\begin{figure*}[p]
+	\centering
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_n/ced_po_n_5.png}
+	    \caption{CED graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:ced_po_n_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_n/mean_error_vs_iters_po_n_5.png}
+	    \caption{Mean normalized point-to-point error vs number of iterations on the LFPW test dataset for all Project-Out Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_error_vs_iters_po_n_5}
+	\end{subfigure}
+	\par\bigskip\bigskip
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_n/mean_cost_vs_iters1_po_n_5.png}
+	    \caption{Mean normalized cost vs number of first scale iterations on the LFPW test dataset for all Project-Out Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters1_po_n_5}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+	    \includegraphics[width=\textwidth]{experiments/algorithms/po_n/mean_cost_vs_iters2_po_n_5.png}
+	    \caption{Mean normalized cost vs number of second scale iterations on the LFPW test dataset for all Project-Out Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{fig:mean_cost_vs_iters2_po_n_5}
+	\end{subfigure}
+	\par\bigskip\bigskip
+	\begin{subfigure}{\textwidth}
+		\center
+		\begin{tabular}{lcccccc}
+		    \toprule
+		    Algorithm & $<0.02$ & $<0.03$ & $<0.04$ & Mean & Sdt & Median 
+		    \\
+		    \midrule
+		    Initialization & 0.000 & 0.004 & 0.055 & 0.080 & 0.028 & 0.078
+		    \\ 
+		    PO\_For\_N\_Sch & 0.280 & 0.503 & 0.626 & 0.043 & 0.033 & 0.030
+		    \\
+		    PO\_For\_N\_Alt & 0.265 & 0.516 & 0.586 & 11.929 & 179.525 & 0.029
+		    \\
+		    PO\_Inv\_N\_Sch & \textbf{0.494} & \textbf{0.744} & \textbf{0.826} & \textbf{0.030} & \textbf{0.028} & \textbf{0.020}
+		    \\
+		    PO\_Bid\_N\_Sch & 0.314 & 0.536 & 0.649 & 0.287 & 1.347 & 0.027
+		    \\
+		    PO\_Bid\_N\_Alt & 0.329 & 0.570 & 0.649 & 0.280 & 1.465 & 0.026
+		    \\
+		    \bottomrule
+	  	\end{tabular}
+	  	\caption{Table showing the proportion of images fitted with a normalized point-to-point error below $0.02$, $0.03$ and $0.04$ together with the normalized point-to-point error Mean, Std and Median for all Project-Out Newton algorithms initialized with $5\%$ uniform noise.}
+	    \label{tab:stats_po_n_5}
+	\end{subfigure}
+	\caption{Results showing the fitting accuracy and convergence properties of the Project-Out Newton algorithms on the LFPW test dataset.}
+	\label{fig:po_n_5}
+\end{figure*}
 
-% \begin{figure}[h!]
-%     \centering
-%     \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/ced_po_n_5.png}
-%     \caption{CED graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
-%     \label{fig:ced_po_gn_4}
-% \end{figure}
 
-% \begin{figure}[h!]
-%     \centering
-%     \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/mean_error_vs_iters_po_n_5.png}
-%     \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
-%     \label{fig:mean_error_vs_iters_po_n_4}
-% \end{figure}
-
-% \begin{figure}[h!]
-%     \centering
-%     \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/mean_cost_vs_iters1_po_n_5.png}
-%     \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
-%     \label{fig:mean_cost_vs_iters1_po_n_4}
-% \end{figure}
-
-% \begin{figure}[h!]
-%     \centering
-%     \includegraphics[width=0.50\textwidth]{experiments/algorithms/po_n/mean_cost_vs_iters2_po_n_5.png}
-%     \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all Project-Out Newton algorithms initialized with $4$\% uniform noise.}
-%     \label{fig:mean_cost_vs_iters2_po_n_4}
-% \end{figure}
-
-\subsubsection*{Wiberg}
-
-\begin{figure*}[h!]
+\begin{figure*}[p]
 	\centering
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/po_w/ced_po_w_5.png}
@@ -186,7 +353,7 @@ Results for Project-Out Gauss-Newton algorithms are reported on Figure \ref{fig:
 	    \caption{Mean normalized point-to-point error vs number of iterations graph on the LFPW test dataset for all Project-Out Wiberg algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_error_vs_iters_po_w_5}
 	\end{subfigure}
-	\par\medskip
+	\par\bigskip\bigskip
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/algorithms/po_w/mean_cost_vs_iters1_po_w_5.png}
 	    \caption{Mean normalized cost vs number of first scale iterations graph on the LFPW test dataset for all Project-Out Wiberg algorithms initialized with $5\%$ uniform noise.}
@@ -198,8 +365,25 @@ Results for Project-Out Gauss-Newton algorithms are reported on Figure \ref{fig:
 	    \caption{Mean normalized cost vs number of second scale iterations graph on the LFPW test dataset for all Project-Out Wiberg algorithms initialized with $5\%$ uniform noise.}
 	    \label{fig:mean_cost_vs_iters2_po_w_5}
 	\end{subfigure}
+	\par\bigskip\bigskip
+	\begin{subfigure}{\textwidth}
+		\center
+		\begin{tabular}{lcccccc}
+		    \toprule
+		    Algorithm & $<0.02$ & $<0.03$ & $<0.04$ & Mean & Sdt & Median 
+		    \\
+		    \midrule
+		    Initialization & 0.000 & 0.004 & 0.055 & 0.080 & 0.028 & 0.078
+		    \\ 
+		    PO\_Bid\_W\_Sch & 0.524 & 0.801 & 0.862 & 0.030 & 0.039 & 0.020
+		    \\
+		    \bottomrule
+	  	\end{tabular}
+	  	\caption{Table showing the proportion of images fitted with a normalized point-to-point error below $0.02$, $0.03$ and $0.04$ together with the normalized point-to-point error Mean, Std and Median for all Project-Out Wiberg algorithms initialized with $5\%$ uniform noise.}
+	    \label{tab:stats_po_w_5}
+	\end{subfigure}
+	\caption{Results showing the fitting accuracy and convergence properties of the Project-Out Wiberg algorithms on the LFPW test dataset.}
 	\label{fig:po_w_5}
-	\caption{}
 \end{figure*}
 
 
@@ -236,14 +420,14 @@ Setting $\rho=0$, $\gamma=1$ reduces the previous cost function to the original 
  
 In order to asses the impact that each term has on the fitting accuracy obtained by the previous project-out algorithm we repeat the experimental set up of the first experiment and test all project-out algorithms for different values of the parameters $\rho$ and $\gamma$. Results for this experiment are reported by Figure \ref{fig:rho}. We can see that, regardless of the type of composition, a weighted combinations of the two previous terms always leads to a smaller mean normalized point-to-point error compared to either term on its own. Note that the accuracy achieved by the standard Bayesian project-out cost function is substantially better than the one obtained by the original project-out loss (specially noticeable for the inverse and bidirectional cases); fully justifying the inclusion of the first term, i.e the Mahalanobis distance \emph{within} the appearance subspace, into the cost function. Finally, in this particular experiment, the accuracy of all algorithms is maximized by setting $\rho=0.1$, $\gamma=0.9$, further highlighting the importance of the first term in the Bayesian formulation.
 
-\begin{figure*}[h!]
+\begin{figure*}[p]
 	\centering
 	\begin{subfigure}{\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/rho/convergence_vs_rho_po_gn_5.png}
 	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the Project-Out and SSD Asymmetric Gauss-Newton algorithms values of $\rho$ and $\gamma$ and initialized with $5\%$ noise.}
 	    \label{fig:convergence_vs_rho_po_gn}
 	\end{subfigure}
-	\par\medskip
+	\par\bigskip
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/rho/ced_po_for_gn_5.png}
 	    \caption{CED on the LFPW test dataset for Project-Out Forward Gauss-Newton algorithms for different values of $\rho$ and $\gamma$ and initialized with $5\%$ noise.}
@@ -255,7 +439,7 @@ In order to asses the impact that each term has on the fitting accuracy obtained
 	    \caption{CED on the LFPW test dataset for Project-Out Inverse Gauss-Newton algorithms for different values of $\rho$ and $\gamma$ and initialized with $5\%$ noise.}
 	    \label{fig:ced_po_inv_gn}
 	\end{subfigure}
-	\par\medskip
+	\par\bigskip
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/rho/ced_po_asy_gn_5.png}
 	    \caption{CED on the LFPW test dataset for Project-Out Asymmetric Gauss-Newton algorithms for different values of $\rho$ and $\gamma$ and initialized with $5\%$ noise.}
@@ -291,7 +475,7 @@ We again repeat the experimental set up described in the first experiments and r
 	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the Project-Out and SSD Asymmetric Gauss-Newton algorithms values of $\alpha$ and $\beta$ and initialized with $5\%$ noise.}
 	    \label{fig:ced_po_asy_gn}
 	\end{subfigure}
-	\par\medskip
+	\par\bigskip
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/alpha/ced_po_asy_gn_5.png}
 	    \caption{CED on the LFPW test dataset for Project-Out Asymmetric Gauss-Newton algorithm for different values of $\alpha$ and $\beta$ and initialized with $5\%$ noise.}
@@ -303,8 +487,8 @@ We again repeat the experimental set up described in the first experiments and r
 	    \caption{CED on the LFPW test dataset for the the SSD Asymmetric Gauss-Newton algorithm for different values of $\alpha$ and $\beta$ and initialized with $5\%$ noise.}
 	    \label{fig:ced_po_inv_gn}
 	\end{subfigure}
-	\label{fig:alpha}
 	\caption{Results quantifying the effect of varying the value of the parameters $\alpha$ and $\beta$ in Asymmetric algorithms.}
+	\label{fig:alpha}
 \end{figure*}
 
 % \begin{figure}[h!]
@@ -315,32 +499,6 @@ We again repeat the experimental set up described in the first experiments and r
 
 
 \subsection{Sampling}
-
-\begin{figure*}[t!]
-	\centering
-	\begin{subfigure}{0.16\textwidth}
-		\includegraphics[width=\textwidth]{figures/sampling_100.png}
-		\caption{$100\%$}
-		\label{fig:sampling_100}
-	\end{subfigure}
-	\begin{subfigure}{0.16\textwidth}
-		\includegraphics[width=\textwidth]{figures/sampling_50.png}
-		\caption{$50\%$}
-		\label{fig:sampling_50}
-	\end{subfigure}
-	\begin{subfigure}{0.16\textwidth}
-		\includegraphics[width=\textwidth]{figures/sampling_25.png}
-		\caption{$25\%$}
-		\label{fig:sampling_25}
-	\end{subfigure}
-	\begin{subfigure}{0.16\textwidth}
-		\includegraphics[width=\textwidth]{figures/sampling_12.png}
-		\caption{$12\%$}
-		\label{fig:ini_3}
-	\end{subfigure}
-	\caption{Subset of pixels on the reference frame used to optimize the SSD and Project-Out cost functions for different rates of sampling.}
-    \label{fig:sampling_12}
-\end{figure*}
 
 In this experiment, we explore the effect of optimizing the SSD and Project-Out cost functions using only a subset of all pixels in the reference frame. In AAMs the total number of pixels on the reference frame, $F$, is typically several orders of magnitude bigger than the number of shape, $n$, and appearance, $m$, components i.e. $F>>m>>n$. Therefore, a significant reduction in the complexity (and running time) of CGD algorithms can be obtained by decreasing the number of pixels that are used to optimize the previous cost functions. To this end, we compare the accuracy obtained by using $100\%$, $50\%$, $25\%$ and $12\%$ of the total number of pixels on the reference frame. Note that, pixels are (approximately) evenly sampled across the reference frame in all cases, Figure \ref{fig:sampling_masks}.
 
@@ -360,8 +518,8 @@ Result for this experiment are shown in Figure \ref{fig:sampling}. It can be see
 	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the Project-Out Asymmetric Gauss-Newton algorithm using different sampling rates and initialized with different amounts of noise.}
 	    \label{fig:sampling_vs_noise_po_asy_gn}
 	\end{subfigure}
-	\label{fig:sampling}
 	\caption{Results assessing the effectiveness of sampling for the best performing Project-Out and SSD algorithms on the LFPW database.}
+	\label{fig:sampling}
 \end{figure*}
 
 
@@ -382,8 +540,8 @@ In this last experiment, we report the fitting accuracy of the SSD and Project-O
 	    \caption{CED on the AFW database for the Project-Out and SSD Asymmetric Gauss-Newton algorithm initialized with $5\%$ noise.}
 	    \label{fig:ced_po_inv_gn}
 	\end{subfigure}
-	\label{fig:alpha}
 	\caption{Results showing the fitting accuracy of the SSD and Project-Out Asymmetric Gauss-Newton algorithms on the Helen and AFW databases.}
+	\label{fig:helen_afw}
 \end{figure*}
 
 % \begin{figure*}[h!]
@@ -417,7 +575,7 @@ In this last experiment, we report the fitting accuracy of the SSD and Project-O
 % 	    \caption{Mean normalized point-to-point error vs number of iterations on the entire AFW database for the best performing CGD algorithms initialized with $5\%$ uniform noise.}
 % 	    \label{fig:helen_mean_error_vs_iters_best_5}
 % 	\end{subfigure}
-% 	\par\medskip
+% 	\par\bigskip
 % 	\begin{subfigure}{0.48\textwidth}
 % 	    \includegraphics[width=\textwidth]{experiments/best/helen/mean_cost_vs_iters1_best_5.png}
 % 	    \caption{Mean normalized cost vs number of first pyramid level iterations on the entire AFW database for the best performing CGD algorithms initialized with $5\%$ uniform noise.}
@@ -447,7 +605,7 @@ In this last experiment, we report the fitting accuracy of the SSD and Project-O
 % 	    \caption{Mean normalized point-to-point error vs number of iterations on the AFW database for the best performing CGD algorithms initialized with $5\%$ uniform noise.}
 % 	    \label{fig:afw_mean_error_vs_iters_best_5}
 % 	\end{subfigure}
-% 	\par\medskip
+% 	\par\bigskip
 % 	\begin{subfigure}{0.48\textwidth}
 % 	    \includegraphics[width=\textwidth]{experiments/best/afw/mean_cost_vs_iters1_best_5.png}
 % 	    \caption{Mean normalized cost vs number of first pyramid level iterations on the AFW database for the best performing CGD algorithms initialized with $5\%$ uniform noise.}
@@ -480,645 +638,3 @@ In this last experiment, we report the fitting accuracy of the SSD and Project-O
 % \caption{Cumulative Error Distributions over 49 landmarks for the AFW dataset.}
 % \label{fig:afw_exp}
 % \end{figure}
-
-\begin{table*}
-\begin{tabular}{lcc}
-\hline\noalign{\smallskip}
-Gauss-Newton algorithms & Iterative solutions
-\\
-\noalign{\bigskip}
-\noalign{\bigskip}
-PO\_For\_GN \cite{Amberg2009, Tzimiropoulos2013} & 
-$
-\Delta \mathbf{p} = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
-$
-\\
-\noalign{\smallskip}
-\noalign{\smallskip}
-PO\_Inv\_GN \cite{Matthews2004} & 
-$
-\Delta \mathbf{p} = -\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
-$
-\\
-\noalign{\smallskip}
-\noalign{\smallskip}
-PO\_Asy\_GN & 
-$
-\Delta \mathbf{p} = -\left( \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
-$
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_GN\_Sch & 
-{$\!\begin{aligned}
-	\Delta \mathbf{q} & = -\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}
-	\\
-	\Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
-\end{aligned}$}
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_GN\_Alt & 
-{$\!\begin{aligned}
-	\Delta \mathbf{q} & = -\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
-	\\
-	\Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
- 	\\
-	O(
-	\underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-	+
-	\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-	+
-	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-	+
-	\underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-	+
-	\underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-	+
-	\underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-	+
-	\underbrace{n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-	)
-\end{aligned}$}
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_GN\_Sch \cite{Amberg2009, Tzimiropoulos2013} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_GN\_Alt & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_GN\_Sch \cite{Papandreou2008, Tzimiropoulos2013} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_GN\_Alt \cite{Tzimiropoulos2012, Antonakos2014} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_GN\_Sch & $O(
-               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_GN\_Alt & $O(
-               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{t}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_GN\_Sch & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_GN\_Alt & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1}\, \& \, \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-\noalign{\smallskip}
-\end{tabular}
-\caption{Solutions at each iteration of all Gauss-Newton CGD algorithms used in this work.}
-\label{tab:complexity}
-\end{table*}
-
-
-\begin{table*}
-\begin{tabular}{lc}
-\hline\noalign{\smallskip}
-Gauss-Newton algorithms & Computational cost
-\\
-\noalign{\smallskip}
-\hline
-\noalign{\smallskip}
-PO\_For\_GN \cite{Amberg2009, Tzimiropoulos2013} & $O(
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{(\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i})^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Inv\_GN \cite{Matthews2004} & $O(
-               \underbrace{nF}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Asy\_GN & $O(
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_GN\_Sch & $O(
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{J}_{\bar{\mathbf{a}}} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_GN\_Alt & $O(
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{r} \, \& \,\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r} \, \& \, \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_GN\_Sch \cite{Amberg2009, Tzimiropoulos2013} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_GN\_Alt & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_GN\_Sch \cite{Papandreou2008, Tzimiropoulos2013} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_GN\_Alt \cite{Tzimiropoulos2012, Antonakos2014} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_GN\_Sch & $O(
-               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_GN\_Alt & $O(
-               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{t}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_GN\_Sch & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_GN\_Alt & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1}\, \& \, \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-\noalign{\smallskip}
-\end{tabular}
-\caption{Computational cost per iteration of all Gauss-Newton CGD algorithms used in this work.}
-\label{tab:complexity}
-\end{table*}
-
-\begin{table*}
-\begin{tabular}{lc}
-\hline\noalign{\smallskip}
-Newton algorithms & Computational cost
-\\
-\noalign{\smallskip}
-\hline
-\noalign{\smallskip}
-PO\_For\_N & $O(
-			   \overbrace{
-	               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-	               +
-	               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-	               +
-	               \underbrace{n^2}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-	           }^{\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
-	           +
-	           \overbrace{
-	               \underbrace{2nF + n^2F + mF}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\mathbf{i}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
-	               +
-	               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-	               +
-	               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-	           }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}}
-	           +
-               \overbrace{
-               	   n^2
-               }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Inv\_N & $O(
-	           \overbrace{
-	           	   \underbrace{n^2F}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\bar{\mathbf{a}}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
-               	   +
-                   \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}}
-               +
-               \overbrace{
-                   n^2
-               }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Asy\_N & $O(
-			   \overbrace{
-	               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-	               +
-	               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
-	               +
-	               \underbrace{n^2}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
-	           }^{\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
-	           +
-	           \overbrace{
-	               \underbrace{2nF + n^2F + mF}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\mathbf{t}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
-	               +
-	               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
-	               +
-	               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-	           }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}}
-	           +
-               \overbrace{
-               	   n^2
-               }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_N\_Sch &
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_N\_Alt &
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_N\_Sch &
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_N\_Alt &
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_N\_Sch \cite{Kossaifi2014} &
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_N\_Alt &
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_N\_Sch &
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_N\_Alt &
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_N\_Sch &
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_N\_Alt &
-\\
-\noalign{\smallskip}
-\noalign{\smallskip}
-\end{tabular}
-\caption{Computational cost per iteration of all Newton CGD algorithms used in this work.}
-\label{tab:complexity}
-\end{table*}
-
-
-% \begin{table*}
-% \begin{tabular}{lccccccc}
-% \hline\noalign{\smallskip}
-% Algorithm & $\mathbf{a}$ & $\mathbf{J}$ & $\mathbf{J}^T\mathbf{U}$ & $\mathbf{H}$ & $\mathbf{H}^{-1}$ & $\mathbf{H}^{-1}\mathbf{J}^T$ & $\mathbf{H}^{-1}\mathbf{J}^T\mathbf{r}$
-% \\
-% \noalign{\smallskip}
-% \hline
-% \noalign{\smallskip}
-% PO\_For\_GN & - & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_For\_N & - & $O(nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_Inv\_GN & - & - & - & - & - & - & $O(nF)$
-% \\
-% PO\_Inv\_N & - & - & - & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_Asy\_GN & - & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_Asy\_N & - & $O(nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_Bid\_GN\_Sch & - & $O(nF)$ & $O(mnF)$ & $O(2n^2F)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% PO\_Bid\_GN\_Alt & - & $O(nF)$ & $O(mnF)$ & $O(2n^2F)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% PO\_Bid\_N\_Sch & - & $O(nF)$ & $O(mnF)$ & $O(3n^2F + 2nF)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% PO\_Bid\_N\_Alt & - & $O(nF)$ & $O(mnF)$ & $O(3n^2F + 2nF)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% SSD\_For\_GN\_Sch & $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_For\_GN\_Alt & $O(mF)$ & $O(nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_For\_N\_Sch & $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_For\_N\_Alt & $O(mF)$ & $O(nF)$ & - & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Inv\_GN\_Sch & $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O((n^2F)$ & $O(nF)$
-% \\
-% SSD\_Inv\_GN\_Alt & $O(mF)$ & $O(nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O((n^2F)$ & $O(nF)$
-% \\
-% SSD\_Inv\_N\_Sch & $O(mF)$ & $O(nF)$ & $O(2mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Inv\_N\_Alt & $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Asy\_GN\_Sch & $O(mF)$ & $O(2nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Asy\_GN\_Alt & $O(mF)$ & $O(2nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Asy\_N\_Sch & $O(mF)$ & $O(2nF)$ & $O(2mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Asy\_N\_Alt & $O(mF)$ & $O(2nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Bid\_GN\_Sch & $O(mF)$ & $O(2nF)$ & $O(2mnF)$ & $O(2n^2F)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% SSD\_Bid\_GN\_Alt & $O(mF)$ & $O(2nF)$ & - & $O(2n^2F)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% SSD\_Bid\_N\_Sch
-% \\
-% SSD\_Bid\_N\_Alt
-% \end{tabular}
-% \caption{Computational cost per iteration of all CGD algorithms used in this work.}
-% \label{tab:complexity}
-% \end{table*}
-
