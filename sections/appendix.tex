@@ -4,219 +4,421 @@
 \section{Solutions and complexity}
 \label{sec:app2}
 
+In this section we report the iterative solutions and computational complexity per iteration of all CGD algorithms studied in this paper. In order to keep the information structured algorithms are grouped by their optimization method. Consequently, iterative solutions for all \emph{Gauss-Newton}, \emph{Newton} and \emph{Wiberg} algorithms are stated in Tables \ref{tab:gn_solution}, \ref{tab:n_solution} and \ref{tab:w_solution} respectively. On the other hand, the computational complexity of all \emph{Gauss-Newton}, \emph{Newton} and \emph{Wiberg} algorithms is reported in Tables \ref{tab:gn_complexity}, \ref{tab:n_complexity} and \ref{tab:w_complexity}.
+
+
 \begin{table*}
-\begin{tabular}{lcc}
-\hline\noalign{\smallskip}
-Gauss-Newton algorithms & Iterative solutions
+\begin{tabular}{llll}
+\toprule
+Gauss-Newton algorithms & \multicolumn{3}{c}{Iterative solutions}
 \\
-\noalign{\bigskip}
-\noalign{\bigskip}
-PO\_For\_GN \cite{Amberg2009, Tzimiropoulos2013} & 
+& \multicolumn{1}{c}{$\Delta\mathbf{p}$} & \multicolumn{1}{c}{$\Delta\mathbf{q}$} & \multicolumn{1}{c}{$\Delta\mathbf{c}$}
+\\
+\midrule
+\medskip
+PO\_For\_GN \cite{Amberg2009, Tzimiropoulos2013} 
+& 
 $
-\Delta \mathbf{p} = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+\\
+\medskip
+PO\_Inv\_GN \cite{Matthews2004} 
+& 
+$
+-\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+\\
+\medskip
+PO\_Asy\_GN 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+\\
+\medskip
+PO\_Bid\_GN\_Sch 
+& 
+$
+-\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}
+$
+&
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+\\
+\medskip
+PO\_Bid\_GN\_Alt 
+& 
+$
+-\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+\\
+\medskip
+SSD\_For\_GN\_Sch \cite{Amberg2009, Tzimiropoulos2013} 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A} \left (\mathbf{r} + \mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} \right)
 $
 \\
-\noalign{\smallskip}
-\noalign{\smallskip}
-PO\_Inv\_GN \cite{Matthews2004} & 
+\medskip
+SSD\_For\_GN\_Alt 
+& 
 $
-\Delta \mathbf{p} = -\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
+-\left( \mathbf{J}_{\mathbf{i}}^T\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
 $
-\\
-\noalign{\smallskip}
-\noalign{\smallskip}
-PO\_Asy\_GN & 
+&
+&
 $
-\Delta \mathbf{p} = -\left( \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
+\mathbf{A}\mathbf{r}
 $
 \\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_GN\_Sch & 
-{$\!\begin{aligned}
-	\Delta \mathbf{q} & = -\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}
-	\\
-	\Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
-\end{aligned}$}
+\medskip
+SSD\_Inv\_GN\_Sch \cite{Papandreou2008, Tzimiropoulos2013} 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A} \left (\mathbf{r} + \mathbf{J}_{\mathbf{a}}\Delta\mathbf{p} \right)
+$
 \\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_GN\_Alt & 
-{$\!\begin{aligned}
-	\Delta \mathbf{q} & = -\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
-	\\
-	\Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
- 	\\
-	O(
-	\underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-	+
-	\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-	+
-	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-	+
-	\underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-	+
-	\underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-	+
-	\underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-	+
-	\underbrace{n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-	)
-\end{aligned}$}
+\medskip
+SSD\_Inv\_GN\_Alt \cite{Tzimiropoulos2012, Antonakos2014} 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A}\mathbf{r}
+$
 \\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_GN\_Sch \cite{Amberg2009, Tzimiropoulos2013} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
+\medskip
+SSD\_Asy\_GN\_Sch 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A} \left (\mathbf{r} + \mathbf{J}_{\mathbf{t}}\Delta\mathbf{p} \right)
+$
 \\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_GN\_Alt & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
+\medskip
+SSD\_Asy\_GN\_Alt 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{t}}^T\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A}\mathbf{r}
+$
 \\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_GN\_Sch \cite{Papandreou2008, Tzimiropoulos2013} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
+\medskip
+SSD\_Bid\_GN\_Sch 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\mathbf{P}\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\mathbf{P}\mathbf{r}
+$
+&
+$	
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\left( \mathbf{r} + \mathbf{J}_{\mathbf{a}}\Delta\mathbf{q} \right)
+$
+&
+$
+\mathbf{A} \left( \mathbf{r} + \mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
+$
 \\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_GN\_Alt \cite{Tzimiropoulos2012, Antonakos2014} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r}}$
-               )
+\medskip
+SSD\_Bid\_GN\_Alt
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\left( \mathbf{r} - \mathbf{A}\Delta\mathbf{c} -\mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} \right)
+$
+&
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T \left( \mathbf{r} - \mathbf{A}\Delta\mathbf{c} -\mathbf{J}_{\mathbf{a}}\Delta\mathbf{q} \right)
+$
+&
+$
+\mathbf{A} \left( \mathbf{r} + \mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
+$
 \\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_GN\_Sch & $O(
-               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_GN\_Alt & $O(
-               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{t}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_GN\_Sch & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_GN\_Alt & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1}\, \& \, \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-\noalign{\smallskip}
+\bottomrule
 \end{tabular}
-\caption{Solutions at each iteration of all Gauss-Newton CGD algorithms used in this work.}
-\label{tab:complexity}
+\caption{Iterative solutions of all \emph{Gauss-Newton} algorithms studied in this paper.}
+\label{tab:gn_solution}
+\end{table*}
+
+
+\begin{table*}
+\begin{tabular}{llll}
+\toprule
+Newton algorithms & \multicolumn{3}{c}{Iterative solutions}
+\\
+& \multicolumn{1}{c}{$\Delta\mathbf{p}$} & \multicolumn{1}{c}{$\Delta\mathbf{q}$} & \multicolumn{1}{c}{$\Delta\mathbf{c}$}
+\\
+\midrule
+\medskip
+PO\_For\_N
+& 
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+\\
+\medskip
+PO\_Inv\_N
+& 
+$
+-\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+\\
+\medskip
+PO\_Asy\_N 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+\\
+\medskip
+PO\_Bid\_N\_Sch 
+& 
+$
+-\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}
+$
+&
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+\\
+\medskip
+PO\_Bid\_N\_Alt 
+& 
+$
+-\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+\\
+\medskip
+SSD\_For\_N\_Sch
+& 
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A} \left (\mathbf{r} + \mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} \right)
+$
+\\
+\medskip
+SSD\_For\_N\_Alt 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A}\mathbf{r}
+$
+\\
+\medskip
+SSD\_Inv\_N\_Sch \cite{Kossaifi2014}
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A} \left (\mathbf{r} + \mathbf{J}_{\mathbf{a}}\Delta\mathbf{p} \right)
+$
+\\
+\medskip
+SSD\_Inv\_N\_Alt
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A}\mathbf{r}
+$
+\\
+\medskip
+SSD\_Asy\_N\_Sch 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A} \left (\mathbf{r} + \mathbf{J}_{\mathbf{t}}\Delta\mathbf{p} \right)
+$
+\\
+\medskip
+SSD\_Asy\_N\_Alt 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{t}}^T\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A}\mathbf{r}
+$
+\\
+\medskip
+SSD\_Bid\_N\_Sch 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\mathbf{P}\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\mathbf{P}\mathbf{r}
+$
+&
+$	
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\left( \mathbf{r} + \mathbf{J}_{\mathbf{a}}\Delta\mathbf{q} \right)
+$
+&
+$
+\mathbf{A} \left( \mathbf{r} + \mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
+$
+\\
+\medskip
+SSD\_Bid\_N\_Alt
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\left( \mathbf{r} - \mathbf{A}\Delta\mathbf{c} -\mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} \right)
+$
+&
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T \left( \mathbf{r} - \mathbf{A}\Delta\mathbf{c} -\mathbf{J}_{\mathbf{a}}\Delta\mathbf{q} \right)
+$
+&
+$
+\mathbf{A} \left( \mathbf{r} + \mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
+$
+\\
+\bottomrule
+\end{tabular}
+\caption{Iterative solutions of all \emph{Newton} algorithms studied in this paper.}
+\label{tab:n_solution}
+\end{table*}
+
+
+
+\begin{table*}
+\begin{tabular}{llll}
+\toprule
+Wiberg algorithms & \multicolumn{3}{c}{Iterative solutions}
+\\
+& \multicolumn{1}{c}{$\Delta\mathbf{p}$} & \multicolumn{1}{c}{$\Delta\mathbf{q}$} & \multicolumn{1}{c}{$\Delta\mathbf{c}$}
+\\
+\midrule
+\medskip
+PO\_Bid\_W\_Sch 
+& 
+$
+-\left( \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}
+$
+&
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+\\
+\medskip
+SSD\_For\_W
+& 
+$
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A} \left (\mathbf{r} + \mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} \right)
+$
+\\
+\medskip
+SSD\_Inv\_W
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A} \left (\mathbf{r} + \mathbf{J}_{\mathbf{a}}\Delta\mathbf{p} \right)
+$
+\\
+\medskip
+SSD\_Asy\_W 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{t}} \right)^{-1} \mathbf{J}_{\mathbf{t}}^T\bar{\mathbf{A}}\mathbf{r}
+$
+&
+&
+$
+\mathbf{A} \left (\mathbf{r} + \mathbf{J}_{\mathbf{t}}\Delta\mathbf{p} \right)
+$
+\\
+\medskip
+SSD\_Bid\_W 
+& 
+$
+-\left( \mathbf{J}_{\mathbf{a}}^T\mathbf{P}\mathbf{J}_{\mathbf{a}} \right)^{-1} \mathbf{J}_{\mathbf{a}}^T\mathbf{P}\mathbf{r}
+$
+&
+$	
+-\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\left( \mathbf{r} + \mathbf{J}_{\mathbf{a}}\Delta\mathbf{q} \right)
+$
+&
+$
+\mathbf{A} \left( \mathbf{r} + \mathbf{J}_{\mathbf{i}}\Delta\mathbf{p} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
+$
+\\
+\bottomrule
+\end{tabular}
+\caption{Iterative solutions of all \emph{Wiberg} algorithms studied in this paper.}
+\label{tab:w_solution}
 \end{table*}
 
 
@@ -449,9 +651,10 @@ SSD\_Bid\_GN\_Alt & $O(
 \noalign{\smallskip}
 \noalign{\smallskip}
 \end{tabular}
-\caption{Computational cost per iteration of all Gauss-Newton CGD algorithms used in this work.}
-\label{tab:complexity}
+\caption{Computational complexity per iteration of all \emph{Gauss-Newton} algorithms studied in this paper.}
+\label{tab:gn_complexity}
 \end{table*}
+
 
 \begin{table*}
 \begin{tabular}{lc}
@@ -576,73 +779,98 @@ SSD\_Bid\_N\_Alt &
 \noalign{\smallskip}
 \noalign{\smallskip}
 \end{tabular}
-\caption{Computational cost per iteration of all Newton CGD algorithms used in this work.}
-\label{tab:complexity}
+\caption{Computational complexity per iteration of all \emph{Newton} algorithms studied in this paper.}
+\label{tab:n_complexity}
 \end{table*}
 
 
-% \begin{table*}
-% \begin{tabular}{lccccccc}
-% \hline\noalign{\smallskip}
-% Algorithm & $\mathbf{a}$ & $\mathbf{J}$ & $\mathbf{J}^T\mathbf{U}$ & $\mathbf{H}$ & $\mathbf{H}^{-1}$ & $\mathbf{H}^{-1}\mathbf{J}^T$ & $\mathbf{H}^{-1}\mathbf{J}^T\mathbf{r}$
-% \\
-% \noalign{\smallskip}
-% \hline
-% \noalign{\smallskip}
-% PO\_For\_GN & - & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_For\_N & - & $O(nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_Inv\_GN & - & - & - & - & - & - & $O(nF)$
-% \\
-% PO\_Inv\_N & - & - & - & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_Asy\_GN & - & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_Asy\_N & - & $O(nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% PO\_Bid\_GN\_Sch & - & $O(nF)$ & $O(mnF)$ & $O(2n^2F)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% PO\_Bid\_GN\_Alt & - & $O(nF)$ & $O(mnF)$ & $O(2n^2F)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% PO\_Bid\_N\_Sch & - & $O(nF)$ & $O(mnF)$ & $O(3n^2F + 2nF)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% PO\_Bid\_N\_Alt & - & $O(nF)$ & $O(mnF)$ & $O(3n^2F + 2nF)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% SSD\_For\_GN\_Sch & $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_For\_GN\_Alt & $O(mF)$ & $O(nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_For\_N\_Sch & $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_For\_N\_Alt & $O(mF)$ & $O(nF)$ & - & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Inv\_GN\_Sch & $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O((n^2F)$ & $O(nF)$
-% \\
-% SSD\_Inv\_GN\_Alt & $O(mF)$ & $O(nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O((n^2F)$ & $O(nF)$
-% \\
-% SSD\_Inv\_N\_Sch & $O(mF)$ & $O(nF)$ & $O(2mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Inv\_N\_Alt & $O(mF)$ & $O(nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Asy\_GN\_Sch & $O(mF)$ & $O(2nF)$ & $O(mnF)$ & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Asy\_GN\_Alt & $O(mF)$ & $O(2nF)$ & - & $O(n^2F)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Asy\_N\_Sch & $O(mF)$ & $O(2nF)$ & $O(2mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Asy\_N\_Alt & $O(mF)$ & $O(2nF)$ & $O(mnF)$ & $O(2n^2F + 2nF)$ & $O(n^3)$ & $O(n^2F)$ & $O(nF)$
-% \\
-% SSD\_Bid\_GN\_Sch & $O(mF)$ & $O(2nF)$ & $O(2mnF)$ & $O(2n^2F)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% SSD\_Bid\_GN\_Alt & $O(mF)$ & $O(2nF)$ & - & $O(2n^2F)$ & $O(2n^3)$ & $O(2n^2F)$ & $O(2nF)$
-% \\
-% SSD\_Bid\_N\_Sch
-% \\
-% SSD\_Bid\_N\_Alt
-% \end{tabular}
-% \caption{Computational cost per iteration of all CGD algorithms used in this work.}
-% \label{tab:complexity}
-% \end{table*}
-
-
+\begin{table*}
+\begin{tabular}{lc}
+\toprule
+Gauss-Newton algorithms & Computational cost
+\\
+\midrule
+\medskip
+PO\_Bid\_W & $O(
+               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
+               +
+               \underbrace{2nF}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{r} \, \& \,\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+               +
+               \underbrace{2n^2}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r} \, \& \, \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
+               )
+\\
+\medskip
+SSD\_For\_W & $O(
+			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
+               +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\mathbf{r}}
+               +
+               \underbrace{2n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
+               )
+\\
+\medskip
+SSD\_Inv\_W \cite{Tzimiropoulos2012, Antonakos2014} & $O(
+			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+               \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{J}_\mathbf{a}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
+               +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{r}}
+               +
+               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r}}$
+               )
+\\
+\medskip
+SSD\_Asy\_W & $O(
+               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+			   \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
+               +
+               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
+               +
+               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
+               +
+               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
+               +
+               \underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
+               +
+               \underbrace{n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}$
+               )
+\\
+\medskip
+SSD\_Bid\_W & $O(
+			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+			   +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+               +
+               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
+               +
+               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}}
+               +
+               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+               +
+               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
+               )
+\\
+\bottomrule
+\end{tabular}
+\caption{Computational complexity per iteration of all \emph{Wiberg} algorithms studied in this paper.}
+\label{tab:w_complexity}
+\end{table*}
