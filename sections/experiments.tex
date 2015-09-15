@@ -540,21 +540,21 @@ In this experiment, we explore two different strategies to reduce the running ti
 
 The first one consists of optimizing the SSD and Project-Out cost functions using only a subset of all pixels in the reference frame.In AAMs the total number of pixels on the reference frame, $F$, is typically several orders of magnitude bigger than the number of shape, $n$, and appearance, $m$, components i.e. $F>>m>>n$. Therefore, a significant reduction in the complexity (and running time) of CGD algorithms can be obtained by decreasing the number of pixels that are used to optimize the previous cost functions. To this end, we compare the accuracy obtained by using $100\%$, $50\%$, $25\%$ and $12\%$ of the total number of pixels on the reference frame. Note that, pixels are (approximately) evenly sampled across the reference frame in all cases, Figure \ref{fig:sampling_masks}.
 
-The second strategy consist of simply reducing the number of iterations that each algorithm is run. Based on the figures used to asses the convergence properties of CGD algorithms in previous experiments, we compare the accuracy obtained by running the algorithms for $40 (24 + 16)$ and $20 (12 + 8)$ iterations.
+The second strategy consist of simply reducing the number of iterations that each algorithm is run. Based on the figures used to asses the convergence properties of CGD algorithms in previous experiments, we compare the accuracy obtained by running the algorithms for $40$ $(24 + 16)$ and $20$ $(12 + 8)$ iterations.
 
 Once more we repeat the experimental set up of the first experiment and report the fitting accuracy obtained by the Project Out and SSD Asymmetric Gauss-Newton algorithms. Result for this experiment are shown in Figure \ref{fig:sampling}. It can be seen that reducing the number of pixels up to $25\%$ while maintaining the original number of iterations to $40$ has little impact on the fitting accuracy achieved by both algorithms while reducing them to $12\%$ has a clear negative impact. In terms of run time, reducing the number of pixels to $50\%$, $25\%$ and $12\%$ offers speed ups of $\sim2.0$x, $\sim2.9$x and $\sim3.7$x for the \emph{BPO} algorithm and of $\sim1.8$x, $\sim2.6$x and $\sim2.8$x for the \emph{SSD} algorithm respectively. 
 
-\begin{figure*}[h!]
+\begin{figure*}[p]
 	\centering
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_ssd_asy_gn.png}
-	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the SSD Asymmetric Gauss-Newton algorithm using different sampling rates, $40 (24 + 16)$ iterations, and initialized with different amounts of noise.}
+	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the SSD Asymmetric Gauss-Newton algorithm using different sampling rates, $40$ $(24 + 16)$ iterations, and initialized with different amounts of noise.}
 	    \label{fig:sampling_vs_noise_ssd_asy_gn}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.48\textwidth}
 	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_po_asy_gn.png}
-	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the Project-Out Asymmetric Gauss-Newton algorithm using different sampling rates, $40 (24 + 16)$ iterations, and initialized with different amounts of noise.}
+	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the Project-Out Asymmetric Gauss-Newton algorithm using different sampling rates, $40$ $(24 + 16)$ iterations, and initialized with different amounts of noise.}
 	    \label{fig:sampling_vs_noise_po_asy_gn}
 	\end{subfigure}
 	\par\bigskip\bigskip
@@ -571,19 +571,19 @@ Once more we repeat the experimental set up of the first experiment and report t
 		    \\
 		    \bottomrule
 	  	\end{tabular}
-	  	\caption{Table showing run time of each algorithm for different amounts of sampling and $40 (24 + 16)$ iterations.}
+	  	\caption{Table showing run time of each algorithm for different amounts of sampling and $40$ $(24 + 16)$ iterations.}
 	    \label{tab:runtime_40}
 	\end{subfigure}
 	\par\bigskip\bigskip
 	\begin{subfigure}{0.48\textwidth}
-	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_ssd_asy_gn.png}
-	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the SSD Asymmetric Gauss-Newton algorithm using different sampling rates, $20 (12 + 8)$ iterations, and initialized with different amounts of noise.}
+	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_ssd_asy_gn_20.png}
+	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the SSD Asymmetric Gauss-Newton algorithm using different sampling rates, $20$ $(12 + 8)$ iterations, and initialized with different amounts of noise.}
 	    \label{fig:sampling_vs_noise_ssd_asy_gn_20}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.48\textwidth}
-	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_po_asy_gn.png}
-	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the Project-Out Asymmetric Gauss-Newton algorithm using different sampling rates, $20 (12 + 8)$ iterations, and initialized with different amounts of noise.}
+	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_po_asy_gn_20.png}
+	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the Project-Out Asymmetric Gauss-Newton algorithm using different sampling rates, $20$ $(12 + 8)$ iterations, and initialized with different amounts of noise.}
 	    \label{fig:sampling_vs_noise_po_asy_gn_20}
 	\end{subfigure}
 	\par\bigskip\bigskip
@@ -594,13 +594,13 @@ Once more we repeat the experimental set up of the first experiment and report t
 		    & $100\%$ & $<50\%$ & $<25\%$ & $<12\%$ 
 		    \\
 		    \midrule
-		    PO\_Asy\_GN & $\sim1400$ ms & $\sim680$ ms & $\sim480$ ms & $\sim380$ ms
+		    PO\_Asy\_GN & $\sim892$ ms & $\sim519$ ms & $\sim369$ ms & $\sim331$ ms
 		    \\ 
-		    PO\_Asy\_GN\_Sch & $\sim1680$ ms & $\sim930$ ms & $\sim650$ ms & $\sim596$ ms
+		    PO\_Asy\_GN\_Sch & $\sim707$ ms & $\sim365$ ms & $\sim235$ ms & $\sim211$ ms
 		    \\
 		    \bottomrule
 	  	\end{tabular}
-	  	\caption{Table showing run time of each algorithm for different amounts of sampling and $20 (12 + 8)$ iterations.}
+	  	\caption{Table showing run time of each algorithm for different amounts of sampling and $20$ $(12 + 8)$ iterations.}
 	    \label{tab:runtime_20}
 	\end{subfigure}
 	\caption{Results assessing the effectiveness of sampling for the best performing Project-Out and SSD algorithms on the LFPW database.}

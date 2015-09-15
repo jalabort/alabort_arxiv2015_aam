@@ -159,7 +159,7 @@ For \emph{asymmetric} composition we have:
         \begin{pmatrix}
             -\underbrace{\mathbf{A}^T \mathbf{A}}_{\mathbf{I}} & \mathbf{A}^T \mathbf{J}_{\mathbf{t}}
             \\
-            \mathbf{J}_a^T \mathbf{A} & -\mathbf{J}_{\mathbf{t}}^T \mathbf{J}_{\mathbf{t}}
+            \mathbf{J}_\mathbf{t}^T \mathbf{A} & -\mathbf{J}_{\mathbf{t}}^T \mathbf{J}_{\mathbf{t}}
         \end{pmatrix}
         \begin{pmatrix}
             \Delta\mathbf{c}
@@ -663,45 +663,17 @@ On the other hand, the matrix $\frac{\partial^2 \mathcal{D}_a}{\partial^2 \Delta
 			\\
 			\frac{\partial^2 \mathcal{D}_a}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{c}} & \frac{\partial^2 \mathcal{D}_a}{\partial^2 \Delta \mathbf{p}}
 		\end{pmatrix}
+        \\
+        & =
+        \begin{pmatrix}
+            \frac{\partial^2 \mathcal{D}_a}{\partial^2 \Delta \mathbf{c}} & \frac{\partial^2 \mathcal{D}_a}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}}
+            \\
+            \left(\frac{\partial^2 \mathcal{D}_a}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}}\right)^T & \frac{\partial^2 \mathcal{D}_a}{\partial^2 \Delta \mathbf{p}}
+        \end{pmatrix}
     \label{eq:asymmetric_newton_hessian}
     \end{aligned}
 \end{equation}
-Note that the Hessian matrix is, by definition, symmetric and its individual terms are defined as follows:
-\begin{equation}
-    \begin{aligned}
-		\frac{\partial^2 \mathcal{D}_a}{\partial^2 \Delta \mathbf{c}} & = \frac{\partial -\mathbf{A}^T \mathbf{r}_a}{\partial \Delta \mathbf{c}}
-		\\
-		& = -\mathbf{A}^T \frac{\partial \mathbf{r}_a}{\partial \Delta \mathbf{c}}
-		\\
-		& = \underbrace{\mathbf{A}^T \mathbf{A}}_{\mathbf{I}}
-    \label{eq:asymmetric_hessian_term1}
-    \end{aligned}
-\end{equation}
-\begin{equation}
-    \begin{aligned}
-		\frac{\partial^2 \mathcal{D}_a}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} & = \frac{\partial -\mathbf{A}^T \mathbf{r}_a}{\partial \Delta \mathbf{p}}
-		\\
-		& = \frac{\partial -\mathbf{A}^T}{\partial \Delta \mathbf{p}} \mathbf{r}_a - \mathbf{A}^T \frac{\partial\mathbf{r}_a}{\partial \Delta \mathbf{p}}
-		\\
-		& = -\beta \mathbf{J}_\mathbf{A}^T \mathbf{r}_a - \mathbf{A}^T \mathbf{J}_{\mathbf{t}}
-    \label{eq:asymmetric_hessian_term2}
-    \end{aligned}
-\end{equation}
-where we have defined $\mathbf{J}_\mathbf{A} = [\nabla \mathbf{a}_1, \cdots, \nabla \mathbf{a}_m]^T \frac{\partial\mathcal{W}}{\partial \Delta \mathbf{p}}$.
-\begin{equation}
-    \begin{aligned}
-		\frac{\partial^2 \mathcal{D}_a}{\partial^2 \Delta \mathbf{p}} & =  \frac{\partial \mathbf{J}_{\mathbf{t}}^T \mathbf{r}_a}{\partial \Delta \mathbf{p}}
-		\\
-		& = \frac{\partial \mathbf{J}_{\mathbf{t}}^T}{\partial \Delta \mathbf{p}} \mathbf{r}_a + \mathbf{J}_{\mathbf{t}}^T \frac{\partial \mathbf{r}_a}{\partial \Delta \mathbf{p}}
-		\\
-		& = \left( \frac{\partial\mathcal{W}}{\partial \Delta \mathbf{p}}^T \nabla^2 \mathbf{t} \frac{\partial\mathcal{W}}{\partial \Delta \mathbf{p}} + \underbrace{\nabla \mathbf{t} \overbrace{\frac{\partial^2 \mathcal{W}}{\partial^2 \mathbf{p}}}^{\mathbf{0}}}_{\mathbf{0}} \right) \mathbf{r}_a +
-		\\
-		& \qquad \, \mathbf{J}_{\mathbf{t}}^T \mathbf{J}_{\mathbf{t}}
-		\\
-		& = \left( \frac{\partial\mathcal{W}}{\partial \Delta \mathbf{p}}^T \nabla^2 \mathbf{t} \frac{\partial\mathcal{W}}{\partial \Delta \mathbf{p}} \right) \mathbf{r}_a + \mathbf{J}_{\mathbf{t}}^T \mathbf{J}_{\mathbf{t}}
-    \label{eq:asymmetric_hessian_term3}
-    \end{aligned}
-\end{equation}
+Note that the Hessian matrix is, by definition, symmetric. The definition of its individual terms is provided in Appendix \ref{sec:app11}.
 
 A similar derivation can be obtained for \emph{bidirectional} composition where, as expected, the data term is defined as:
 \begin{equation}
@@ -728,71 +700,23 @@ and the Hessian matrix takes the following form:
 			\\
 			\frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{c}} & \frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{p}} & \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{q}}
 			\\
-			\frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{c}} & \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{q}}
-			& \frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{q}}
+			\frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{c}} & \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{p}}
+			& \frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{q}}    
 		\end{pmatrix}
+        \\
+        & =
+        \begin{pmatrix}
+            \frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{c}} & \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} & \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}}
+            \\
+            \left(\frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}}\right)^T & \frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{p}} & \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{q}}
+            \\
+            \left(\frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}}\right)^T & \left(\frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{q}}\right)^T
+            & \frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{q}}
+        \end{pmatrix}
     \label{eq:bidirectional_newton_hessian}
     \end{aligned}
 \end{equation}
-As before, the previous matrix is symmetric and its individual terms are defined as follows:
-\begin{equation}
-    \begin{aligned}
-		\frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{c}} & = \frac{\partial -\mathbf{A}^T \mathbf{r}_b}{\partial \Delta \mathbf{c}}
-		\\
-		& = -\mathbf{A}^T \frac{\partial \mathbf{r}_b}{\partial \Delta \mathbf{c}}
-		\\
-		& = \underbrace{\mathbf{A}^T \mathbf{A}}_{\mathbf{I}}
-    \label{eq:bidirectional_hessian_term1}
-    \end{aligned}
-\end{equation}
-\begin{equation}
-    \begin{aligned}
-		\frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} & = \frac{\partial -\mathbf{A}^T \mathbf{r}_b}{\partial \Delta \mathbf{p}}
-		\\
-		& = -\mathbf{A}^T \frac{\partial \mathbf{r}_b}{\partial \Delta \mathbf{p}}
-		\\
-		& = -\mathbf{A}^T \mathbf{J}_{\mathbf{i}}
-    \label{eq:bidirectional_hessian_term2}
-    \end{aligned}
-\end{equation}
-\begin{equation}
-    \begin{aligned}
-		\frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}} & =  \frac{\partial -\mathbf{A}^T \mathbf{r}_b}{\partial \Delta \mathbf{q}}
-		\\
-		&= \frac{\partial -\mathbf{A}^T}{\partial \Delta \mathbf{q}} \mathbf{r}_b - \mathbf{A}^T \frac{\partial \mathbf{r}_b}{\partial \Delta \mathbf{q}}
-		\\
-		& = -\mathbf{J}_{\mathbf{A}}^T \mathbf{r}_b + \mathbf{A}^T \mathbf{J}_{\mathbf{a}}
-    \label{eq:bidirectional_hessian_term3}
-    \end{aligned}
-\end{equation}
-\begin{equation}
-    \begin{aligned}
-		\frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{p}} & =  \frac{\partial \mathbf{J}_{\mathbf{i}}^T \mathbf{r}_b}{\partial \Delta \mathbf{p}}
-		\\
-		& = \frac{\partial \mathbf{J}_{\mathbf{i}}^T}{\partial \Delta \mathbf{p}} \mathbf{r}_b + \mathbf{J}_{\mathbf{i}}^T \frac{\partial \mathbf{r}_b}{\partial \Delta \mathbf{p}}
-		\\
-		& = \left( \frac{\partial\mathcal{W}}{\partial \Delta \mathbf{p}}^T \nabla^2 \mathbf{i}[\mathbf{p}] \frac{\partial\mathcal{W}}{\partial \Delta \mathbf{p}} \right) \mathbf{r}_b + \mathbf{J}_{\mathbf{i}}^T \mathbf{J}_{\mathbf{i}}
-    \label{q:bidirectional_hessian_term4}
-    \end{aligned}
-\end{equation}
-\begin{equation}
-    \begin{aligned}
-		\frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{q}} & =  \frac{\partial \mathbf{J}_{\mathbf{i}}^T \mathbf{r}_b}{\partial \Delta \mathbf{q}}
-		\\
-		& = -\mathbf{J}_{\mathbf{i}}^T \mathbf{J}_{\mathbf{a}}
-    \label{eq:bidirectional_hessian_term5}
-    \end{aligned}
-\end{equation}
-\begin{equation}
-    \begin{aligned}
-		\frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{q}} & =  \frac{\partial -\mathbf{J}_{\mathbf{a}}^T \mathbf{r}_b}{\partial \Delta \mathbf{q}}
-		\\
-		& = \frac{\partial -\mathbf{J}_{\mathbf{a}}^T}{\partial \Delta \mathbf{q}} \mathbf{r}_b - \mathbf{J}_{\mathbf{a}}^T \frac{\partial \mathbf{r}_b}{\partial \Delta \mathbf{q}}
-		\\
-		& = -\left( \frac{\partial\mathcal{W}}{\partial \Delta \mathbf{q}}^T \nabla^2 (\mathbf{a} + \mathbf{A}\mathbf{c}) \frac{\partial\mathcal{W}}{\partial \Delta \mathbf{q}} \right) \mathbf{r}_b + \mathbf{J}_{\mathbf{a}}^T \mathbf{J}_{\mathbf{a}}
-    \label{q:bidirectional_hessian_term6}
-    \end{aligned}
-\end{equation}
+Notice that the previous matrix is again symmetric. The definition of its individual terms is provided in Appendix \ref{sec:app12}.
 
 
 \subsubsection*{Simultaneous}
