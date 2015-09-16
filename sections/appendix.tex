@@ -733,235 +733,274 @@ In this section we report the iterative solutions and computational complexity p
 
 
 \begin{table*}
-\begin{tabular}{lc}
-\hline\noalign{\smallskip}
-\emph{Gauss-Newton} algorithms & Computational cost per iteration
-\\
-\noalign{\smallskip}
-\hline
-\noalign{\smallskip}
-PO\_For\_GN \cite{Amberg2009, Tzimiropoulos2013} & $O(
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{(\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i})^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Inv\_GN \cite{Matthews2004} & $O(
-               \underbrace{nF}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Asy\_GN & $O(
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_GN\_Sch & $O(
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{J}_{\bar{\mathbf{a}}} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Bid\_GN\_Alt & $O(
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{r} \, \& \,\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r} \, \& \, \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_GN\_Sch \cite{Amberg2009, Tzimiropoulos2013} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_For\_GN\_Alt & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_GN\_Sch \cite{Papandreou2008, Tzimiropoulos2013} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Inv\_GN\_Alt \cite{Tzimiropoulos2012, Antonakos2014} & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{J}_\mathbf{a}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_GN\_Sch & $O(
-               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-			   \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Asy\_GN\_Alt & $O(
-               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\mathbf{J}_\mathbf{t}}
-               +
-               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{t}^T\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_GN\_Sch & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-SSD\_Bid\_GN\_Alt & $O(
-			   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
-			   +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-               +
-               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
-               +
-               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1}\, \& \, \mathbf{H}_\mathbf{i}^{-1}}
-               +
-               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-               +
-               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
-               )
-\\
-\noalign{\smallskip}
-\noalign{\smallskip}
+\centering
+\begin{tabular}{l|c}
+	\toprule
+	BPO algorithms & Computational cost per iteration
+	\\
+	\midrule
+	PO\_For\_GN \cite{Amberg2009, Tzimiropoulos2013} 
+	& 
+	$
+	O(
+	\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+	+
+	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+	+
+	\underbrace{n^2F}_{\hat{\mathbf{H}}_\mathbf{i}}
+	+
+	\underbrace{n^3}_{\hat{\mathbf{H}}_\mathbf{i}^{-1}}
+	+
+	\underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	+
+	\underbrace{n^2}_{\hat{\mathbf{H}}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	)
+	$             
+	\\
+	\midrule
+	PO\_For\_N 
+	& 
+	$O
+	(
+	\overbrace{
+		\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+	   	+
+	   	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+	   	+
+	   	\underbrace{n^2}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	}^{\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
+	+
+	\overbrace{
+		\underbrace{2nF + n^2F + mF}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\mathbf{i}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
+	   	+
+	   	\underbrace{n^2F}_{\hat{\mathbf{H}}_\mathbf{i}}
+	   	+
+	   	\underbrace{n^3}_{\left(\hat{\mathbf{H}}_\mathbf{i}^{\textrm{N}}\right)^{-1}}
+	}^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}}
+	+
+	\overbrace{
+		\underbrace{n^2}_{\left(\hat{\mathbf{H}}_\mathbf{i}^{\textrm{N}}\right)^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	}^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
+	)
+	$
+	\\
+	\midrule
+	PO\_Inv\_GN \cite{Matthews2004} 
+	& 
+	$
+	O(
+	\underbrace{nF}_{\hat{\mathbf{H}}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}}
+	)
+	$               
+	\\
+	\midrule
+	PO\_Inv\_N 
+	& 
+	$O
+	(
+	\overbrace{
+		\underbrace{n^2F}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\bar{\mathbf{a}}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
+		+
+	   	\underbrace{n^3}_{\left(\hat{\mathbf{H}}_\mathbf{a}^{\textrm{N}}\right)^{-1}}
+	}^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}}
+	+
+	\overbrace{
+		\underbrace{n^2}_{\left(\hat{\mathbf{H}}_{\bar{\mathbf{a}}}^{\textrm{N}}\right)^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}}
+	}^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
+    )
+    $
+	\\
+	\midrule
+	PO\_Asy\_GN & 
+	$
+	O(
+	\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+	+
+	\underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
+	+
+	\underbrace{n^2F}_{\hat{\mathbf{H}}_\mathbf{t}}
+	+
+	\underbrace{n^3}_{\hat{\mathbf{H}}_\mathbf{t}^{-1}}
+	+
+	\underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
+	+
+	\underbrace{n^2}_{\hat{\mathbf{H}}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
+	)
+	$
+	\\  
+	\midrule
+	PO\_Asy\_N 
+	& 
+	$
+	O(
+	\overbrace{
+		\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+		+
+		\underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
+		+
+		\underbrace{n^2}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
+	}^{\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
+	+
+	\overbrace{
+		\underbrace{2nF + n^2F + mF}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\mathbf{t}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
+		+
+		\underbrace{n^2F}_{\hat{\mathbf{H}}_\mathbf{t}}
+		+
+		\underbrace{n^3}_{\left(\hat{\mathbf{H}}_\mathbf{t}^{\textrm{N}}\right)^{-1}}
+	}^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}}
+	+
+	\overbrace{
+		\underbrace{n^2}_{\left(\hat{\mathbf{H}}_\mathbf{t}^{\textrm{N}}\right)^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
+	}^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
+    )
+    $        
+	\\
+	\midrule
+	PO\_Bid\_GN\_Sch 
+	& 
+	$
+	O(
+	\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+	+
+	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}} \, \& \, \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}}
+	+
+	\underbrace{n^2F}_{\hat{\mathbf{H}}_{\mathbf{i}} \, \& \, \check{\mathbf{H}}_{\bar{\mathbf{a}}}}
+	+
+	\underbrace{n^3}_{\hat{\mathbf{H}}_{\mathbf{i}}^{-1} \, \& \, \check{\mathbf{H}}_{\bar{\mathbf{a}}}^{-1}}
+	+
+	\underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r} \, \& \, \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}}
+	+
+	\underbrace{2n^2}_{\hat{\mathbf{H}}_{\mathbf{i}}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r} \, \& \, \check{\mathbf{H}}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}}
+	)
+	$             
+	\\
+	\midrule
+	PO\_Bid\_GN\_Alt 
+	& 
+	$O
+	(
+	\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+	+
+	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+	+
+	\underbrace{n^2F}_{\hat{\mathbf{H}}_\mathbf{i}}
+	+
+	\underbrace{n^3}_{\hat{\mathbf{H}}_\mathbf{i}^{-1}}
+	+
+	\underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r} \, \& \,\hat{\mathbf{H}}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}}
+	+
+	\underbrace{n^2}_{\hat{\mathbf{H}}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}
+	)
+	$
+	\\
+	\midrule
+	\multirow{3}{*}{PO\_Bid\_N\_Sch} 
+	& 
+	$O
+	(
+	\overbrace{
+		\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+	   	+
+	   	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+	   	+
+	   	\underbrace{n^2}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	}^{\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
+	+
+	\overbrace{
+	   	\underbrace{mnF}_{\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}}
+	   	+
+	   	\underbrace{n^2}_{\mathbf{J}_{\bar{\mathbf{i}}}^T\mathbf{P}\mathbf{r}}
+	}^{\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{q}}}
+	+
+	$
+	\\
+	&
+	$
+	\overbrace{
+		\underbrace{2nF + n^2F + mF}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\mathbf{i}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
+	   	+
+	   	\underbrace{n^2F}_{\hat{\mathbf{H}}_\mathbf{i}}
+	   	+
+	   	\underbrace{n^2F}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\bar{\mathbf{a}}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
+	   	+
+	   	\underbrace{2n^3}_{\left(\hat{\mathbf{H}}_\mathbf{i}^{\textrm{N}}\right)^{-1} \, \& \, \left(\hat{\mathbf{H}}_\mathbf{a}^{\textrm{N}}\right)^{-1}}
+	}^{
+		\frac{\partial^2 \mathcal{D}}
+		{\partial^2 \Delta \mathbf{p}}^{-1} \, \& \, 
+		\frac{\partial^2 \mathcal{D}}
+		{\partial^2 \Delta \mathbf{q}}^{-1}
+	}
+	+
+	$
+	\\
+	&
+	$
+	\overbrace{
+		\underbrace{2n^2}_{\left(\hat{\mathbf{H}}_\mathbf{i}^{\textrm{N}}\right)^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r} \, \& \, \left(\hat{\mathbf{H}}_{\bar{\mathbf{a}}}^{\textrm{N}}\right)^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}}
+	}^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}} \, \& \, \frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{q}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{q}} }
+	)
+	$
+	\\
+	\midrule
+	\multirow{2}{*}{PO\_Bid\_N\_Alt} 
+	& 
+	$O
+	(
+	\overbrace{
+		\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+	   	+
+	   	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+	   	+
+	   	\underbrace{n^2}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	}^{\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
+	+
+	\overbrace{
+		\underbrace{2nF + n^2F + mF}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\mathbf{i}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
+	   	+
+	   	\underbrace{n^2F}_{\hat{\mathbf{H}}_\mathbf{i}}
+	   	+
+	   	\underbrace{n^2F}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\bar{\mathbf{a}}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
+	   	+
+	   	\underbrace{2n^3}_{\left(\hat{\mathbf{H}}_\mathbf{i}^{\textrm{N}}\right)^{-1} \, \& \, \left(\hat{\mathbf{H}}_\mathbf{a}^{\textrm{N}}\right)^{-1}}
+	}^{
+		\frac{\partial^2 \mathcal{D}}
+		{\partial^2 \Delta \mathbf{p}}^{-1} \, \& \, 
+		\frac{\partial^2 \mathcal{D}}
+		{\partial^2 \Delta \mathbf{q}}^{-1}
+	}
+	+
+	$
+	\\
+	&
+	$
+	\overbrace{
+		\underbrace{2n^2}_{\left(\hat{\mathbf{H}}_\mathbf{i}^{\textrm{N}}\right)^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r} \, \& \, \left(\hat{\mathbf{H}}_{\bar{\mathbf{a}}}^{\textrm{N}}\right)^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{r}}
+	}^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}} \, \& \, \frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{q}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{q}} }
+	)
+	$
+	\\
+	\midrule
+	PO\_Bid\_W
+	& 
+	$
+	O(
+	\underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+	+
+	\underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}} \, \& \, \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}}
+	+
+	\underbrace{n^2F}_{\hat{\mathbf{H}}_{\mathbf{i}} \, \& \, \check{\mathbf{H}}_{\bar{\mathbf{a}}}}
+	+
+	\underbrace{n^3}_{\hat{\mathbf{H}}_{\mathbf{i}}^{-1} \, \& \, \check{\mathbf{H}}_{\bar{\mathbf{a}}}^{-1}}
+	+
+	\underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r} \, \& \, \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}}
+	+
+	\underbrace{2n^2}_{\hat{\mathbf{H}}_{\mathbf{i}}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r} \, \& \, \check{\mathbf{H}}_{\bar{\mathbf{a}}}^{-1}\mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}}
+	)
+	$             
+	\\
+	\bottomrule
 \end{tabular}
-\caption{Computational cost per iteration of all \emph{Gauss-Newton} algorithms studied in this paper.}
+\caption{Computational cost per iteration of all BPO algorithms studied in this paper.}
 \label{tab:gn_complexity}
 \end{table*}
 
@@ -971,71 +1010,150 @@ SSD\_Bid\_GN\_Alt & $O(
 \hline\noalign{\smallskip}
 \emph{Newton} algorithms & Computational cost per iteration
 \\
-\noalign{\smallskip}
-\hline
-\noalign{\smallskip}
-PO\_For\_N & $O(
-			   \overbrace{
-	               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
+\midrule
+	SSD\_For\_GN\_Sch \cite{Amberg2009, Tzimiropoulos2013} & $O(
+				   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+				   +
+				   \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
 	               +
 	               \underbrace{mnF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
-	               +
-	               \underbrace{n^2}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
-	           }^{\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
-	           +
-	           \overbrace{
-	               \underbrace{2nF + n^2F + mF}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\mathbf{i}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
 	               +
 	               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
 	               +
 	               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
-	           }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}}
-	           +
-               \overbrace{
-               	   n^2
-               }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Inv\_N & $O(
-	           \overbrace{
-	           	   \underbrace{n^2F}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\bar{\mathbf{a}}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
-               	   +
-                   \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
-               }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}}
-               +
-               \overbrace{
-                   n^2
-               }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}$
-               )
-\\
-\noalign{\smallskip}
-% \hline
-\noalign{\smallskip}
-PO\_Asy\_N & $O(
-			   \overbrace{
+	               +
+	               \underbrace{nF}_{\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	               +
+	               \underbrace{n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
+	               )
+	\\
+	\noalign{\smallskip}
+	% \hline
+	\noalign{\smallskip}
+	SSD\_For\_GN\_Alt & $O(
+				   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+				   +
 	               \underbrace{nF}_{\mathbf{J}_\mathbf{i}}
 	               +
-	               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
+	               \underbrace{n^2F}_{\mathbf{J}_\mathbf{i}^T\mathbf{J}_\mathbf{i}}
 	               +
-	               \underbrace{n^2}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
-	           }^{\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}
-	           +
-	           \overbrace{
-	               \underbrace{2nF + n^2F + mF}_{\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}}^T\nabla^2\mathbf{t}[\mathbf{p}]\frac{\partial\mathcal{W}}{\partial\Delta\mathbf{p}} \bar{\mathbf{A}}\mathbf{r}}
+	               \underbrace{n^3}_{\mathbf{H}_\mathbf{i}^{-1}}
+	               +
+	               \underbrace{2nF}_{\mathbf{J}_\mathbf{i}^T\mathbf{r}}
+	               +
+	               \underbrace{2n^2}_{\mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
+	               )
+	\\
+	\noalign{\smallskip}
+	% \hline
+	\noalign{\smallskip}
+	SSD\_Inv\_GN\_Sch \cite{Papandreou2008, Tzimiropoulos2013} & $O(
+				   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+				   +
+				   \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
+	               +
+	               \underbrace{mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}}
+	               +
+	               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a}}
+	               +
+	               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
+	               +
+	               \underbrace{nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}
+	               +
+	               \underbrace{n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r}}$
+	               )
+	\\
+	\noalign{\smallskip}
+	% \hline
+	\noalign{\smallskip}
+	SSD\_Inv\_GN\_Alt \cite{Tzimiropoulos2012, Antonakos2014} & $O(
+				   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+				   +
+	               \underbrace{nF}_{\mathbf{J}_\mathbf{a}}
+	               +
+	               \underbrace{n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{J}_\mathbf{a}}
+	               +
+	               \underbrace{n^3}_{\mathbf{H}_\mathbf{a}^{-1}}
+	               +
+	               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{r}}
+	               +
+	               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r}}$
+	               )
+	\\
+	\noalign{\smallskip}
+	% \hline
+	\noalign{\smallskip}
+	SSD\_Asy\_GN\_Sch & $O(
+	               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+				   +
+				   \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
+	               +
+	               \underbrace{mnF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}}
 	               +
 	               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{t}}
 	               +
 	               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
-	           }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}}
-	           +
-               \overbrace{
-               	   n^2
-               }^{\frac{\partial^2 \mathcal{D}}{\partial^2 \Delta \mathbf{p}}^{-1}\frac{\partial \mathcal{D}}{\partial \Delta \mathbf{p}}}$
-               )
-\\
+	               +
+	               \underbrace{nF}_{\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}
+	               +
+	               \underbrace{n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\bar{\mathbf{A}}\mathbf{r}}$
+	               )
+	\\
+	\noalign{\smallskip}
+	% \hline
+	\noalign{\smallskip}
+	SSD\_Asy\_GN\_Alt & $O(
+	               \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+				   +
+	               \underbrace{nF}_{\mathbf{J}_\mathbf{t}}
+	               +
+	               \underbrace{n^2F}_{\mathbf{J}_\mathbf{t}^T\mathbf{J}_\mathbf{t}}
+	               +
+	               \underbrace{n^3}_{\mathbf{H}_\mathbf{t}^{-1}}
+	               +
+	               \underbrace{2nF}_{\mathbf{J}_\mathbf{t}^T\mathbf{r}}
+	               +
+	               \underbrace{2n^2}_{\mathbf{H}_\mathbf{t}^{-1}\mathbf{J}_\mathbf{t}^T\mathbf{r}}$
+	               )
+	\\
+	\noalign{\smallskip}
+	% \hline
+	\noalign{\smallskip}
+	SSD\_Bid\_GN\_Sch & $O(
+				   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+				   +
+	               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
+	               +
+	               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+	               +
+	               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
+	               +
+	               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}}
+	               +
+	               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	               +
+	               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{P}\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}$
+	               )
+	\\
+	\noalign{\smallskip}
+	% \hline
+	\noalign{\smallskip}
+	SSD\_Bid\_GN\_Alt & $O(
+				   \underbrace{mF}_{\mathbf{A}^T\mathbf{r}}
+				   +
+	               \underbrace{2nF}_{\mathbf{J}_\mathbf{a} \, \& \,  \mathbf{J}_\mathbf{i}}
+	               +
+	               \underbrace{2mnF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}}
+	               +
+	               \underbrace{2n^2F}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{a} \, \& \, \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{J}_\mathbf{i}}
+	               +
+	               \underbrace{2n^3}_{\mathbf{H}_\mathbf{a}^{-1}\, \& \, \mathbf{H}_\mathbf{i}^{-1}}
+	               +
+	               \underbrace{2nF}_{\mathbf{J}_\mathbf{a}^T\bar{\mathbf{A}}\mathbf{r} \, \& \,  \mathbf{J}_\mathbf{i}^T\bar{\mathbf{A}}\mathbf{r}}
+	               +
+	               \underbrace{2n^2}_{\mathbf{H}_\mathbf{a}^{-1}\mathbf{J}_\mathbf{a}^T\mathbf{r} \, \& \,  \mathbf{H}_\mathbf{i}^{-1}\mathbf{J}_\mathbf{i}^T\mathbf{r}}$
+	               )
+	\\
 \noalign{\smallskip}
 % \hline
 \noalign{\smallskip}
