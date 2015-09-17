@@ -66,7 +66,6 @@ where $\mathbf{a} \in \mathcal{R}^{F \times 1}$ is the mean appearance, and $\ma
 The role of the motion model, denoted by $\mathcal{W}(\mathbf{x}; \mathbf{p})$, is to extrapolate the position of all pixel positions $\mathbf{x} \in \Omega$ from the reference frame to a particular shape instance $\mathbf{s}$ (and vice-versa) based on their relative position with respect to the sparse set of landmarks defining the shape model (for which direct correspondences are always known). Classic motion models for AAMs are PieceWise Affine (PWA) \cite{Cootes2004,Matthews2004} and Thin Plate Splines (TPS) \cite{Cootes2004,Papandreou2008} warps. 
 
 Given an image $I(\mathbf{x})$ containing the object of interest, its manually annotated ground truth shape $\mathbf{s}$, and a particular motion model $\mathcal{W}(\mathbf{x}, \mathbf{p})$; the two main assumptions behind AAMs are:
-
 \begin{enumerate}
 	\item The ground truth shape of the object can be well approximated by the shape model
 	\begin{eqnarray}
@@ -83,10 +82,12 @@ Given an image $I(\mathbf{x})$ containing the object of interest, its manually a
 		\end{aligned}
 	    \label{eq:aam_2}
 	\end{eqnarray}
-	where $\mathbf{i}[\mathbf{p}] = \mathrm{vec}(I(\mathcal{W}(\mathbf{x}; \mathbf{p}))$ denotes the vectorized version of the warped image. Note that, the warp $\mathcal{W}(\mathbf{x}; \mathbf{p})$ which explicitly depends on the shape parameters $\mathbf{p}$, relates the shape and appearance models and is a central part of the AAMs formulation
+	where $\mathbf{i}[\mathbf{p}] = \mathrm{vec}(I(\mathcal{W}(\mathbf{x}; \mathbf{p}))$ denotes the vectorized version of the warped image. Note that, the warp $\mathcal{W}(\mathbf{x}; \mathbf{p})$ which explicitly depends on the shape parameters $\mathbf{p}$, relates the shape and appearance models and is a central part of the AAMs formulation.
 \end{enumerate}
 
-Because of their explicit use of the motion model, the two previous assumptions provide a concise and unambiguous way to define AAMs. These assumption will be used in next section \ref{sec:probabilistic_aam} to introduce a more general and probabilistic formulation of AAMs. At this point, it is worth mentioning that the vector notation of Equations \ref{eq:aam_1} and \ref{eq:aam_2} will be, in general, the preferred notation in this paper.
+Because of the explicit use of the motion model, the two previous assumptions provide a concise definition of AAMs. At this point, it is worth mentioning that the vector notation of Equations \ref{eq:aam_1} and \ref{eq:aam_2} will be, in general, the preferred notation in this paper.
+
+% These assumption will be used in next section \ref{sec:probabilistic_aam} to introduce a more general and probabilistic formulation of AAMs. At this point, it is worth mentioning that the vector notation of Equations \ref{eq:aam_1} and \ref{eq:aam_2} will be, in general, the preferred notation in this paper.
 
 % \begin{figure*}
 % 	\centering

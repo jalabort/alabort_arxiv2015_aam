@@ -15,7 +15,7 @@ The previous methods can be used to iteratively solve the non-linear optimizatio
     \item The way in which each method solves for the incremental parameters $\Delta \mathbf{c}$, $\Delta \mathbf{p}$ and $\Delta \mathbf{q}$. Gauss-Newton and Newton can either solve for them \emph{simultaneously} or in an \emph{alternated} fashion while Wiberg defines its own procedure to solve for different sets of parameters\footnote{Wiberg reduces to Gauss-Newton when only a single set of parameters needs to be inferred.}.
 \end{enumerate}
 
-The following subsections thoroughly explain how the previous optimization methods are used in CGD algorithms. In order to simplify their comprehension full derivations will be given for all methods using the SSD data term (Equation \ref{eq:ssd}) with both asymmetric (Section \ref{sec:asymmetric}) and bidirectional (Section \ref{sec:bidirectional}) compositions\footnote{These represent the most general cases because the derivations for forward, inverse and symmetric compositions can be directly obtained from the asymmetric one and they require solving for all sets of parameters.} while only direct solutions will be given for the project-out data term (Equation \ref{eq:po}).
+The following subsections thoroughly explain how the previous optimization methods are used in CGD algorithms. In order to simplify their comprehension full derivations will be given for all methods using the SSD data term (Equation \ref{eq:ssd}) with both asymmetric (Section \ref{sec:asymmetric}) and bidirectional (Section \ref{sec:bidirectional}) compositions\footnote{These represent the most general cases because the derivations for forward, inverse and symmetric compositions can be directly obtained from the asymmetric one and they require solving for both shape and appearance parameters.} while only direct solutions will be given for the Project-Out data term (Equation \ref{eq:po}).
 
 
 \subsubsection{Gauss-Newton}
@@ -28,16 +28,15 @@ When \emph{asymmetric} composition is used, the optimization problem define by t
     \label{eq:asymmetric_ssd}
     \end{aligned}
 \end{equation}
-where the asymmetric residual $\mathbf{r}_a$ is defined as:
+with the asymmetric residual $\mathbf{r}_a$ defined as:
 \begin{equation}
     \begin{aligned}
-		\mathbf{r}_a & = \mathbf{i}[\mathbf{p}_{k-1}^* \circ \alpha \Delta \mathbf{p}] -
-		\\
-		& \quad \, \, (\mathbf{a} + \mathbf{A}(\mathbf{c}^*_{k-1} + \Delta\mathbf{c})) [\beta \Delta \mathbf{p}^{-1}]
+		\mathbf{r}_a & = \mathbf{i}[\mathbf{p} \circ \alpha \Delta \mathbf{p}] - (\mathbf{a} + \mathbf{A}(\mathbf{c} + \Delta\mathbf{c})) [\beta \Delta \mathbf{p}^{-1}]
     \label{eq:asymmetric_residual}
     \end{aligned}
 \end{equation}
-The Gauss-Newton method solves the previous optimization problem by first performing a first order Taylor expansion of the residual around the incremental warps:
+and where we have introduced the incremental appearance parameters $\Delta\mathbf{c}$\footnote{The value of the current estimate of appearance parameters is updated at each iteration using the following additive update rule: $\mathbf{c} \leftarrow \mathbf{c} + \Delta \mathbf{c}$}. 
+The Gauss-Newton method solves the previous optimization problem by performing a \emph{first} order Taylor expansion of the residual:
 \begin{equation}
     \begin{aligned}
 		\mathbf{r}_a(\Delta \boldsymbol{\ell}) & \approx \hat{\mathbf{r}}_a(\Delta \boldsymbol{\ell})
@@ -46,7 +45,7 @@ The Gauss-Newton method solves the previous optimization problem by first perfor
     \label{eq:asymmetric_residual_taylor}
     \end{aligned}
 \end{equation}
-and then solving the following approximation of the original problem:
+and solving the following approximation of the original problem:
 \begin{equation}
     \begin{aligned}
         \Delta \boldsymbol{\ell}^* & = \underset{\Delta \boldsymbol{\ell}}{\mathrm{arg\,min\;}} \frac{1}{2} \hat{\mathbf{r}}_a^T\hat{\mathbf{r}}_a
@@ -64,7 +63,7 @@ where, in order to unclutter the notation, we have defined $\Delta \boldsymbol{\
     \label{eq:asymmetric_jacobian}
     \end{aligned}
 \end{equation}
-where $\nabla\mathbf{t} = \left( \alpha \nabla \mathbf{i}[\mathbf{p}_{k-1}^*]  + \beta \nabla (\mathbf{a} + \mathbf{A}\mathbf{c}_{k-1}^*) \right)$.
+where $\nabla\mathbf{t} = \left( \alpha \nabla \mathbf{i}[\mathbf{p}]  + \beta \nabla (\mathbf{a} + \mathbf{A}\mathbf{c}) \right)$.
 
 When \emph{bidirectional} composition is used, the optimization problem is defined as:
 \begin{equation}
@@ -76,11 +75,11 @@ When \emph{bidirectional} composition is used, the optimization problem is defin
 where the bidirectional residual $\mathbf{r}_b$ reduces to:
 \begin{equation}
     \begin{aligned}
-		\mathbf{r}_b & = \mathbf{i}[\mathbf{p}_{k-1}^* \circ \Delta \mathbf{p}] - (\mathbf{a} + \mathbf{A}(\mathbf{c}^*_{k-1} + \Delta\mathbf{c})) [\Delta \mathbf{q}]
+		\mathbf{r}_b & = \mathbf{i}[\mathbf{p} \circ \Delta \mathbf{p}] - (\mathbf{a} + \mathbf{A}(\mathbf{c} + \Delta\mathbf{c})) [\Delta \mathbf{q}]
     \label{eq:bidirectional_residual}
     \end{aligned}
 \end{equation}
-The Gauss-Newton method proceeds in exactly the same manner as before i.e. performing a first order Taylor expansion:
+The Gauss-Newton method proceeds in exactly the same manner as before, i.e. performing a first order Taylor expansion:
 \begin{equation}
     \begin{aligned}
 		\mathbf{r}_b(\Delta \boldsymbol{\ell}) & \approx \hat{\mathbf{r}}_b(\Delta \boldsymbol{\ell})
@@ -105,7 +104,7 @@ where, in this case, $\Delta \boldsymbol{\ell} = (\Delta \mathbf{c}^T, \Delta \m
     \label{eq:bidirectional_jacobian}
     \end{aligned}
 \end{equation}
-where $\mathbf{J}_\mathbf{i} = \nabla \mathbf{i}[\mathbf{p}_{k-1}] \frac{\partial \mathcal{W}}{\partial \Delta \mathbf{q}}$ and $\mathbf{J}_\mathbf{a} = \nabla (\mathbf{a} + \mathbf{A}\mathbf{c}_{k-1}^*) \frac{\partial \mathcal{W}}{\partial \Delta \mathbf{q}}.$
+where $\mathbf{J}_\mathbf{i} = \nabla \mathbf{i}[\mathbf{p}] \frac{\partial \mathcal{W}}{\partial \Delta \mathbf{p}}$ and $\mathbf{J}_\mathbf{a} = \nabla (\mathbf{a} + \mathbf{A}\mathbf{c}) \frac{\partial \mathcal{W}}{\partial \Delta \mathbf{q}}.$
 
 
 \subsubsection*{Simultaneous}
@@ -131,7 +130,7 @@ The solution is given by:
 \end{equation}
 where $\left( \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}}^T \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}} \right)$ is known as the Gauss-Newton approximation to the \emph{Hessian} matrix.
 
-Directly inverting $\left( \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}}^T \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}} \right)$ has complexity $O((n + m)^3)$ for asymmetric composition and $O((2n + m)^3)$ for bidirectional composition\footnote{\label{foot:complexity}$m$ and $n$ denote the number of shape and appearance parameters respectively while $F$ denotes the number of pixels on the reference frame.}. However, one can take advantage of the problem structure and derive an algorithm with smaller complexity by using the \emph{Schur complement}\footnote{
+Directly inverting $\left( \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}}^T \frac{\partial \mathbf{r}}{\partial \Delta \boldsymbol{\ell}} \right)$ has complexity\footnote{\label{foot:complexity}$m$ and $n$ denote the number of shape and appearance parameters respectively while $F$ denotes the number of pixels on the reference frame.} $O((n + m)^3)$ for asymmetric composition and $O((2n + m)^3)$ for bidirectional composition. However, one can take advantage of the problem structure and derive an algorithm with smaller complexity by using the \emph{Schur complement}\footnote{
 Applying the Schur complement to the following system of equations:
 \begin{equation*}
     \begin{aligned}
@@ -197,7 +196,7 @@ and plugging the solution for $\Delta\mathbf{p}$ into equation \ref{eq:asymmetri
     \label{eq:asymmetric_schur_solution2}
     \end{aligned}
 \end{equation}
-Using the above procedure the complexity\footnoteref{foot:complexity} of solving each Gauss-Newton step reduced to:
+Using the above procedure the complexity\footnoteref{foot:complexity} of solving each Gauss-Newton step is reduced to:
 \begin{equation}
     \begin{aligned}
         O(
@@ -283,7 +282,7 @@ Applying the Schur complement once, the combined solution for $(\Delta\mathbf{p}
 Note that the complexity of inverting this new approximation to the Hessian matrix is $O((2n)^3)$\footnote{This is an important reduction in complexity because usually $m >> n$ in CGD algorithms.}. Similar to before, plugging the solutions for $\Delta\mathbf{p}$ and $\Delta\mathbf{q}$ into Equation \ref{eq:bidirectional_structure} we can infer the optimal value for $\Delta\mathbf{c}$ using:
 \begin{equation}
     \begin{aligned}
-        \Delta\mathbf{c} & = \mathbf{A}^T \left( \mathbf{r}_b - \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p}^* + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
+        \Delta\mathbf{c} & = \mathbf{A}^T \left( \mathbf{r}_b - \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
     \label{eq:bidirectional_schur_solution2}
     \end{aligned}
 \end{equation}
@@ -325,12 +324,12 @@ where we have defined the projection matrix $\mathbf{P}$ as:
 		\label{eq:bidirectional_schur_projection}
     \end{aligned}
 \end{equation}
-and the solutions for $\Delta\mathbf{q}$ and $\Delta\mathbf{c}$ can be obtained by plugging the solutions for $\Delta\mathbf{q}$ into Equation \ref{eq:bidirectional_schur_solution1} and the solutions for $\Delta\mathbf{q}$ and $\Delta\mathbf{p}$ into Equation \ref{eq:bidirectional_structure} respectively:
+and the solutions for $\Delta\mathbf{p}$ and $\Delta\mathbf{c}$ can be obtained by plugging the solutions for $\Delta\mathbf{q}$ into Equation \ref{eq:bidirectional_schur_solution1} and the solutions for $\Delta\mathbf{q}$ and $\Delta\mathbf{p}$ into Equation \ref{eq:bidirectional_structure} respectively:
 \begin{equation}
     \begin{aligned}
-        \Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}} \left(\mathbf{r}_b - \mathbf{J}_{\mathbf{a}}\Delta \mathbf{q}^* \right)
+        \Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}} \left(\mathbf{r}_b - \mathbf{J}_{\mathbf{a}}\Delta \mathbf{q} \right)
         \\
-        \Delta\mathbf{c} & = \mathbf{A}^T \left( \mathbf{r}_b - \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p}^* + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
+        \Delta\mathbf{c} & = \mathbf{A}^T \left( \mathbf{r}_b + \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p} - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
     \label{eq:bidirectional_schur_solution4}
     \end{aligned}
 \end{equation}
@@ -351,9 +350,9 @@ The total complexity per iteration of the previous approach reduces to:
     \label{eq:complexity_schur_bidirectional2}
     \end{aligned}
 \end{equation}
-Note that because of their reduced complexity, the solutions in Equations \ref{eq:bidirectional_schur_solution3} and \ref{eq:bidirectional_schur_solution4} are preferred over the ones defined by Equations \ref{eq:bidirectional_schur_solution1} and \ref{eq:bidirectional_schur_solution2}.
+Note that because of their reduced complexity, the solutions defined by Equations \ref{eq:bidirectional_schur_solution3} and \ref{eq:bidirectional_schur_solution4} are preferred over the ones defined by Equations \ref{eq:bidirectional_schur_solution1} and \ref{eq:bidirectional_schur_solution2}.
 
-Finally, the solutions using the project-out cost function are:
+Finally, the solutions using the Project-Out cost function are:
 \begin{itemize}
 	\item For \emph{asymmetric} composition:
 	\begin{equation}
@@ -362,28 +361,29 @@ Finally, the solutions using the project-out cost function are:
 	    \label{eq:asymmetric_schur_po_solution}
 	    \end{aligned}
 	\end{equation}
-	with complexity\footnote{\label{foot:ic}In practice, the solutions for the project-out cost function can be computed slightly faster because they do not need to explicitly solve for $\Delta\mathbf{c}$. This is specially important in the \emph{inverse} compositional case because expressions of the form $(\mathbf{J}^T\mathbf{U}\mathbf{J})^{-1}\mathbf{J}^T\mathbf{U}$ can be completely precomputed and the complexity at each iteration reduces to $O(nF)$.} given by Equation \ref{eq:complexity_schur_asymmetric}.
+	with complexity\footnote{\label{foot:ic}In practice, the solutions for the Project-Out cost function can be computed slightly faster than those for the SSD because they do not need to explicitly solve for $\Delta\mathbf{c}$. This is specially important in the \emph{inverse} compositional case because expressions of the form $(\mathbf{J}^T\mathbf{U}\mathbf{J})^{-1}\mathbf{J}^T\mathbf{U}$ can be completely precomputed and the computational cost per iteration reduces to $O(nF)$.} given by Equation \ref{eq:complexity_schur_asymmetric}.
 
 	\item For \emph{bidirectional} composition:
 	\begin{equation}
 	    \begin{aligned}
 	        \Delta \mathbf{q} & = \left( \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\mathbf{P}\mathbf{r}
 	        \\
-	        \Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \left( \mathbf{r} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
+	        \Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \left( \mathbf{r} - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
 	    \label{eq:bidirectional_schur_po_solution}
 	    \end{aligned}
 	\end{equation}
 	with complexity\footnoteref{foot:ic} given by Equation \ref{eq:complexity_schur_bidirectional2}.
 \end{itemize}
-where, in both cases, we have used $\mathbf{r} = \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}}$.
+where, in both cases, $\mathbf{r} = \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}}$.
 
 
 \subsubsection*{Alternated}
 \label{sec:gauss_newton_alternated}
 
-Instead of solving the problem simultaneously with respect to all parameters, we can update one set of parameters at a time while keeping the other sets fixed. In the optimization literature, this procedure is known as alternated optimization \cite{DelaTorre2012}.
+Another way of solving optimization problems with two or more sets of variables is to use alternated optimization \cite{DelaTorre2012}.
+Hence, instead of solving the previous problem simultaneously with respect to all parameters, we can update one set of parameters at a time while keeping the other sets fixed.
 
-More specifically, using \emph{asymmetric} composition we can alternate between updating $\Delta\mathbf{c}$ given the previous $\Delta\mathbf{p}^*$ and then update $\Delta\mathbf{p}$ given the updated $\Delta\mathbf{c}^*$ in an alternate manner. Taking advantage of the structure of the problem defined by Equation \ref{eq:asymmetric_structure}, we can obtain the following system of equations:
+More specifically, using \emph{asymmetric} composition we can alternate between updating $\Delta\mathbf{c}$ given the previous $\Delta\mathbf{p}$ and then update $\Delta\mathbf{p}$ given the updated $\Delta\mathbf{c}$ in an alternate manner. Taking advantage of the structure of the problem defined by Equation \ref{eq:asymmetric_structure}, we can obtain the following system of equations:
 \begin{equation}
     \begin{aligned}
         -\Delta\mathbf{c} + \mathbf{A}^T \mathbf{J}_{\mathbf{t}} \Delta\mathbf{p} & = -\mathbf{A}^T \mathbf{r}_a
@@ -395,9 +395,9 @@ More specifically, using \emph{asymmetric} composition we can alternate between 
 which we can rewrite as:
 \begin{equation}
     \begin{aligned}
-        \Delta\mathbf{c} & = \mathbf{A}^T \left( \mathbf{r}_a + \mathbf{J}_{\mathbf{t}} \Delta\mathbf{p}^* \right)
+        \Delta\mathbf{c} & = \mathbf{A}^T \left( \mathbf{r}_a + \mathbf{J}_{\mathbf{t}} \Delta\mathbf{p} \right)
         \\
-        \Delta\mathbf{p}& = -\left(\mathbf{J}_{\mathbf{t}}^T\mathbf{J}_{\mathbf{t}}\right)^{-1} \mathbf{J}_{\mathbf{t}}^T \left( \mathbf{r}_a + \mathbf{A} \Delta\mathbf{c}^* \right)
+        \Delta\mathbf{p}& = -\left(\mathbf{J}_{\mathbf{t}}^T\mathbf{J}_{\mathbf{t}}\right)^{-1} \mathbf{J}_{\mathbf{t}}^T \left( \mathbf{r}_a - \mathbf{A} \Delta\mathbf{c} \right)
         \label{eq:asymmetric_alt_solution}
     \end{aligned}
 \end{equation}
@@ -411,8 +411,8 @@ in order to obtain the analytical expression for the previous alternated update 
 
 In the case of \emph{bidirectional} composition we can proceed in two different ways:
 \begin{inparaenum}[\itshape a\upshape)]
-\item update $\Delta\mathbf{c}$ given the previous $\Delta\mathbf{p}^*$ and $\Delta\mathbf{q}^*$ and then update $(\Delta\mathbf{p}^T, \Delta\mathbf{q}^T)^T$ from the updated $\Delta\mathbf{c}^*$, or
-\item update $\Delta\mathbf{c}$ given the previous $\Delta\mathbf{p}^*$ and $\Delta\mathbf{q}^*$, then  $\Delta\mathbf{p}$ given the updated $\Delta\mathbf{c}^*$ and the previous $\Delta\mathbf{q}^*$ and, finally, $\Delta\mathbf{q}$ given the updated $\Delta\mathbf{c}^*$ and $\Delta\mathbf{p}^*$.
+\item update $\Delta\mathbf{c}$ given the previous $\Delta\mathbf{p}$ and $\Delta\mathbf{q}$ and then update $(\Delta\mathbf{p}^T, \Delta\mathbf{q}^T)^T$ from the updated $\Delta\mathbf{c}$, or
+\item update $\Delta\mathbf{c}$ given the previous $\Delta\mathbf{p}$ and $\Delta\mathbf{q}$, then  $\Delta\mathbf{p}$ given the updated $\Delta\mathbf{c}$ and the previous $\Delta\mathbf{q}$ and, finally, $\Delta\mathbf{q}$ given the updated $\Delta\mathbf{c}$ and $\Delta\mathbf{p}$.
 \end{inparaenum}
 
 From Equation \ref{eq:bidirectional_structure}, we can derive the following system of equations:
@@ -429,7 +429,7 @@ From Equation \ref{eq:bidirectional_structure}, we can derive the following syst
 from which we can define the alternated update rules for the first of the previous two options:
 \begin{equation}
     \begin{aligned}
-        \Delta\mathbf{c}& = \mathbf{A}^T \left( \mathbf{r}_b + \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p}^* - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
+        \Delta\mathbf{c}& = \mathbf{A}^T \left( \mathbf{r}_b + \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p} - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
         \\
         \begin{pmatrix}
             \Delta\mathbf{p}
@@ -446,7 +446,7 @@ from which we can define the alternated update rules for the first of the previo
             \mathbf{J}_{\mathbf{i}}^T
             \\
             -\mathbf{J}_{\mathbf{a}}^T
-        \end{pmatrix} \left(\mathbf{r}_b - \mathbf{A} \Delta\mathbf{c}^*\right)
+        \end{pmatrix} \left(\mathbf{r}_b - \mathbf{A} \Delta\mathbf{c}\right)
         \label{eq:bidirectional_alt_solution1}
     \end{aligned}
 \end{equation}
@@ -464,14 +464,14 @@ with complexity:
     \label{eq:complexity_alternated_bidirectional1}
     \end{aligned}
 \end{equation}
-The rules for the second options is:
+The rules for the second options are:
 \begin{equation}
     \begin{aligned}
-        \Delta\mathbf{c} & = \mathbf{A}^T \left( \mathbf{r}_b + \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p}^* - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
+        \Delta\mathbf{c} & = \mathbf{A}^T \left( \mathbf{r}_b + \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p} - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
         \\
-        \Delta\mathbf{p} & = -(\mathbf{J}_{\mathbf{i}}^T\mathbf{J}_{\mathbf{i}})^{-1} \mathbf{J}_{\mathbf{i}}^T \left( \mathbf{r}_b - \mathbf{A} \Delta\mathbf{c}^* - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
+        \Delta\mathbf{p} & = -(\mathbf{J}_{\mathbf{i}}^T\mathbf{J}_{\mathbf{i}})^{-1} \mathbf{J}_{\mathbf{i}}^T \left( \mathbf{r}_b - \mathbf{A} \Delta\mathbf{c} - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
         \\
-        \Delta\mathbf{q} & = -(\mathbf{J}_{\mathbf{a}}^T\mathbf{J}_{\mathbf{a}})^{-1} \mathbf{J}_{\mathbf{a}}^T \left( \mathbf{r}_b - \mathbf{A} \Delta\mathbf{c}^* + \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p}^* \right)
+        \Delta\mathbf{q} & = (\mathbf{J}_{\mathbf{a}}^T\mathbf{J}_{\mathbf{a}})^{-1} \mathbf{J}_{\mathbf{a}}^T \left( \mathbf{r}_b - \mathbf{A} \Delta\mathbf{c} + \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p} \right)
         \label{eq:bidirectional_alt_solution2}
     \end{aligned}
 \end{equation}
@@ -483,20 +483,20 @@ and their complexity is dominated by:
     \end{aligned}
 \end{equation}
 
-On the other hand, the alternated update rules using the project-out cost function are:
+On the other hand, the alternated update rules using the Project-Out cost function are:
 \begin{itemize}
 	\item For \emph{asymmetric} composition:
-	There is no proper alternated rule because the project-out cost function only depends on one set of parameters, $\Delta \mathbf{p}$.
+	There is no proper alternated rule because the Project-Out cost function only depends on one set of parameters, $\Delta \mathbf{p}$.
 	\item For \emph{bidirectional} composition:
 	\begin{equation}
 	    \begin{aligned}
-	        \Delta \mathbf{q} & = \left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}} \left( \mathbf{r} - \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p}^* \right)
+	        \Delta \mathbf{q} & = \left( \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}}\mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}} \left( \mathbf{r} + \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p} \right)
 	        \\
-	        \Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \left( \mathbf{r} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
+	        \Delta \mathbf{p} & = -\left( \mathbf{J}_{\mathbf{i}}^T\bar{\mathbf{A}}\mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \left( \mathbf{r} - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
 	    \label{eq:bidirectional_alternated_po_solution}
 	    \end{aligned}
 	\end{equation}
-	with equivalent complexity to the one given by Equation \ref{eq:complexity_schur_asymmetric} because the term $\left( \mathbf{J}_{\bar{\mathbf{a}}}^T \bar{\mathbf{A}} \mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T \bar{\mathbf{A}}$ can be precomputed in this case.
+	with equivalent complexity to the one given by Equation \ref{eq:complexity_schur_asymmetric} because, in this case, the term $\left( \mathbf{J}_{\bar{\mathbf{a}}}^T \bar{\mathbf{A}} \mathbf{J}_{\bar{\mathbf{a}}} \right)^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T \bar{\mathbf{A}}$ can be completely precomputed.
 \end{itemize}
 
 Note that all previous alternated update rules, Equations \ref{eq:asymmetric_alt_solution}, \ref{eq:bidirectional_alt_solution1}, \ref{eq:bidirectional_alt_solution2} and \ref{eq:bidirectional_alternated_po_solution}, are similar but slightly different from their simultaneous counterparts, Equations \ref{eq:asymmetric_schur_solution1} and \ref{eq:asymmetric_schur_solution2}, \ref{eq:bidirectional_schur_solution1} and \ref{eq:bidirectional_schur_solution2}, \ref{eq:bidirectional_schur_solution3} and \ref{eq:bidirectional_schur_solution4}, and \ref{eq:bidirectional_schur_po_solution}.
@@ -507,7 +507,7 @@ Note that all previous alternated update rules, Equations \ref{eq:asymmetric_alt
 
 The use of \emph{asymmetric} composition together with the Gauss-Newton method has been proven to naturally lead to Efficient Second order Minimization (ESM) algorithms in the related field of parametric image alignment \cite{Malis2004, Benhimane2004, Megret2008, Megret2010}. Following a similar line of reasoning, in this subsection we show that asymmetric Gauss-Newton algorithms for fitting AAMs can also be interpreted as ESM algorithms with respect to the incremental warp $\Delta \mathbf{p}$.
 
-In order to show the previous relationship we will make use of the simplified data term\footnote{Notice that similar derivations can also be obtained using the SSD and project-out data terms, but we use the simplified one here for clarity.} introduced by Equation \ref{eq:ssd_shape}. Using \emph{forward} composition, the optimization problem defined by:
+In order to show the previous relationship we will make use of the simplified data term\footnote{Notice that similar derivations can also be obtained using the SSD and Project-Out data terms, but we use the simplified one here for clarity.} introduced by Equation \ref{eq:ssd_shape}. Using \emph{forward} composition, the optimization problem defined by:
 \begin{equation}
     \begin{aligned}
         \Delta \mathbf{p}^* & = \underset{\Delta \mathbf{p}}{\mathrm{arg\,min\;}} \frac{1}{2} \mathbf{r}_f^T\bar{\mathbf{A}}\mathbf{r}_f
@@ -517,20 +517,20 @@ In order to show the previous relationship we will make use of the simplified da
 where the forward residual $\mathbf{r}_f$ is defined as:
 \begin{equation}
     \begin{aligned}
-		\mathbf{r}_f & = \mathbf{i}[\mathbf{p}_{k-1}^* \circ \Delta \mathbf{p}] - \bar{\mathbf{a}}
+		\mathbf{r}_f & = \mathbf{i}[\mathbf{p} \circ \Delta \mathbf{p}] - \bar{\mathbf{a}}
     \label{eq:po_forward_residual}
     \end{aligned}
 \end{equation}
-As seen before, Gauss-Newton solves the previous optimization problem by first performing a \emph{first} order Taylor expansion of the residual around $\Delta \mathbf{p}$:
+As seen before, Gauss-Newton solves the previous optimization problem by performing a \emph{first} order Taylor expansion of the residual around $\Delta \mathbf{p}$:
 \begin{equation}
     \begin{aligned}
 		\hat{\mathbf{r}}_f(\Delta\mathbf{p}) & = \mathbf{r}_f + \frac{\partial \mathbf{r}_f}{\partial\Delta \mathbf{p}}\Delta\mathbf{p} + \underbrace{O_{\mathbf{r}_f}(\Delta\mathbf{p}^2)}_{\textrm{remainder}}
 		\\
-		& = \mathbf{i}[\mathbf{p}_{k-1}^*] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} + O_{\mathbf{r}_f}(\Delta\mathbf{p}^2)
+		& = \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} + O_{\mathbf{r}_f}(\Delta\mathbf{p}^2)
     \label{eq:po_forward_residual_taylor}
     \end{aligned}
 \end{equation}
-and then solving the following approximation of the original problem:
+and solving the following approximation of the original problem:
 \begin{equation}
     \begin{aligned}
         \Delta\mathbf{p}^* & = \underset{\Delta\mathbf{p}}{\mathrm{arg\,min\;}} \frac{1}{2} \hat{\mathbf{r}}_f^T\hat{\mathbf{r}}_f
@@ -545,7 +545,7 @@ However, note that, instead of performing a first order Taylor expansion, we can
 		\\
 		& \quad \, \frac{1}{2} \Delta\mathbf{p}^T\frac{\partial^2 \mathbf{r}_f}{\partial^2\Delta \mathbf{p}}\Delta\mathbf{p} + O_{\mathbf{r}_f}(\Delta\mathbf{p}^3)
 		\\
-		& = \mathbf{i}[\mathbf{p}_{k-1}^*] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} \, +
+		& = \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} \, +
 		\\
 		& \quad \, \frac{1}{2} \Delta\mathbf{p}^T\mathbf{H}_\mathbf{i}\Delta\mathbf{p} + O_{\mathbf{r}_f}(\Delta\mathbf{p}^3)
     \label{eq:po_forward_residual_taylor2}
@@ -560,7 +560,7 @@ Then, given the second main assumption behind AAMs (Equation \ref{eq:aam_2}) the
 		\label{eq:jacobian_aproximation}
 	\end{aligned}
 \end{equation}
-and because the previous $\mathbf{J}_\mathbf{i}$ and $\mathbf{J}_\mathbf{a}$ are functions of $\Delta\mathbf{p}$ we can perform a first order Taylor expansion around the former to obtain:
+and, because the previous $\mathbf{J}_\mathbf{i}$ and $\mathbf{J}_\mathbf{a}$ are functions of $\Delta\mathbf{p}$, we can perform a \emph{first} order Taylor expansion of $\mathbf{J}_\mathbf{i}$ to obtain:
 \begin{equation}
 	\begin{aligned}
 	\mathbf{J}_\mathbf{i} (\Delta\mathbf{p}) & \approx \mathbf{J}_\mathbf{i} + \Delta\mathbf{p}^T \frac{\partial\mathbf{J}_\mathbf{i}}{\partial\Delta\mathbf{p}} + \underbrace{O_{\mathbf{J}_\mathbf{i}}(\Delta\mathbf{p}^2)}_{\textrm{remainder}}
@@ -574,20 +574,20 @@ and because the previous $\mathbf{J}_\mathbf{i}$ and $\mathbf{J}_\mathbf{a}$ are
 	\end{aligned}
 \end{equation}
 
-Finally, substituting the previous approximation for $\Delta\mathbf{p}^T \mathbf{H}_\mathbf{i}$ into Equation \ref{eq:po_forward_residual_taylor2} we have:
+Finally, substituting the previous approximation for $\Delta\mathbf{p}^T \mathbf{H}_\mathbf{i}$ into Equation \ref{eq:po_forward_residual_taylor2} we arrive at:
 \begin{equation}
     \begin{aligned}
-		\check{\mathbf{r}}_f(\Delta\mathbf{p}) & = \mathbf{i}[\mathbf{p}_{k-1}^*] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} \, +
+		\check{\mathbf{r}}_f(\Delta\mathbf{p}) & = \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} \, +
 		\\
 		& \quad \, \frac{1}{2} \Delta\mathbf{p}^T\mathbf{H}_\mathbf{i}\Delta\mathbf{p} + O_{\mathbf{r}_f}(\Delta\mathbf{p}^3)
 		\\
-		& = \mathbf{i}[\mathbf{p}_{k-1}^*] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} \, +
+		& = \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} + \mathbf{J}_\mathbf{i}\Delta\mathbf{p} \, +
 		\\
 		& \quad \, \frac{1}{2} \left( \mathbf{J}_\mathbf{a} - \mathbf{J}_\mathbf{i} - O_{\mathbf{J}_\mathbf{i}}(\Delta\mathbf{p}^2) \right) \Delta\mathbf{p} \, +
 		\\
 		& \quad \, O_{\mathbf{r}_f}(\Delta\mathbf{p}^3)
 		\\
-		& = \mathbf{i}[\mathbf{p}_{k-1}^*] - \bar{\mathbf{a}} + \frac{1}{2} \left( \mathbf{J}_\mathbf{i} + \mathbf{J}_\mathbf{a} \right) \Delta\mathbf{p} \, +
+		& = \mathbf{i}[\mathbf{p}] - \bar{\mathbf{a}} + \frac{1}{2} \left( \mathbf{J}_\mathbf{i} + \mathbf{J}_\mathbf{a} \right) \Delta\mathbf{p} \, +
 		\\
 		& \quad \, O_{\textrm{total}}(\Delta\mathbf{p}^3)
     \label{eq:po_asymmetric_residual_approximation}
@@ -600,7 +600,7 @@ where the total remainder is cubic with respect to $\Delta \mathbf{p}$:
     \label{eq:po_asymmetric_residual_approximation}
     \end{aligned}
 \end{equation}
-The previous expression constitutes a true second order approximation of the forward residual $\mathbf{r}_f$ where the term $\frac{1}{2} \left( \mathbf{J}_\mathbf{i} + \mathbf{J}_\mathbf{a} \right)$ is equivalent to the asymmetric Jacobian in Equation \ref{eq:asymmetric_ssd_taylor} when $\alpha = \beta = 0.5$:
+The previous expression constitutes a true \emph{second} order approximation of the forward residual $\mathbf{r}_f$ where the term $\frac{1}{2} \left( \mathbf{J}_\mathbf{i} + \mathbf{J}_\mathbf{a} \right)$ is equivalent to the asymmetric Jacobian in Equation \ref{eq:asymmetric_ssd_taylor} when $\alpha = \beta = 0.5$:
 \begin{equation}
     \begin{aligned}
 		\frac{1}{2} \left( \mathbf{J}_\mathbf{i} + \mathbf{J}_\mathbf{a} \right) & = \left( \frac{1}{2} \mathbf{J}_\mathbf{i} + \frac{1}{2} \mathbf{J}_\mathbf{a} \right)
@@ -615,13 +615,13 @@ The previous expression constitutes a true second order approximation of the for
     \label{eq:equivalent_jacobians}
     \end{aligned}
 \end{equation}
-and, consequently, asymmetric Gauss- Newton algorithms for fitting AAMs can be viewed as ESM algorithms that only require first order partial derivatives of the residual.
+and, consequently, asymmetric Gauss-Newton algorithms for fitting AAMs can be viewed as ESM algorithms that only require \emph{first} order partial derivatives of the residual and that have the same computational complexity as \emph{first} order algorithms.
 
 
 \subsubsection{Newton}
 \label{sec:newton}
 
-The Newton algorithm performs a second order Taylor expansion of the entire data term $\mathcal{D}$:
+The Newton method performs a \emph{second} order Taylor expansion of the entire data term $\mathcal{D}$:
 \begin{equation}
     \begin{aligned}
 		\mathcal{D}(\Delta \boldsymbol{\ell}) & \approx \hat{\mathcal{D}}(\Delta \boldsymbol{\ell})
@@ -796,7 +796,7 @@ On the other hand, the solutions for \emph{bidirectional} composition are given 
             \mathbf{u}
         \end{pmatrix}
         \\
-        \Delta \mathbf{c} & = \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p}^* - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}} \Delta \mathbf{q}^*
+        \Delta \mathbf{c} & = \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}} \Delta \mathbf{q}
     \label{eq:bidirectional_newton_schur_solutions1}
     \end{aligned}
 \end{equation}
@@ -805,9 +805,9 @@ or
     \begin{aligned}
         \Delta \mathbf{p} & = \left( \mathbf{U} - \mathbf{W} \mathbf{V}^{-1} \mathbf{W}^T \right)^{-1} \left(\mathbf{u} -  \mathbf{W} \mathbf{V}^{-1}\mathbf{v} \right)
     	\\
-        \Delta \mathbf{p} & = \mathbf{V}^{-1} \left( \mathbf{v} - \mathbf{W}^T \Delta\mathbf{q}^*\right)
+        \Delta \mathbf{p} & = \mathbf{V}^{-1} \left( \mathbf{v} - \mathbf{W}^T \Delta\mathbf{q}\right)
     	\\
-        \Delta \mathbf{c} & = \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p}^* - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}} \Delta \mathbf{q}^*
+        \Delta \mathbf{c} & = \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}} \Delta \mathbf{q}
     \label{eq:bidirectional_newton_schur_solutions2}
     \end{aligned}
 \end{equation}
@@ -879,7 +879,7 @@ and
 \end{equation}
 respectively.
 
-The solutions using the project-out cost function are:
+The solutions using the Project-Out cost function are:
 \begin{itemize}
 	\item For \emph{asymmetric} composition:
 	\begin{equation}
@@ -899,7 +899,7 @@ The solutions using the project-out cost function are:
 	        \\
 	        & \quad \, \mathbf{J}_{\bar{\mathbf{a}}}^T\tilde{\mathbf{P}}\mathbf{r}
 	        \\
-	        \Delta \mathbf{p} & = -\mathbf{H}_\mathbf{i}^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \left( \mathbf{r} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
+	        \Delta \mathbf{p} & = -\mathbf{H}_\mathbf{i}^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \left( \mathbf{r} - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
 	    \label{eq:bidirectional_newton_po_solution}
 	    \end{aligned}
 	\end{equation}
@@ -924,14 +924,14 @@ Note that, the derivations of the previous solutions, for both types of composit
 \subsubsection*{Alternated}
 \label{sec:newton_alternated}
 
-Alternated optimization rules can also be derived for the Newton method following the strategy shown in Section \ref{sec:gauss_newton_alternated} for the Gauss-Newton method. Again, we will simply provide the update rules for both types of composition and omit the details of their full derivation.
+Alternated optimization rules can also be derived for the Newton method following the strategy shown in Section \ref{sec:gauss_newton_alternated} for the Gauss-Newton case. Again, we will simply provide update rules and computational complexity for both types of composition and will omit the details of their full derivation.
 
 For \emph{asymmetric} composition the alternated rules are defined as:
 \begin{equation}
     \begin{aligned}
-        \Delta \mathbf{c} & = \frac{\partial \mathcal{D}_a}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_a}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p}^*
+        \Delta \mathbf{c} & = \frac{\partial \mathcal{D}_a}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_a}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p}
         \\
-        \Delta \mathbf{p} & = \frac{\partial^2 \mathcal{D}_a}{\partial^2 \Delta \mathbf{p}}^{-1} \left( \frac{\partial \mathcal{D}_a}{\partial \Delta \mathbf{p}} - \frac{\partial^2 \mathcal{D}_a}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{c}} \Delta \mathbf{c}^* \right)
+        \Delta \mathbf{p} & = \frac{\partial^2 \mathcal{D}_a}{\partial^2 \Delta \mathbf{p}}^{-1} \left( \frac{\partial \mathcal{D}_a}{\partial \Delta \mathbf{p}} - \frac{\partial^2 \mathcal{D}_a}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{c}} \Delta \mathbf{c} \right)
         \label{eq:asymmetric_newton_alternated_solution}
     \end{aligned}
 \end{equation}
@@ -950,8 +950,8 @@ with complexity:
 The alternated rules for \emph{bidirectional} composition case are given either by:
 \begin{equation}
     \begin{aligned}
-        \Delta \mathbf{c} & =  \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p}^* - \\
-        & \quad \, \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}} \Delta \mathbf{q}^*
+        \Delta \mathbf{c} & =  \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p} - \\
+        & \quad \, \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}} \Delta \mathbf{q}
         \\
         \begin{pmatrix}
             \Delta\mathbf{p}
@@ -967,9 +967,9 @@ The alternated rules for \emph{bidirectional} composition case are given either 
         \\
         & \quad \,
         \begin{pmatrix}
-            \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{p}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{c}} \Delta \mathbf{c}^*
+            \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{p}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{c}} \Delta \mathbf{c}
             \\
-            \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{q}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{c}} \Delta \mathbf{c}^*
+            \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{q}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{c}} \Delta \mathbf{c}
         \end{pmatrix}
         \label{eq:bidirectional_newton_alternated_solution1}
     \end{aligned}
@@ -998,15 +998,15 @@ with complexity:
 or:
 \begin{equation}
     \begin{aligned}
-        \Delta \mathbf{c} & =  \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p}^* - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}} \Delta \mathbf{q}^*
+        \Delta \mathbf{c} & =  \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{c}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{p}} \Delta \mathbf{p} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{c} \partial \Delta \mathbf{q}} \Delta \mathbf{q}
         \\
         \Delta \mathbf{p} & = \frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{p}}^{-1}
         \\
-        & \quad \left( \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{p}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{c}} \Delta \mathbf{c}^* - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{q}} \Delta \mathbf{q}^* \right)
+        & \quad \left( \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{p}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{c}} \Delta \mathbf{c} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{p} \partial \Delta \mathbf{q}} \Delta \mathbf{q} \right)
         \\
         \Delta \mathbf{q} & = \frac{\partial^2 \mathcal{D}_b}{\partial^2 \Delta \mathbf{q}}^{-1}
         \\
-        & \quad \left( \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{q}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{c}} \Delta \mathbf{c}^* - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{p}} \Delta \mathbf{p}^* \right)
+        & \quad \left( \frac{\partial \mathcal{D}_b}{\partial \Delta \mathbf{q}} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{c}} \Delta \mathbf{c} - \frac{\partial^2 \mathcal{D}_b}{\partial \Delta \mathbf{q} \partial \Delta \mathbf{p}} \Delta \mathbf{p} \right)
         \label{eq:bidirectional_newton_alternated_solution2}
     \end{aligned}
 \end{equation}
@@ -1031,9 +1031,9 @@ On the other hand, the alternated update rules for the Newton method using the p
 	\item For \emph{bidirectional} composition:
 	\begin{equation}
 	    \begin{aligned}
-	        \Delta \mathbf{q} & = \mathbf{H}_\mathbf{a}^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}} \left( \mathbf{r} - \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p}^* \right)
+	        \Delta \mathbf{q} & = \mathbf{H}_\mathbf{a}^{-1} \mathbf{J}_{\bar{\mathbf{a}}}^T\bar{\mathbf{A}} \left( \mathbf{r} + \mathbf{J}_{\mathbf{i}} \Delta\mathbf{p} \right)
 	        \\
-	        \Delta \mathbf{p} & = -\mathbf{H}_\mathbf{i}^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \left( \mathbf{r} + \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q}^* \right)
+	        \Delta \mathbf{p} & = -\mathbf{H}_\mathbf{i}^{-1} \mathbf{J}_\mathbf{i}^T \bar{\mathbf{A}} \left( \mathbf{r} - \mathbf{J}_{\mathbf{a}} \Delta\mathbf{q} \right)
 	    \label{eq:bidirectional_alternated_po_solution}
 	    \end{aligned}
 	\end{equation}
@@ -1065,7 +1065,7 @@ On the other hand, the alternated update rules for the Newton method using the p
 \subsubsection{Wiberg}
 \label{sec:wiberg}
 
-The idea behind the Wiberg method is similar to the one used by the alternated Gauss-Newton method, Section \ref{sec:gauss_newton_alternated}, i.e. solving for one set of parameters at a time while keeping the other sets fixed. However, Wiberg does so by rewriting the asymmetric $\mathbf{r}_a(\Delta\mathbf{c}, \Delta\mathbf{p})$ and bidirectional $\mathbf{r}_b(\Delta\mathbf{c}, \Delta\mathbf{p},\Delta\mathbf{q})$ residuals as functions that only depend on $\Delta\mathbf{p}$ and $\Delta\mathbf{q}$ respectively.
+The idea behind the Wiberg method is similar to the one used by the alternated Gauss-Newton method in Section \ref{sec:gauss_newton_alternated}, i.e. solving for one set of parameters at a time while keeping the other sets fixed. However, Wiberg does so by rewriting the asymmetric $\mathbf{r}_a(\Delta\mathbf{c}, \Delta\mathbf{p})$ and bidirectional $\mathbf{r}_b(\Delta\mathbf{c}, \Delta\mathbf{p},\Delta\mathbf{q})$ residuals as functions that only depend on $\Delta\mathbf{p}$ and $\Delta\mathbf{q}$ respectively.
 
 For \emph{asymmetric} composition, the residual $\bar{\mathbf{r}}_a (\Delta \mathbf{p})$ is defined as follows:
 \begin{equation}
@@ -1162,14 +1162,14 @@ where, similarly as before, the function $\bar{\Delta \mathbf{c}}_b(\Delta \math
 \begin{equation}
     \begin{aligned}
         \bar{\Delta \mathbf{c}}_b(\Delta \mathbf{p}, \Delta \mathbf{q}) & = \mathbf{A}^T \mathbf{r}_b
-        \label{eq:asymmetric_wiberg_c_function}
+        \label{eq:bidirectional_wiberg_c_function}
     \end{aligned}
 \end{equation}
 and the function $\bar{\Delta \mathbf{p}}_b(\bar{\Delta \mathbf{c}}_b, \Delta\mathbf{q})$ is obtained by solving for $\Delta\mathbf{p}$ using the Wiberg method while keeping $\Delta \mathbf{q}$ fixed:
 \begin{equation}
     \begin{aligned}
         \bar{\Delta \mathbf{p}}_b(\bar{\Delta \mathbf{c}}_b, \Delta\mathbf{q}) & = -\left( \mathbf{J}_{\mathbf{i}}^T \bar{\mathbf{A}} \mathbf{J}_{\mathbf{i}} \right)^{-1} \mathbf{J}_{\mathbf{i}}^T \bar{\mathbf{A}} \bar{\mathbf{r}}_b
-        \label{eq:asymmetric_wiberg_p_function}
+        \label{eq:bidirectional_wiberg_p_function}
     \end{aligned}
 \end{equation}
 At this point, the Wiberg method proceeds to define the following optimization problem with respect to $\Delta\mathbf{q}$:
@@ -1222,8 +1222,9 @@ In this case, the Jacobian of the residual can also be obtained by direct applic
     \label{eq:bidirectional_wiberg_solution}
     \end{aligned}
 \end{equation}
+In this case, the Wiberg method solves explicitly, at each iteration, for $\Delta\mathbf{p}$ using the previous expression and implicitly for $\Delta\mathbf{p}$ and $\Delta\mathbf{c}$ (through $\bar{\Delta \mathbf{p}}_b(\bar{\Delta \mathbf{c}}_b, \Delta\mathbf{q})$ and $\bar{\Delta \mathbf{c}}_b(\Delta \mathbf{p}, \Delta \mathbf{q})$) using Equations \ref{eq:bidirectional_wiberg_p_function} and \ref{eq:bidirectional_wiberg_c_function} respectively. Again, the complexity per iteration is the same as the one of the Gauss-Newton method after applying the Schur complement, Equation \ref{eq:complexity_schur_bidirectional2}; and the solutions for both methods are almost identical, Equations \ref{eq:bidirectional_wiberg_solution}, \ref{eq:bidirectional_wiberg_p_function} and \ref{eq:bidirectional_wiberg_c_function} and Equations \ref{eq:bidirectional_schur_solution1}, \ref{eq:bidirectional_schur_solution2} and \ref{eq:bidirectional_schur_solution3}.
 
-On the other hand, the Wiberg solutions using the project-out cost function are:
+On the other hand, the Wiberg solutions for the project-out cost function are:
 \begin{itemize}
 	\item For \emph{asymmetric} composition:
 	Because the project-out cost function only depends on one set of parameters, $\Delta \mathbf{p}$, in this case Wiberg reduces to Gauss-Newton.
@@ -1237,18 +1238,20 @@ On the other hand, the Wiberg solutions using the project-out cost function are:
 	    \label{eq:bidirectional_wiberg_po_solution}
 	    \end{aligned}
 	\end{equation}
-	where the bidirectional project-out Wiberg residual $\bar{\mathbf{r}}$ is defined as:
-	\begin{equation}
-	    \begin{aligned}
-	        \bar{\mathbf{r}} = \mathbf{i}[\mathbf{p} \circ \bar{\Delta\mathbf{p}}] - \bar{\mathbf{a}}[\Delta\mathbf{q}]
-	    \label{eq:po_wiberg_residual}
-	    \end{aligned}
-	\end{equation}
-	and the optimization problem with respect to $\Delta\mathbf{q}$: 
-	\begin{equation}
-	    \begin{aligned}
-	        \Delta\mathbf{q}^* & = \underset{\Delta\mathbf{q}}{\mathrm{arg\,min\;}} \bar{\mathbf{r}}^T\bar{\mathbf{A}}\bar{\mathbf{r}}
-	    \label{eq:bidirectional_wiberg_problem1}
-	    \end{aligned}
-	\end{equation}
+    Note that, also in this case, the solutions obtained with the Wiberg method are almost identical to the ones obtained using Gauss-Newton after applying the Schur complement, Equation \ref{eq:bidirectional_schur_po_solution}.
 \end{itemize}
+	
+%where the bidirectional project-out Wiberg residual $\bar{\mathbf{r}}$ is defined as:
+%\begin{equation}
+%    \begin{aligned}
+%        \bar{\mathbf{r}} = \mathbf{i}[\mathbf{p} \circ \bar{\Delta\mathbf{p}}] - \bar{\mathbf{a}}[\Delta\mathbf{q}]
+%    \label{eq:po_wiberg_residual}
+%    \end{aligned}
+%\end{equation}
+%and the optimization problem with respect to $\Delta\mathbf{q}$: 
+%\begin{equation}
+%    \begin{aligned}
+%        \Delta\mathbf{q}^* & = \underset{\Delta\mathbf{q}}{\mathrm{arg\,min\;}} \bar{\mathbf{r}}^T\bar{\mathbf{A}}\bar{\mathbf{r}}
+%    \label{eq:bidirectional_wiberg_problem1}
+%    \end{aligned}
+%\end{equation}

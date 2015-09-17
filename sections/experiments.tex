@@ -25,7 +25,7 @@ Finally, in order to encourage open research and facilitate future comparisons w
 
 In this experiment, we report the fitting accuracy and convergence properties of all CGD algorithms studied in this paper. Results are reported on the $\sim220$ test images of the LFPW database. In order to keep the information easily readable and interpretable, we group algorithms by cost function i.e. (SSD or BPO), and optimization method (i.e. Gauss-Newton, Newton or Wiberg).
 
-Results for this experiment are reported in Figures \ref{fig:ssd_gn_5}, \ref{fig:ssd_n_5}, \ref{fig:ssd_w_5}, \ref{fig:bpo_gn_5}, \ref{fig:bpo_n_5} and \ref{fig:bpo_w_5}. These figures have all the same structure and are composed of four figures and a table. Figures \ref{fig:ced_ssd_gn_5}, \ref{fig:ced_ssd_n_5}, \ref{fig:ced_ssd_w_5}, \ref{fig:ced_bpo_gn_5}, \ref{fig:ced_bpo_n_5} and \ref{fig:ced_bpo_w_5} report the Cumulative Error Distribution (CED), i.e the proportion of images vs normalized point-to-point error. Tables \ref{tab:stats_ssd_gn_5}, \ref{tab:stats_ssd_n_5}, \ref{tab:stats_ssd_w_5}, \ref{tab:stats_bpo_gn_5}, \ref{tab:stats_bpo_n_5}, and \ref{tab:stats_bpo_w_5} summarize and complete the information on the previous CEDs by stating the proportion of images fitted with a normalized point-to-point error smaller than $0.02$, $0.03$ and $0.04$; and by stating the mean, std and median of the final normalized point-to-point error. The aim of the previous figures and tables is to help us compare the final fitting accuracy obtained by each algorithm. On the other hand, Figures \ref{fig:mean_error_vs_iters_ssd_gn_5}, \ref{fig:mean_error_vs_iters_ssd_n_5}, \ref{fig:mean_error_vs_iters_ssd_w_5}, \ref{fig:mean_error_vs_iters_bpo_gn_5}, \ref{fig:mean_error_vs_iters_bpo_n_5} and \ref{fig:mean_error_vs_iters_bpo_w_5} report the mean normalized point-to-point error at each iteration while Figures \ref{fig:mean_cost_vs_iters1_ssd_gn_5}, \ref{fig:mean_cost_vs_iters2_ssd_gn_5}, \ref{fig:mean_cost_vs_iters1_ssd_n_5}, \ref{fig:mean_cost_vs_iters2_ssd_n_5}, \ref{fig:mean_cost_vs_iters1_ssd_w_5}, \ref{fig:mean_cost_vs_iters2_ssd_w_5}, \ref{fig:mean_cost_vs_iters1_bpo_gn_5}, \ref{fig:mean_cost_vs_iters2_bpo_gn_5}, \ref{fig:mean_cost_vs_iters1_bpo_n_5}, \ref{fig:mean_cost_vs_iters2_bpo_n_5} and \ref{fig:mean_cost_vs_iters1_bpo_w_5}, \ref{fig:mean_cost_vs_iters2_bpo_w_5} report the mean normalized cost at each iteration\footnote{The Figures are produced by dividing the value of the cost function at each iteration by its initial value and averaging for all images.}. The aim of the previous figures is to help us compare the convergence properties of every algorithm.
+Results for this experiment are reported in Figures \ref{fig:ssd_gn_5}, \ref{fig:ssd_n_5}, \ref{fig:ssd_w_5}, \ref{fig:bpo_gn_5}, \ref{fig:bpo_n_5} and \ref{fig:bpo_w_5}. These figures have all the same structure and are composed of four figures and a table. Figures \ref{fig:ced_ssd_gn_5}, \ref{fig:ced_ssd_n_5}, \ref{fig:ced_ssd_w_5}, \ref{fig:ced_bpo_gn_5}, \ref{fig:ced_bpo_n_5} and \ref{fig:ced_bpo_w_5} report the Cumulative Error Distribution (CED), i.e the proportion of images vs normalized point-to-point error. Tables \ref{tab:stats_ssd_gn_5}, \ref{tab:stats_ssd_n_5}, \ref{tab:stats_ssd_w_5}, \ref{tab:stats_bpo_gn_5}, \ref{tab:stats_bpo_n_5}, and \ref{tab:stats_bpo_w_5} summarize and complete the information on the previous CEDs by stating the proportion of images fitted with a normalized point-to-point error smaller than $0.02$, $0.03$ and $0.04$; and by stating the mean, std and median of the final normalized point-to-point error. The aim of the previous figures and tables is to help us compare the final fitting accuracy obtained by each algorithm. On the other hand, Figures \ref{fig:mean_error_vs_iters_ssd_gn_5}, \ref{fig:mean_error_vs_iters_ssd_n_5}, \ref{fig:mean_error_vs_iters_ssd_w_5}, \ref{fig:mean_error_vs_iters_bpo_gn_5}, \ref{fig:mean_error_vs_iters_bpo_n_5} and \ref{fig:mean_error_vs_iters_bpo_w_5} report the mean normalized point-to-point error at each iteration while Figures \ref{fig:mean_cost_vs_iters1_ssd_gn_5}, \ref{fig:mean_cost_vs_iters2_ssd_gn_5}, \ref{fig:mean_cost_vs_iters1_ssd_n_5}, \ref{fig:mean_cost_vs_iters2_ssd_n_5}, \ref{fig:mean_cost_vs_iters1_ssd_w_5}, \ref{fig:mean_cost_vs_iters2_ssd_w_5}, \ref{fig:mean_cost_vs_iters1_bpo_gn_5}, \ref{fig:mean_cost_vs_iters2_bpo_gn_5}, \ref{fig:mean_cost_vs_iters1_bpo_n_5}, \ref{fig:mean_cost_vs_iters2_bpo_n_5} and \ref{fig:mean_cost_vs_iters1_bpo_w_5}, \ref{fig:mean_cost_vs_iters2_bpo_w_5} report the mean normalized cost at each iteration\footnote{The Figures are produced by dividing the value of the cost function at each iteration by its initial value and averaging for all images.}. The aim of these figures is to help us compare the convergence properties of every algorithm.
 
 
 \subsubsection{SSD Gauss-Newton algorithms}
@@ -565,9 +565,9 @@ Once more we repeat the experimental set up of the first experiment and report t
 		    & $100\%$ & $<50\%$ & $<25\%$ & $<12\%$ 
 		    \\
 		    \midrule
-		    PO\_Asy\_GN & $\sim1400$ ms & $\sim680$ ms & $\sim480$ ms & $\sim380$ ms
+		    SSD\_Asy\_GN\_Sch & $\sim1680$ ms & $\sim930$ ms & $\sim650$ ms & $\sim590$ ms
 		    \\ 
-		    PO\_Asy\_GN\_Sch & $\sim1680$ ms & $\sim930$ ms & $\sim650$ ms & $\sim590$ ms
+		    PO\_Asy\_GN & $\sim1400$ ms & $\sim680$ ms & $\sim480$ ms & $\sim380$ ms
 		    \\
 		    \bottomrule
 	  	\end{tabular}
@@ -576,14 +576,14 @@ Once more we repeat the experimental set up of the first experiment and report t
 	\end{subfigure}
 	\par\bigskip\bigskip
 	\begin{subfigure}{0.48\textwidth}
-	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_ssd_asy_gn_20.png}
-	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the SSD Asymmetric Gauss-Newton algorithm using different sampling rates, $20$ $(12 + 8)$ iterations, and initialized with different amounts of noise.}
+	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_po_asy_gn_20.png}
+	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the Project-Out Asymmetric Gauss-Newton algorithm using different sampling rates, $20$ $(12 + 8)$ iterations, and initialized with different amounts of noise.}
 	    \label{fig:sampling_vs_noise_ssd_asy_gn_20}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.48\textwidth}
-	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_po_asy_gn_20.png}
-	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the Project-Out Asymmetric Gauss-Newton algorithm using different sampling rates, $20$ $(12 + 8)$ iterations, and initialized with different amounts of noise.}
+	    \includegraphics[width=\textwidth]{experiments/sampling/sampling_vs_noise_ssd_asy_gn_20.png}
+	    \caption{Proportion of images with normalized point-to-point errors smaller than $0.02$, $0.03$ and $0.04$ for the SSD Asymmetric Gauss-Newton algorithm using different sampling rates, $20$ $(12 + 8)$ iterations, and initialized with different amounts of noise.}
 	    \label{fig:sampling_vs_noise_po_asy_gn_20}
 	\end{subfigure}
 	\par\bigskip\bigskip
@@ -594,10 +594,10 @@ Once more we repeat the experimental set up of the first experiment and report t
 		    & $100\%$ & $<50\%$ & $<25\%$ & $<12\%$ 
 		    \\
 		    \midrule
-		    PO\_Asy\_GN & $\sim892$ ms & $\sim519$ ms & $\sim369$ ms & $\sim331$ ms
-		    \\ 
-		    PO\_Asy\_GN\_Sch & $\sim707$ ms & $\sim365$ ms & $\sim235$ ms & $\sim211$ ms
+		    SSD\_Asy\_GN\_Sch & $\sim892$ ms & $\sim519$ ms & $\sim369$ ms & $\sim331$ ms
 		    \\
+		    PO\_Asy\_GN & $\sim707$ ms & $\sim365$ ms & $\sim235$ ms & $\sim211$ ms
+		    \\ 
 		    \bottomrule
 	  	\end{tabular}
 	  	\caption{Table showing run time of each algorithm for different amounts of sampling and $20$ $(12 + 8)$ iterations.}
@@ -610,7 +610,9 @@ Once more we repeat the experimental set up of the first experiment and report t
 
 \subsection{Comparison on Helen and AFW}
 
-In this last experiment, we report the fitting accuracy of the SSD and Project-Out Asymmetric Gauss-Newton algorithms on the test set of the Helen database and on the entire AFW database. We chose these two algorithm because they were the best performing algorithms in the previous experiments. 
+In order to facilitate the comparison with prior work on AAMs \cite{} and with other state-of-the-art approaches in face alignment, in this last experiment, we report the fitting accuracy of the SSD and Project-Out Asymmetric Gauss-Newton algorithms, both with a sampling rate of $25\%$ and run for $20$ $(12 + 8)$ iterations, on the widely used test set of the Helen database and on the entire AFW database. We chose these two algorithm because they are, overall, the best performing algorithms in the previous experiments.
+
+Result for this experiment are shown in Figure \ref{fig:helen_afw}. Looking at Figure \ref{fig:ced_po_for_gn} we can see that both methods obtain similar fitting accuracy on the Helen test dataset and that this accuracy is comparable to the one obtained on the previous LFPW test dataset. However, the performance of both methods drops significantly on the AFW database. This drop in performance is consistent with other recent works on AAMs \cite{Tzimiropoulos2014, Alabort2014, Antonakos2014, Alabort2015} and it is due to the fact that the characteristics of the images on the AFW dataset are significantly different from those of the training sets of the LFPW and Helen datasets where the AAM model was trained.
 
 \begin{figure*}[h!]
 	\centering

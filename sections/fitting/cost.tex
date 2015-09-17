@@ -1,24 +1,36 @@
 \subsection{Cost Function}
 \label{sec:cost_function}
 
-In this paper, we define AAM fitting as the \emph{regularized} search over the shape and appearance parameters that minimize a global measure of similarity between the vectorized warped image and the appearance model:
+AAM fitting is typically formulated as the (regularized) search over the shape and appearance parameters that minimize a global error measure between the vectorized warped image and the appearance model:
 \begin{equation}
     \begin{aligned}
         \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} \mathcal{R} (\mathbf{p}, \mathbf{c}) + \mathcal{D} (\mathbf{i}[\mathbf{p}], \mathbf{c}) 
         \end{aligned}
     \label{eq:aam_fitting}
 \end{equation}
-where $\mathcal{R}$ is a regularization term that penalizes complex shape and appearance deformations and $\mathcal{D}$ is a data term that
-quantifies the global measure of similarity between the vectorized warped image and the appearance model.
+where $\mathcal{D}$ is a data term that quantifies the global error measure between the vectorized warped image and the appearance model and $\mathcal{R}$ is an \emph{optional} regularization term that penalizes complex shape and appearance deformations.
 
 
-\subsubsection{Regularized Sum of Squared Differences}
+\subsubsection{Sum of Squared Differences}
 \label{sec:rssd}
 
-Arguably, the most natural choices for the previous data and regularization terms are the SSD between the vectorized warped image and the linear appearance model\footnote{This choice of $\mathcal{D}$ is very related to the second main assumption behind AAMs, Equation \ref{eq:aam_2}.} and the sum of ${\ell_2}^2$-norms over the shape and appearance parameters respectively:
+Arguably, the most natural choice for the previous data term is the \emph{Sum of Squared Differences} (SSD) between the vectorized warped image and the linear appearance model\footnote{This choice of $\mathcal{D}$ is naturally given by second main assumption behind AAMs, Equation \ref{eq:aam_2} and by the linear generative model of appearance defined by Equation \ref{eq:paam_2}.}. Consequently, the \emph{classic} AAM fitting problem is defined by the following non-linear optimization problem\footnote{The residual $\mathbf{r}$ in Equation \ref{eq:ssd} is linear with respect to the appearance parameters $\mathbf{c}$ and non-linear with respect to the shape parameters $\mathbf{p}$ through the warp $\mathcal{W}(\mathbf{x}; \mathbf{p})$}:
 \begin{equation}
     \begin{aligned}
-        \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} \underbrace{\frac{1}{2}||\mathbf{p}||^2 + \frac{1}{2}||\mathbf{c}||^2}_{\mathcal{R} (\mathbf{p}, \mathbf{c})} +
+        \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} \frac{1}{2} \mathbf{r}^T\mathbf{r}
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} 
+        \underbrace{\frac{1}{2} \left\| \mathbf{i}[\mathbf{p}] - \left( \bar{\mathbf{a}} + \mathbf{A} \mathbf{c} \right) \right\|^2}_{\mathcal{D} (\mathbf{i}[\mathbf{p}], \mathbf{c})} 
+    \end{aligned}
+    \label{eq:ssd}
+\end{equation}
+
+On the other hand, considering regularization, the most natural choice for $\mathcal{R}$ is the sum of ${\ell_2}^2$-norms over the shape and appearance parameters. In this case, the \emph{regularized} AAM fitting problem is defined as follows:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} \frac{1}{2}||\mathbf{p}||^2 + \frac{1}{2}||\mathbf{c}||^2 + \frac{1}{2} \mathbf{r}^T\mathbf{r}
+        \\
+        & =\underset{\mathbf{p}, \mathbf{c}} {\mathrm{arg\, min\;}} \underbrace{\frac{1}{2}||\mathbf{p}||^2 + \frac{1}{2}||\mathbf{c}||^2}_{\mathcal{R} (\mathbf{p}, \mathbf{c})} +
         \\
         & \qquad \qquad \quad \underbrace{\frac{1}{2}|| \mathbf{i}[\mathbf{p}] - (\mathbf{\bar{a}} + \mathbf{A} \mathbf{c}) ||^2}_{\mathcal{D} (\mathbf{i}[\mathbf{p}], \mathbf{c})}
     \end{aligned}
@@ -29,7 +41,19 @@ Arguably, the most natural choices for the previous data and regularization term
 \subsubsection*{Probabilistic Formulation}
 \label{sec:rssd_pi}
 
-A probabilistic interpretation of the previous cost function can be naturally derived using the probabilistic generative models introduced in Section \ref{sec:probabilistic_aam}. Denoting the models' parameters as \mbox{$\Theta = \{\mathbf{\bar{s}}, \mathbf{S}, \mathbf{\Lambda}, \mathbf{\bar{a}}, \mathbf{A}, \mathbf{\Sigma}, \sigma^2\}$} and taking into account the prior distributions over the shape and texture parameters:
+A probabilistic formulation of the previous cost function can be naturally derived using the probabilistic generative models introduced in Section \ref{sec:probabilistic_aam}. Denoting the models' parameters as \mbox{$\Theta = \{\mathbf{\bar{s}}, \mathbf{S}, \mathbf{\Lambda}, \mathbf{\bar{a}}, \mathbf{A}, \mathbf{\Sigma}, \sigma^2\}$} a Maximum-Likelihood (ML) formulation can be derived as follows:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,max\;}} p(\mathbf{i}[\mathbf{p}] |  \mathbf{p}, \mathbf{c}, \Theta) 
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,max\;}} \ln p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \mathbf{c}, \Theta)
+        \\
+        & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,min\;}} 
+        \underbrace{ \frac{1}{2\sigma^2} || \mathbf{i}[\mathbf{p}] - (\mathbf{\bar{a}} + \mathbf{A} \mathbf{c}) ||^2}_{\mathcal{D}(\mathbf{i}[\mathbf{p}], \mathbf{c})} 
+    \end{aligned}
+    \label{eq:prob_ssd}
+\end{equation}
+and a Maximum-A-Posteriori (MAP) formulation can be similarly derived by taking into account the prior distributions over the shape and appearance parameters:
 \begin{equation}
     \begin{aligned}
         \mathbf{p}^*, \mathbf{c}^* & = \underset{\mathbf{p}, \mathbf{c}}{\mathrm{arg\,max\;}} p(\mathbf{p}, \mathbf{c}, \mathbf{i}[\mathbf{p}] | \Theta) 
@@ -49,12 +73,12 @@ A probabilistic interpretation of the previous cost function can be naturally de
 \end{equation}
 where we have assumed the shape and appearance parameters to be independent\footnote{This is a common assumption in CGD algorithms \cite{Matthews2004}, however, in reality, some degree of dependence between these parameters is to be expected \cite{Cootes2001}.}.
 
-The previous Maximum-A-Posteriori (MAP) formulation is a weighted version of the optimization problem defined by Equation \ref{eq:rssd}. The maximization of the prior probability over the shape and texture parameters leads to the minimization of the regularization term $\mathcal{R}$ and the maximization of the conditional probability of the vectorized warped image given the shape, texture and model parameters leads to the minimization of the data term $\mathcal{D}$.
+The previous ML and MAP formulations are weighted version of the optimization problem defined by Equation \ref{eq:ssd} and \ref{eq:rssd}. In both cases, the maximization of the conditional probability of the vectorized warped image given the shape, appearance and model parameters leads to the minimization of the data term $\mathcal{D}$ and, in the MAP case, the maximization of the prior probability over the shape and appearance parameters leads to the minimization of the regularization term $\mathcal{R}$.
 
-\subsubsection{Regularized Project-Out}
+\subsubsection{Project-Out}
 \label{sec:rpo}
 
-Matthews and Baker showed in \cite{Matthews2004} that one could express the SSD between the vectorized warped image and the linear appearance model (Equation \ref{eq:ssd}) as the sum of two different terms:
+Matthews and Baker showed in \cite{Matthews2004} that one could express the SSD between the vectorized warped image and the linear PCA-based appearance model as the sum of two different terms\footnote{The use of PCA ensures the orthonormality of the appearance bases and, consequently, $\mathbf{A}^T\mathbf{A} = \mathbf{I}$ (where $\mathbf{I} $ denotes the identity matrix). Similarly, the use of PCA also ensures orthogonality between the appearance mean and the appearance bases and, hence, $\mathbf{A}^T\bar{\mathbf{a}} =  \mathbf{0}$.}:
 \begin{equation}
     \begin{aligned}
         \frac{1}{2}\mathbf{r}^T \mathbf{r} & = \frac{1}{2}\mathbf{r}^T (\mathbf{A}\mathbf{A}^T + \mathbf{I} - \mathbf{A}\mathbf{A}^T) \mathbf{r}
@@ -109,17 +133,25 @@ where, for convenience, we have defined the orthogonal complement to the appeara
     \end{aligned}
 \end{equation}
 
-Therefore, using the previous \emph{project-out trick}, the minimization problem defined by Equation \ref{eq:rssd} reduces to:
+Therefore, using the previous \emph{project-out trick}, the minimization problems defined by Equations \ref{eq:ssd} and \ref{eq:rssd} reduce to:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}^* & = \underset{\mathbf{p}} {\mathrm{arg\, min\;}} \underbrace{\frac{1}{2}|| \mathbf{i}[\mathbf{p}] - \mathbf{\bar{a}} ||^2_{\bar{\mathbf{A}}}}_{\mathcal{D} (\mathbf{i}[\mathbf{p}])}
+    \label{eq:po}
+    \end{aligned}
+\end{equation}
+and
 \begin{equation}
     \begin{aligned}
         \mathbf{p}^* & = \underset{\mathbf{p}} {\mathrm{arg\, min\;}} \underbrace{\frac{1}{2}||\mathbf{p}||^2}_{\mathcal{R} (\mathbf{p})} + \underbrace{\frac{1}{2}|| \mathbf{i}[\mathbf{p}] - \mathbf{\bar{a}} ||^2_{\bar{\mathbf{A}}}}_{\mathcal{D} (\mathbf{i}[\mathbf{p}])}
     \label{eq:rpo}
     \end{aligned}
 \end{equation}
+respectively.
 
 \subsubsection*{Probabilistic Formulation}
 \label{sec:po_pi}
-In our preliminary work \cite{Alabort2014}, we showed that by assuming the probabilistic models defined in Section \ref{sec:probabilistic_aam}, a Bayesian version of the previous project-out data term could be naturally derived by marginalizing over the appearance parameters to obtain the following marginalized density:
+Assuming the probabilistic models defined in Section \ref{sec:probabilistic_aam}, a \emph{Bayesian} formulation of the previous project-out data term can be naturally derived by marginalizing over the appearance parameters to obtain the following marginalized density:
 \begin{equation}
     \begin{aligned}
         p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \Theta) & = \int_c p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \mathbf{c}, \Theta) p(\mathbf{c}|\mathbf{\Sigma}) d\mathbf{c} 
@@ -128,7 +160,7 @@ In our preliminary work \cite{Alabort2014}, we showed that by assuming the proba
     \end{aligned}
     \label{eq:marginal}
 \end{equation}
-and that the Woodbury formula\footnote{
+and applying the Woodbury formula\footnote{
 \begin{equation*}
     \begin{aligned}
     \small
@@ -141,7 +173,7 @@ and that the Woodbury formula\footnote{
     	& = \mathbf{A}\mathbf{D}^{-1}\mathbf{A}^T + \frac{1}{\sigma^2} (\mathbf{I} - \mathbf{A}\mathbf{A}^T)
     \end{aligned}
     \label{eq:woodbury}
-\end{equation*}} \cite{Woodbury1950} can be used to decompose the natural logarithm of the previous density into the sum of two different terms:
+\end{equation*}} \cite{Woodbury1950} to decompose the natural logarithm of the previous density into the sum of two different terms:
 \begin{equation}
     \begin{aligned}
         \ln p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \Theta) & = \frac{1}{2}|| \mathbf{i}[\mathbf{p}] - \mathbf{\bar{a}} ||^2_{(\mathbf{A}\mathbf{\Sigma}\mathbf{A}^T + \sigma^2 \mathbf{I})^{-1}}
@@ -152,17 +184,25 @@ and that the Woodbury formula\footnote{
     \end{aligned}
     \label{eq:prob_po}
 \end{equation}
-where $\mathbf{D} = \textrm{diag}[\lambda_1 + \sigma^2, \cdots, \lambda_m + \sigma^2]$.
+where $\mathbf{D} = \textrm{diag}(\lambda_{\mathbf{a}_1} + \sigma^2, \cdots, \lambda_{\mathbf{a}_m} + \sigma^2)$.
 
 As depicted by Figure \ref{fig:bayes}, the previous two terms define respectively: 
 \begin{inparaenum}[\itshape i\upshape)]
     \item the Mahalanobis distance \emph{within} the linear appearance subspace; and 
     \item the Euclidean distance \emph{to} the linear appearance subspace (i.e. the Euclidean distance within its orthogonal complement) weighted by the inverse of the estimated image noise.
-\end{inparaenum} 
-Note that when the variance $\mathbf{\Sigma}$ of the prior distribution over the latent appearance space increases (and especially as
-$\mathbf{\Sigma} \rightarrow \infty$) $\mathbf{c}$ becomes uniformly distributed and the contribution of the first term $\frac{1}{2}|| \mathbf{i}[\mathbf{p}] - \mathbf{\bar{a}} ||^2_{\mathbf{A}\mathbf{D}^{-1}\mathbf{A}^T}$ vanishes and we obtain a weighted version of the project-out data term defined by Equation \ref{eq:po}. 
+\end{inparaenum}
+Note that when the variance $\mathbf{\Sigma}$ of the prior distribution over the latent appearance space increases (and especially as $\mathbf{\Sigma} \rightarrow \infty$) $\mathbf{c}$ becomes uniformly distributed and the contribution of the first term $\frac{1}{2}|| \mathbf{i}[\mathbf{p}] - \mathbf{\bar{a}} ||^2_{\mathbf{A}\mathbf{D}^{-1}\mathbf{A}^T}$ vanishes and we obtain a weighted version of the project-out data term defined by Equation \ref{eq:po}. Hence, given our Bayesian formulation, the project-out loss arises naturally by assuming a uniform prior over the latent appearance space.
 
-A MAP formulation with respect to the shape parameters for the previous Bayesian interpretation of the project-out cost function can be derived as follows:
+The probabilistic formulations of the minimization problems defined by Equations \ref{eq:po} and \ref{eq:rpo} can be derived, from the previous Bayesian Project-Out (BPO) cost function, as
+\begin{equation}
+    \begin{aligned}
+        \mathbf{p}^* & = \underset{\mathbf{p}}{\mathrm{arg\,max\;}} \ln p(\mathbf{i}[\mathbf{p}] | \mathbf{p}, \Theta)
+        \\
+        & = \underset{\mathbf{p}}{\mathrm{arg\,min\;}} \underbrace{\frac{1}{2\sigma^2}|| \mathbf{i}[\mathbf{p}] - \mathbf{\bar{a}} ||^2_{\mathbf{Q}}}_{\mathcal{D}(\mathbf{i}[\mathbf{p}])}
+    \end{aligned}
+    \label{eq:prob_rpo}
+\end{equation}
+and 
 \begin{equation}
     \begin{aligned}
         \mathbf{p}^* & = \underset{\mathbf{p}}{\mathrm{arg\,max\;}} p(\mathbf{p}, \mathbf{i}[\mathbf{p}] | \Theta) 
@@ -176,7 +216,7 @@ A MAP formulation with respect to the shape parameters for the previous Bayesian
     \end{aligned}
     \label{eq:prob_rpo}
 \end{equation}
-where we have defined the Bayesian project-out operator as $\mathbf{Q} = \mathbf{I} - \mathbf{A}(\mathbf{I} - \sigma^2\mathbf{D}^{-1})\mathbf{A}^T$.
+respectively. Where we have defined the BPO operator as $\mathbf{Q} = \mathbf{I} - \mathbf{A}(\mathbf{I} - \sigma^2\mathbf{D}^{-1})\mathbf{A}^T$.
 
 \begin{figure}
     \centering
